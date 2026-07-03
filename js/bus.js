@@ -15,4 +15,5 @@ export const on = (type, fn) => bus.addEventListener(type, (e) => fn(e.detail));
  *   mix-toggle         — {id} toggle place in the active curation/mix edit
  *   pack-changed       — the active friend pack (view or edit) appeared/changed/left;
  *                        zones + doodles re-render their layers off this
+ *   export-pack        — {slug} seal one friend map into friends/<file>.enc (+ manifest)
  */

@@ -65,7 +65,7 @@ function cardEl(p) {
     ${p.notes && p.notes.length > 180 ? '<button class="card-more">the whole rant ▾</button>' : ""}
     ${editing ? `<button class="card-note-btn">${editNote ? "edit the" : "add a"} note for ${esc(editing.name || "them")}</button>` : ""}
     ${editNote ? `<div class="card-personal">for ${esc(editing.name || "them")}: ${esc(editNote)}</div>` : ""}
-    ${custom ? '<button class="card-del" title="delete this spot">delete</button>' : ""}`;
+    ${custom && !state.curationView ? '<button class="card-del" title="delete this spot">delete</button>' : ""}`;
 
   card.addEventListener("click", (e) => {
     if (e.target.closest("a")) return;

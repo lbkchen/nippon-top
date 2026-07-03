@@ -2,6 +2,7 @@
 // Ken's in-browser edits layer on top via localStorage until exported.
 import { LS, CATS } from "./config.js";
 import { map } from "./map.js";
+import { generateKey, randomSuffix } from "./pack.js";
 
 const lsGet = (k, fb = []) => { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } };
 const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -56,6 +57,7 @@ function packTarget(kind) {
 export const allPlaces = () => [...BASE.places, ...customPlaces, ...(activePack()?.extraPlaces || [])];
 export const placeById = (id) => allPlaces().find((p) => p.id === id);
 export const isCustom = (id) => String(id).startsWith("custom-");
+export const isPackExtra = (id) => (activePack()?.extraPlaces || []).some((p) => p.id === id);
 
 export function addPlace(p) {
   const t = packTarget("extraPlaces");
@@ -163,9 +165,22 @@ export function removeZone(id) {
 export const zoneCount = () => BASE.zones.length + customZones.length;
 
 // ---------- curations (friend-map forks) ----------
-// { slug, name, emoji, message, mode: "exclude"|"include", ids: [], notes: {placeId: text}, seen: [], updated }
+// { slug, name, emoji, message, mode: "exclude"|"include", ids: [], notes: {placeId: text},
+//   seen: [], updated, file, key, extraPlaces: [], extraZones: [], extraDoodles: [] }
 // exclude-mode: base minus ids — new recs flow in automatically (rebase on head).
 // include-mode: handpicked list — `seen` records base ids known at last edit, for staleness hints.
+// file+key are minted once on first save and never change: `file` names the published
+// friends/<file>.enc blob, `key` decrypts it and rides only in the share link.
+const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "friend";
+
+export function uniqueSlug(name) {
+  const taken = new Set(allCurations().map((c) => c.slug));
+  const base = slugify(name);
+  let out = base, i = 2;
+  while (taken.has(out)) out = `${base}-${i++}`;
+  return out;
+}
+
 export const allCurations = () => {
   const overridden = new Set(customCurations.map((c) => c.slug));
   return [...BASE.curations.filter((c) => !overridden.has(c.slug)), ...customCurations];
@@ -191,6 +206,9 @@ export function curationUnseenIds(cur) {
 export function upsertCuration(cur) {
   cur.updated = new Date().toISOString().slice(0, 10);
   cur.seen = BASE.places.map((p) => p.id);
+  cur.slug = cur.slug || uniqueSlug(cur.name);
+  cur.file = cur.file || `${cur.slug}-${randomSuffix()}`; // stable forever — the link depends on it
+  cur.key = cur.key || generateKey();
   customCurations = customCurations.filter((c) => c.slug !== cur.slug);
   customCurations.push(cur);
   lsSet(LS.curations, customCurations);

@@ -2,7 +2,7 @@
 // which zone it's in, and the nearest other recs to chain onto.
 import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint } from "./config.js";
 import { map } from "./map.js";
-import { state, placeById, allPlaces, allZones, isCustom, deletePlace, setPhoto, placePassesFilters } from "./store.js";
+import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, placePassesFilters } from "./store.js";
 import { emit, on } from "./bus.js";
 
 // ---- dev-only photo drop: web-size in the browser, save via serve.mjs ----
@@ -87,12 +87,13 @@ function render(id) {
     ${zone ? `<div class="detail-zone"><span class="zone-dot" style="--z:${zone.color}"></span>inside ${esc(zone.name)}</div>` : ""}
     <div class="omni-section detail-section">pairs well with</div>
     <div class="detail-pairs"></div>
-    ${isCustom(p.id) ? '<button class="detail-del">delete this spot</button>' : ""}`;
+    ${isCustom(p.id) && !state.curationView ? '<button class="detail-del">delete this spot</button>' : ""}`;
 
   const img = panel.querySelector(".detail-photo img");
   if (img) img.addEventListener("error", () => panel.querySelector(".detail-photo").remove());
 
-  if (DEV) {
+  // no photo drops on pack extras: img/ is a public folder, the pack is not
+  if (DEV && !isPackExtra(p.id)) {
     const fig = panel.querySelector(".detail-photo");
     if (fig) {
       fig.title = "drop a new photo to swap it";

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 <body>
   <!-- splash title card -->
@@ -63,6 +63,7 @@
     <input id="curMessage" type="text" placeholder="lil message for them…" maxlength="90" />
     <button class="btn-ghost" id="curMode" title="switch fork mode"></button>
     <span class="mix-count" id="curCount">0 in</span>
+    <button class="btn-ghost hidden" id="curPick" title="back to flipping pins in and out">back to picking</button>
     <button class="btn-solid" id="curSave">save</button>
     <button class="btn-ghost" id="curCancel">nvm</button>
   </div>
@@ -71,6 +72,7 @@
   <div class="mix-banner hidden" id="curBanner">
     <div class="mix-banner-text" id="curBannerText"></div>
     <div class="mix-banner-msg hidden" id="curBannerMsg"></div>
+    <button class="btn-solid hidden" id="curBannerAdopt" title="pull this map into your friend-maps drawer for editing">adopt this map</button>
     <button class="btn-ghost" id="curBannerShowAll">show me the whole map instead</button>
   </div>
 
@@ -203,6 +205,7 @@
       <p>fork the map for a person. exclusions rebase on your newest recs; handpicks stay frozen.</p>
       <button class="drawer-close" id="curationsClose" aria-label="close">✕</button>
       <button class="btn-solid drawer-new" id="curationsNew">+ fork one</button>
+      <button class="btn-ghost drawer-keyring" id="curKeyring" title="every link key as one json — stash it in your password manager">download keyring</button>
     </div>
     <div class="drawer-body drawer-list" id="curationsBody"></div>
   </div>
@@ -265,7 +268,7 @@
   </svg>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data.js?v=6"></script>
-  <script type="module" src="js/main.js?v=6"></script>
+  <script src="data.js?v=7"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>
