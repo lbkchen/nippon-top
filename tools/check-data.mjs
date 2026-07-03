@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Sanity-checks data.js so a bad export/edit can't ship a broken map.
 //   node tools/check-data.mjs        (exit 1 on any failure)
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -40,6 +40,10 @@ for (const p of places) {
   else if (p.lat < JP.latMin || p.lat > JP.latMax || p.lng < JP.lngMin || p.lng > JP.lngMax)
     err(`${tag}: coords [${p.lat}, ${p.lng}] are not in Japan — did lat/lng get swapped?`);
   if (typeof p.notes !== "string") err(`${tag}: notes must be a string (empty is fine)`);
+  if (p.photo != null) {
+    if (typeof p.photo !== "string" || !/\.(jpe?g|png|webp|avif)$/i.test(p.photo)) err(`${tag}: photo must be an image filename in img/`);
+    else if (!existsSync(join(ROOT, "img", p.photo))) err(`${tag}: img/${p.photo} does not exist`);
+  }
 }
 
 // ---- chains ----

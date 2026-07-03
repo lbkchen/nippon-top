@@ -24,10 +24,12 @@ function popupContent(p) {
   div.innerHTML = `
     <div class="popup-title">${p.emoji || CATS[p.cat].emoji} ${esc(p.name)} ${p.star ? "⭐" : ""}</div>
     <div class="popup-blurb">${linkify(esc(short)) || "<i>no notes, pure vibes</i>"}</div>
-    ${p.notes && p.notes.length > 150 ? '<span class="popup-link popup-rant">read the full rant in the list →</span>' : ""}
+    <span class="popup-link popup-rant">full details →</span>
     <a class="popup-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener">open in google maps ↗</a>`;
-  const link = div.querySelector(".popup-rant");
-  if (link) link.addEventListener("click", () => emit("place-selected", { id: p.id, fly: false, openList: true }));
+  div.querySelector(".popup-rant").addEventListener("click", () => {
+    map.closePopup();
+    emit("open-detail", { id: p.id });
+  });
   return div;
 }
 

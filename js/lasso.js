@@ -5,7 +5,6 @@ import { state, allPlaces, placePassesFilters } from "./store.js";
 import { emit, on } from "./bus.js";
 import { setMode } from "./modes.js";
 import { registerSketchMode } from "./sketch.js";
-import { openSidebar } from "./sidebar.js";
 import { openZoneModal } from "./zones.js";
 
 export function clearLasso(silent) {
@@ -25,7 +24,7 @@ export function initLasso() {
       const layer = L.polygon(poly, { color: "#2b2b33", weight: 3, dashArray: "10 8", fillColor: "#f5b301", fillOpacity: 0.12, className: "rough-line" }).addTo(map);
       state.lasso = { ids, layer, points: poly };
       setMode(null);
-      openSidebar();
+      emit("open-sidebar");
       showHint(ids.length ? `got ${ids.length} — they're in the list →` : "nothing in there… cast a wider net", 2500);
     },
   });

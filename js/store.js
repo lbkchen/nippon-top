@@ -24,6 +24,7 @@ export const state = {
   q: "",
   lasso: null,                // { ids:[], layer, points }
   selectedId: null,           // place highlighted in the list
+  detailId: null,             // place open in the detail panel
   curationView: null,         // curation being viewed via #for= link
   editingCuration: null,      // curation object being edited in curate mode
   zonesOn: true,

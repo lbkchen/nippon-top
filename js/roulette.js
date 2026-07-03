@@ -2,7 +2,6 @@
 import { showHint } from "./config.js";
 import { currentList } from "./store.js";
 import { emit, on } from "./bus.js";
-import { openSidebar } from "./sidebar.js";
 
 let spinning = false;
 
@@ -13,7 +12,7 @@ function spin() {
   const weighted = pool.flatMap((p) => (p.star ? [p, p, p] : [p]));
   const pick = weighted[Math.floor(Math.random() * weighted.length)];
   spinning = true;
-  openSidebar();
+  emit("open-sidebar");
   let i = 0;
   const iv = setInterval(() => {
     const rand = pool[Math.floor(Math.random() * pool.length)];
@@ -21,7 +20,7 @@ function spin() {
     if (++i >= 10) {
       clearInterval(iv);
       spinning = false;
-      emit("place-selected", { id: pick.id, fly: true, openList: true });
+      emit("open-detail", { id: pick.id, fly: true });
       showHint(`fate has spoken: ${pick.name}${pick.star ? " ★" : ""} — no backsies`, 4000);
     }
   }, 110);

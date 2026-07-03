@@ -41,6 +41,7 @@ export function initModes() {
     $("#chainsDrawer").classList.add("hidden");
     $("#curationsDrawer").classList.add("hidden");
     if (state.mode) setMode(null);
+    else emit("close-detail");
   });
 
   $$("#toolbar button[data-tool]").forEach((btn) => {

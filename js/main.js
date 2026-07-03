@@ -19,6 +19,7 @@ import { initExporter } from "./exporter.js";
 import { initRoulette } from "./roulette.js";
 import { initLocate } from "./locate.js";
 import { initOmnisearch } from "./omnisearch.js";
+import { initDetail } from "./detail.js";
 
 initSplash();
 initPins();
@@ -35,6 +36,7 @@ initExporter();
 initRoulette();
 initLocate();
 initOmnisearch();
+initDetail();
 
 map.fitBounds(groupBounds("tokyo"), PAD());
 emit("refresh");

@@ -47,6 +47,8 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 - **Place**: `star` = certified banger (bigger gold pin, weighted 3× in roulette). `cat` keys
   live in config.js CATS; `group` drives region chips. `emoji` overrides the cat glyph.
+  `photo` = filename in img/ (see img/README.md), shown by the detail panel (js/detail.js);
+  missing/broken files degrade gracefully. check-data verifies referenced files exist.
 - **Curations (friend maps)** — the fork model, Ken's core feature:
   `mode:"exclude"` = base minus `ids`, auto-inherits new recs ("rebase on head");
   `mode:"include"` = frozen handpicks; `seen` (base ids at last save) powers the

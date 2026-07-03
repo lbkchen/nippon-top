@@ -1331,3 +1331,92 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
     width: auto;
   }
 }
+
+/* ---------- spot detail panel ---------- */
+.detail {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.detail-back {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: var(--r-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.detail-back:hover { background: var(--gold); }
+.detail-photo {
+  margin: 2px 0 0;
+  width: 100%;
+  border: 3px solid var(--ink);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-0.6deg);
+  background: var(--paper);
+}
+.detail-photo img { width: 100%; display: block; }
+.detail-head { display: flex; align-items: center; gap: 9px; }
+.detail-emoji { font-size: 27px; }
+.detail-name {
+  margin: 0;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+}
+.detail-ribbon { position: static; align-self: flex-start; transform: rotate(-1deg) skewX(-6deg); }
+.detail-notes { font-size: 13.5px; line-height: 1.55; }
+.detail-gmaps { text-decoration: none; }
+.detail-zone {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.zone-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--z);
+  border: 2px solid var(--ink);
+}
+.detail-section { padding: 6px 0 0; }
+.detail-pairs { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.pair {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-sm);
+  padding: 7px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.pair:hover { background: var(--gold); }
+.pair-d { font-size: 11px; font-weight: 800; opacity: 0.6; white-space: nowrap; }
+.detail-del {
+  align-self: flex-end;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0.45;
+  text-decoration: underline;
+  padding: 0;
+}
+.detail-del:hover { opacity: 1; color: var(--red); }

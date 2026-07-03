@@ -72,7 +72,7 @@ export function initOmnisearch() {
     clearBtn.classList.remove("hidden");
     close();
     emit("refresh");
-    emit("place-selected", { id: p.id, fly: true, openList: true });
+    emit("open-detail", { id: p.id, fly: true });
   }
 
   function pickPlace(r) {

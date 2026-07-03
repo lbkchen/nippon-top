@@ -136,7 +136,7 @@ export function initAddSpot() {
     resetModal();
     setMode(null);
     emit("refresh");
-    emit("place-selected", { id: place.id, fly: true });
+    emit("open-detail", { id: place.id, fly: true });
     showHint(`"${name}" is on the map — export to make it permanent`, 3500);
   });
 }

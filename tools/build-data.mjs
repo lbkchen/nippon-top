@@ -356,6 +356,7 @@ async function main() {
       lng: geocoded ? hit.coords[1] : p.fallback[1],
       approx: p.approx && !geocoded ? true : false,
       notes: p.notes,
+      photo: p.photo || null, // filename in img/, e.g. "kichijoji.jpg"
     };
   });
   // in-app additions survive rebuilds

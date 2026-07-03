@@ -107,7 +107,7 @@ function cardEl(p) {
       return;
     }
     if (state.mode === "curate") { emit("mix-toggle", p.id); return; }
-    emit("place-selected", { id: p.id, fly: true });
+    emit("open-detail", { id: p.id, fly: true });
   });
   card.addEventListener("mouseenter", () => highlightPin(p.id, true));
   card.addEventListener("mouseleave", () => highlightPin(p.id, false));
@@ -197,6 +197,7 @@ export function initSidebar() {
 
   on("refresh", renderList);
   on("refresh-list", renderList);
+  on("open-sidebar", openSidebar);
   on("place-selected", ({ id, openList }) => {
     state.selectedId = id;
     if (openList) openSidebar();

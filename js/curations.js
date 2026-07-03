@@ -13,7 +13,6 @@ import {
 } from "./store.js";
 import { emit, on } from "./bus.js";
 import { setMode } from "./modes.js";
-import { openSidebar } from "./sidebar.js";
 
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "friend";
 
@@ -37,7 +36,7 @@ function startEdit(cur) {
   if (state.mode !== "curate") setMode("curate");
   else emit("refresh");
   updateEditUI();
-  openSidebar();
+  emit("open-sidebar");
 }
 
 function updateEditUI() {
