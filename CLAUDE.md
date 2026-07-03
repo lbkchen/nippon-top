@@ -7,6 +7,7 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 - Serve: `node tools/serve.mjs` on :4173 (no-cache headers — plain `python3 -m http.server`
   serves stale ES modules; never recommend it). `.claude/launch.json` works with preview_start.
+  It also accepts `PUT /img/<file>` for the detail panel's dev-only photo drop (binds 127.0.0.1).
 - Debug/test in browser: `window.__nippon` = `{ map, state, store, markers, emit, setMode }`.
   Module scope isn't global; always go through this in preview_eval. Simulate lasso/doodle with
   synthetic PointerEvents on `#map` (screenshots downscale ~55% — get coords from
@@ -48,7 +49,9 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 - **Place**: `star` = certified banger (bigger gold pin, weighted 3× in roulette). `cat` keys
   live in config.js CATS; `group` drives region chips. `emoji` overrides the cat glyph.
   `photo` = filename in img/ (see img/README.md), shown by the detail panel (js/detail.js);
-  missing/broken files degrade gracefully. check-data verifies referenced files exist.
+  set it by dragging a photo onto the panel in dev (web-sized in-browser, saved via serve.mjs,
+  rides the `nippon_custom_photos` overlay until export; rebuilds carry data.js photos over).
+  Missing/broken files degrade gracefully. check-data verifies referenced files exist.
 - **Curations (friend maps)** — the fork model, Ken's core feature:
   `mode:"exclude"` = base minus `ids`, auto-inherits new recs ("rebase on head");
   `mode:"include"` = frozen handpicks; `seen` (base ids at last save) powers the

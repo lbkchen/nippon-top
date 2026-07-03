@@ -28,7 +28,7 @@ Any static server works; that one's just nicer for development.
 | 🔗 **Chain Gang** | recs that are everywhere on purpose (Torikizoku, konbini, Donki…) live in a drawer, not on pins. |
 | 💾 **Export** | downloads a fresh `data.js` with every in-browser edit baked in. Drop it in the repo → canon. |
 | ⭐ **Bangers only** | the spreadsheet's star system, honored. Star pins are bigger, golden, and gently smug. |
-| 📖 **Spot detail** | clicking a card/search result/roulette pick drills the sidebar into one spot: photo (drop files in `img/`, see its README), the whole rant, which vibe zone it's inside, and "pairs well with" — the 3 nearest recs, clickable, so you can hop rec to rec. |
+| 📖 **Spot detail** | clicking a card/search result/roulette pick drills the sidebar into one spot: photo, the whole rant, which vibe zone it's inside, and "pairs well with" — the 3 nearest recs, clickable, so you can hop rec to rec. On localhost, just drag a photo onto the panel — it web-sizes itself, lands in `img/`, and ships with your next export (see `img/README.md`). |
 
 Esc exits any mode. `?splash` forces the title card (it otherwise plays once per session).
 

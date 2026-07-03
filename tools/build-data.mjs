@@ -345,6 +345,9 @@ async function main() {
   if (process.argv.includes("--geocode")) await geocodeAll();
   const finalCache = existsSync(CACHE_PATH) ? JSON.parse(readFileSync(CACHE_PATH, "utf8")) : cache;
   const existing = readExisting();
+  // photos attached in-app (dev drag-and-drop) live only in data.js after an
+  // export — carry them over unless the master list names one explicitly
+  const existingPhotos = new Map(existing.places.filter((p) => p.photo).map((p) => [p.id, p.photo]));
 
   const places = PLACES.map((p) => {
     const hit = finalCache[p.id];
@@ -356,7 +359,7 @@ async function main() {
       lng: geocoded ? hit.coords[1] : p.fallback[1],
       approx: p.approx && !geocoded ? true : false,
       notes: p.notes,
-      photo: p.photo || null, // filename in img/, e.g. "kichijoji.jpg"
+      photo: p.photo || existingPhotos.get(p.id) || null, // filename in img/
     };
   });
   // in-app additions survive rebuilds

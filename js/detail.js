@@ -1,9 +1,55 @@
 // Spot detail: the sidebar drills into one place — photo, the whole rant,
 // which zone it's in, and the nearest other recs to chain onto.
-import { $, esc, linkify, CATS, distKm, fmtDist, gmapsUrl, pointInPoly } from "./config.js";
+import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint } from "./config.js";
 import { map } from "./map.js";
-import { state, placeById, allPlaces, allZones, isCustom, deletePlace, placePassesFilters } from "./store.js";
+import { state, placeById, allPlaces, allZones, isCustom, deletePlace, setPhoto, placePassesFilters } from "./store.js";
 import { emit, on } from "./bus.js";
+
+// ---- dev-only photo drop: web-size in the browser, save via serve.mjs ----
+
+async function webSize(file, max = 1600) {
+  const bmp = await createImageBitmap(file);
+  const s = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bmp.width * s);
+  canvas.height = Math.round(bmp.height * s);
+  canvas.getContext("2d").drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  return new Promise((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error("encode failed"))), "image/jpeg", 0.85));
+}
+
+async function uploadPhoto(p, file) {
+  if (!file) return;
+  let blob;
+  try { blob = await webSize(file); }
+  catch { return showHint("couldn't read that image — jpg/png/webp work best", 3200); }
+  const name = `${p.id}.jpg`;
+  try {
+    const res = await fetch(`img/${name}`, { method: "PUT", body: blob });
+    if (!res.ok) throw new Error();
+  } catch { return showHint("couldn't save — photo drops need the dev server (node tools/serve.mjs)", 3800); }
+  setPhoto(p.id, name);
+  emit("refresh");
+  if (state.detailId === p.id) render(p.id);
+  showHint(`saved img/${name} — bakes into data.js on export`, 3200);
+}
+
+function wireDrop(el, p) {
+  el.addEventListener("dragover", (e) => { e.preventDefault(); el.classList.add("dropping"); });
+  el.addEventListener("dragleave", () => el.classList.remove("dropping"));
+  el.addEventListener("drop", (e) => {
+    e.preventDefault();
+    el.classList.remove("dropping");
+    uploadPhoto(p, e.dataTransfer.files[0]);
+  });
+}
+
+function pickFile(p) {
+  const inp = document.createElement("input");
+  inp.type = "file";
+  inp.accept = "image/*";
+  inp.addEventListener("change", () => uploadPhoto(p, inp.files[0]));
+  inp.click();
+}
 
 function nearestTo(p, n = 3) {
   return allPlaces()
@@ -45,6 +91,22 @@ function render(id) {
 
   const img = panel.querySelector(".detail-photo img");
   if (img) img.addEventListener("error", () => panel.querySelector(".detail-photo").remove());
+
+  if (DEV) {
+    const fig = panel.querySelector(".detail-photo");
+    if (fig) {
+      fig.title = "drop a new photo to swap it";
+      wireDrop(fig, p);
+    } else {
+      const drop = document.createElement("button");
+      drop.type = "button";
+      drop.className = "photo-drop";
+      drop.innerHTML = "<b>drop a photo here</b><span>or click to pick one — saves to img/, ships on export</span>";
+      drop.addEventListener("click", () => pickFile(p));
+      wireDrop(drop, p);
+      panel.querySelector(".detail-back").after(drop);
+    }
+  }
 
   const pairs = panel.querySelector(".detail-pairs");
   const near = nearestTo(p);
@@ -94,4 +156,9 @@ export function initDetail() {
   on("open-detail", open);
   on("close-detail", close);
   on("mode-changed", (m) => { if (m) close(); }); // picking up a tool returns you to the list
+  if (DEV) {
+    // a drag that misses the drop target shouldn't navigate the tab away
+    window.addEventListener("dragover", (e) => e.preventDefault());
+    window.addEventListener("drop", (e) => e.preventDefault());
+  }
 }

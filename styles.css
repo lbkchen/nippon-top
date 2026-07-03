@@ -1191,6 +1191,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   flex-direction: column;
   align-items: flex-start;
   gap: 1px;
+  width: 100%; /* buttons shrink-wrap inside the async "on the map" section otherwise */
   text-align: left;
   border: none;
   background: none;
@@ -1363,6 +1364,31 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   background: var(--paper);
 }
 .detail-photo img { width: 100%; display: block; }
+.detail-photo.dropping { outline: 3px dashed var(--red); outline-offset: 3px; }
+/* dev-only: appears when the spot has no photo yet */
+.photo-drop {
+  width: 100%;
+  margin: 2px 0 0;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  border: 2.5px dashed rgba(29, 29, 36, 0.4);
+  border-radius: var(--r-md);
+  background: none;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 700;
+  opacity: 0.65;
+  cursor: pointer;
+}
+.photo-drop b { font-family: var(--font-head); font-weight: 600; font-size: 14px; }
+.photo-drop:hover, .photo-drop.dropping {
+  border-color: var(--red);
+  background: rgba(245, 179, 1, 0.14);
+  opacity: 1;
+}
 .detail-head { display: flex; align-items: center; gap: 9px; }
 .detail-emoji { font-size: 27px; }
 .detail-name {

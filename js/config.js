@@ -22,7 +22,11 @@ export const LS = {
   doodles: "nippon_doodles",
   zones: "nippon_custom_zones",
   curations: "nippon_custom_curations",
+  photos: "nippon_custom_photos", // { placeId: filename } — dev photo drops
 };
+
+// dev = the app can save dropped photos through tools/serve.mjs
+export const DEV = ["localhost", "127.0.0.1"].includes(location.hostname);
 
 export const $ = (sel) => document.querySelector(sel);
 export const $$ = (sel) => [...document.querySelectorAll(sel)];

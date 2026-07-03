@@ -3,7 +3,7 @@
 import { LS, CATS } from "./config.js";
 import { map } from "./map.js";
 
-const lsGet = (k) => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+const lsGet = (k, fb = []) => { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } };
 const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
 export const BASE = window.NIPPON || { places: [], chains: [], zones: [], doodles: [], curations: [] };
@@ -16,6 +16,13 @@ let customPlaces = lsGet(LS.places).filter((p) => !baseIds.has(p.id));
 let customZones = lsGet(LS.zones);
 let customCurations = lsGet(LS.curations).filter((c) => !BASE.curations.some((b) => b.slug === c.slug || b.slug === c.baseSlug));
 export let doodles = [...BASE.doodles, ...lsGet(LS.doodles)];
+
+// photos dropped in dev mode overlay any place until they're baked in by an
+// export; entries already matching data.js get pruned (same idea as customs)
+const photoOverlay = lsGet(LS.photos, {});
+for (const p of BASE.places) if (photoOverlay[p.id] === p.photo) delete photoOverlay[p.id];
+for (const p of [...BASE.places, ...customPlaces]) if (photoOverlay[p.id]) p.photo = photoOverlay[p.id];
+lsSet(LS.photos, photoOverlay);
 
 export const state = {
   mode: null,                 // null | lasso | pen | add | curate
@@ -44,6 +51,15 @@ export function addPlace(p) {
 export function deletePlace(id) {
   customPlaces = customPlaces.filter((c) => c.id !== id);
   lsSet(LS.places, customPlaces);
+  delete photoOverlay[id];
+  lsSet(LS.photos, photoOverlay);
+}
+
+export function setPhoto(id, file) {
+  const p = placeById(id);
+  if (p) p.photo = file;
+  photoOverlay[id] = file;
+  lsSet(LS.photos, photoOverlay);
 }
 
 // ---------- filters / lists ----------
