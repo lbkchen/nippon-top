@@ -291,7 +291,7 @@ button {
 }
 #search:focus { box-shadow: 2px 2px 0 var(--ink), 0 0 0 3px rgba(245, 179, 1, 0.55); }
 
-.filter-row { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.filter-row { margin-top: 0; padding-right: 42px; display: flex; flex-direction: column; gap: 8px; }
 
 .star-toggle {
   align-self: flex-start;
@@ -1055,7 +1055,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   .region-chips {
     left: 10px;
     right: 10px;
-    top: 84px;
+    top: 148px;
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -1076,13 +1076,13 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
     left: 10px;
     right: 64px;
     bottom: auto;
-    top: 138px;
+    top: 196px;
   }
   .toolbar button { width: 40px; height: 40px; font-size: 17px; }
   .pen-tray {
     flex-direction: row;
     left: 10px;
-    top: 192px;
+    top: 250px;
     bottom: auto;
     padding: 7px 9px;
   }
@@ -1098,15 +1098,71 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   * { transition-duration: 0.01s !important; animation-duration: 0.01s !important; }
 }
 
-/* ---------- geosearch ---------- */
-.geo-search {
+/* ---------- omnisearch (the primary bar) ---------- */
+.omnibar {
   position: fixed;
-  top: 92px;
+  top: 94px;
   left: 14px;
   z-index: 890;
-  width: 264px;
+  width: 360px;
 }
-.geo-search input, #addSearch {
+.omnibar-box {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--paper);
+  border: var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+  padding: 11px 14px;
+}
+.omnibar-box > svg { flex: none; opacity: 0.6; }
+#omniInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+#omniInput::placeholder { opacity: 0.5; }
+#omniInput::-webkit-search-cancel-button { display: none; }
+.omni-clear {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--cream);
+  font-size: 11px;
+  line-height: 1;
+}
+.omni-clear:hover { background: var(--red); color: var(--cream); }
+.omni-results {
+  margin-top: 8px;
+  background: var(--cream);
+  border: var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  max-height: 46vh;
+  display: flex;
+  flex-direction: column;
+}
+.omni-section {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  letter-spacing: 1.4px;
+  padding: 8px 13px 2px;
+  opacity: 0.55;
+}
+.omni-star { color: var(--gold); text-shadow: 1px 1px 0 var(--ink); }
+
+#addSearch {
   width: 100%;
   font-family: var(--font-body);
   font-weight: 700;
@@ -1118,7 +1174,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   outline: none;
   box-shadow: var(--shadow-sm);
 }
-.geo-search input:focus, #addSearch:focus { box-shadow: var(--shadow-sm), 0 0 0 3px rgba(245, 179, 1, 0.55); }
+#addSearch:focus { box-shadow: var(--shadow-sm), 0 0 0 3px rgba(245, 179, 1, 0.55); }
 .geo-results {
   margin-top: 6px;
   background: var(--cream);
@@ -1268,12 +1324,10 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   .tool-label { display: none; }
   .toolbar button { width: 40px; height: 40px; }
   .toolbar button svg { width: 20px; height: 20px; }
-  .geo-search {
-    top: auto;
-    position: fixed;
+  .omnibar {
     left: 10px;
     right: 10px;
-    top: 190px;
+    top: 88px;
     width: auto;
   }
 }

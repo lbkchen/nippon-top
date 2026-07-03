@@ -18,7 +18,7 @@ import { initCurations, enterHashView } from "./curations.js";
 import { initExporter } from "./exporter.js";
 import { initRoulette } from "./roulette.js";
 import { initLocate } from "./locate.js";
-import { initGeosearch } from "./geosearch.js";
+import { initOmnisearch } from "./omnisearch.js";
 
 initSplash();
 initPins();
@@ -34,7 +34,7 @@ initCurations();
 initExporter();
 initRoulette();
 initLocate();
-initGeosearch();
+initOmnisearch();
 
 map.fitBounds(groupBounds("tokyo"), PAD());
 emit("refresh");

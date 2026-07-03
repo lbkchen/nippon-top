@@ -34,5 +34,10 @@ Read README.md for the architecture map; it's accurate.
   SVG line icons with hover labels. No prompt()/alert() — use the styled modals.
 - Runtime geocoding is Photon (photon.komoot.io): free, keyless, typeahead-friendly. Keep the
   350ms debounce and attribution. Nominatim is for offline build-time geocoding only.
+- The omnibar (js/omnisearch.js) is the ONE search surface: recs + addresses in one dropdown.
+  Don't add secondary search inputs elsewhere (the add-spot modal's location search is the
+  only exception). state.q is owned by the omnibar.
+- Asset URLs in index.html carry ?v=N — bump it whenever styles.css/data.js/js change in a
+  user-visible way, so stale browser caches can't serve mixed old/new assets.
 - Coordinates: places the geocoder missed are `approx: true` and wear "~ish location" tags.
   Geocode fixes go in `build-data.mjs` fallbacks (Nominatim results >50km from fallback are auto-rejected).

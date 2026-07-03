@@ -19,7 +19,7 @@ Any static server works; that one's just nicer for development.
 |---|---|
 | 🪢 **Lasso** | draw a loop around pins → everything inside lists in the sidebar with full notes. The "what's worth it around here today" tool. |
 | 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone"). Draw one from the zones menu, or save any lasso as a zone — either way you name it and pick its flag color. |
-| 🔎 **Place search** | find any address/venue via Photon (komoot's free, keyless OSM geocoder) — then add a spot there, or measure distances from it ("what's near my hotel?"). Also built into the add-spot form. |
+| 🔎 **Omnisearch** | the primary bar under the logo: typing live-filters the rec pins AND searches real-world places/addresses (Photon — komoot's free, keyless OSM geocoder) in one dropdown. Pick a rec → fly to it; pick an address → add a spot there or measure distances from it ("what's near my hotel?"). Same search lives inside the add-spot form. |
 | 🖊️ **Doodle** | freehand ink that sticks to the terrain. iPad/Pencil friendly. |
 | 📍 **Add a spot** | click the map, fill the form. Lives in your browser until exported. |
 | 💌 **Friend maps** | fork the whole map for a person — see below, this is the good stuff. |

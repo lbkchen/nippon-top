@@ -21,10 +21,12 @@ export async function photonSearch(q, near, limit = 6) {
       .filter(Boolean)
       .filter((v, i, a) => a.indexOf(v) === i)
       .join(", ");
-    const key = `${name}|${where}`; // OSM often has node+way+relation for one venue
+    const [lng, lat] = f.geometry.coordinates;
+    // OSM often has node+way+relation for one venue — same name within ~1km = same place
+    const key = `${name}|${lat.toFixed(2)}|${lng.toFixed(2)}`;
     if (seen.has(key)) return [];
     seen.add(key);
-    return [{ name, where, lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0] }];
+    return [{ name, where, lat, lng }];
   });
 }
 

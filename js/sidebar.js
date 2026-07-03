@@ -173,11 +173,6 @@ export function initSidebar() {
     emit("refresh");
   });
 
-  $("#search").addEventListener("input", (e) => {
-    state.q = e.target.value.trim().toLowerCase();
-    emit("refresh");
-  });
-
   $("#regionChips").addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn) return;
