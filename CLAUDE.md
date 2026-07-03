@@ -78,8 +78,10 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 ## Shipping
 
-- Repo: github.com/lbkchen/nippon-top, **private**. Pushing there is fine; the Pages workflow
-  (.github/workflows/pages.yml) validates data on every push and its deploy job skips itself
-  while the repo is private. NEVER flip the repo public (= publishing the site + Ken's
-  personal notes) without his explicit OK.
+- Repo: github.com/lbkchen/nippon-top, **public** (Ken flipped it 2026-07-03; his personal
+  place notes are published by design). The Pages workflow (.github/workflows/pages.yml)
+  validates data and deploys the live site on every push to main:
+  https://lbkchen.github.io/nippon-top/ — so pushing main = shipping to friends.
+- Public repo means committed files are browsable by anyone — don't commit anything
+  friend-private in plaintext (friend packs are encrypted for exactly this reason).
 - Commit per coherent phase with descriptive messages; run check-data first.
