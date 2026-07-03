@@ -96,12 +96,15 @@ tiny event bus:
 index.html          static shell: every panel/drawer/modal lives here
 styles.css          the whole look — sticker-bomb + halftone + rough ink
 data.js             generated data (window.NIPPON) — never hand-edit
+friends/            encrypted friend-map packs (*.enc) + public manifest (index.json);
+                    the decryption key lives only in each friend's share link
 js/
   main.js           boot order
   bus.js            EventTarget wrapper — modules talk via events, not imports
   config.js         categories, palette, pure helpers
   store.js          state + data + localStorage overlay + curation logic
   map.js            Leaflet init, layers, padding
+  pack.js           friend-pack codec: deflate + AES-GCM, fetch with offline cache
   pins.js           markers, popups, zoom scaling
   sidebar.js        cards, filters, search, region hops
   modes.js          tool switching, Esc, toolbar dispatch

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Sanity-checks data.js so a bad export/edit can't ship a broken map.
+// Sanity-checks data.js (and the friends/ pack manifest) so a bad export/edit
+// can't ship a broken map.
 //   node tools/check-data.mjs        (exit 1 on any failure)
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,7 +23,7 @@ const data = w.NIPPON;
 
 if (!data) { console.error("✗ data.js did not set window.NIPPON"); process.exit(1); }
 
-const { places = [], chains = [], zones = [], curations = [], doodles = [] } = data;
+const { places = [], chains = [], zones = [], doodles = [] } = data;
 
 // ---- places ----
 const ids = new Set();
@@ -66,18 +67,34 @@ for (const z of zones) {
   }
 }
 
-// ---- curations ----
-const slugs = new Set();
-for (const c of curations) {
-  const tag = `curation "${c.slug || c.name || "???"}"`;
-  if (!c.slug || !/^[\w-]+$/.test(c.slug)) err(`${tag}: slug must be url-safe ([\\w-]+)`);
-  if (slugs.has(c.slug)) err(`${tag}: duplicate slug`);
-  slugs.add(c.slug);
-  if (!c.name) err(`${tag}: missing name`);
-  if (!["exclude", "include"].includes(c.mode)) err(`${tag}: mode must be exclude|include`);
-  for (const id of c.ids || []) if (!ids.has(id)) err(`${tag}: references unknown place "${id}"`);
-  for (const id of Object.keys(c.notes || {})) if (!ids.has(id)) err(`${tag}: note on unknown place "${id}"`);
-  for (const id of c.seen || []) if (!ids.has(id)) err(`${tag}: seen list has unknown place "${id}"`);
+// ---- friend packs ----
+// Packs are encrypted (contents get sanity-checked at export time, in the app) —
+// CI can only verify the manifest and the blobs agree, so no friend link 404s silently.
+let packCount = 0;
+const friendsDir = join(ROOT, "friends");
+if (existsSync(friendsDir)) {
+  const encFiles = readdirSync(friendsDir).filter((f) => f.endsWith(".enc"));
+  packCount = encFiles.length;
+  let manifest = [];
+  const mPath = join(friendsDir, "index.json");
+  if (existsSync(mPath)) {
+    try { manifest = JSON.parse(readFileSync(mPath, "utf8")); } catch { err("friends/index.json: does not parse"); }
+  } else if (encFiles.length) {
+    err("friends/ has packs but no index.json — the manager can't list them");
+  }
+  if (!Array.isArray(manifest)) { err("friends/index.json: must be an array"); manifest = []; }
+  const listed = new Set();
+  for (const e of manifest) {
+    const tag = `friends manifest "${e.name || e.file || "???"}"`;
+    if (!e.file || !/^[\w-]+$/.test(e.file)) { err(`${tag}: bad or missing file id`); continue; }
+    if (!e.name) err(`${tag}: missing name`);
+    if (listed.has(e.file)) err(`${tag}: duplicate file id`);
+    listed.add(e.file);
+    if (!encFiles.includes(`${e.file}.enc`)) err(`${tag}: friends/${e.file}.enc is missing — that link is dead`);
+  }
+  for (const f of encFiles) {
+    if (!listed.has(f.replace(/\.enc$/, ""))) err(`friends/${f}: not in index.json — export it again from the app`);
+  }
 }
 
 // ---- doodles ----
@@ -92,4 +109,4 @@ if (errors.length) {
   for (const e of errors) console.error(`  · ${e}`);
   process.exit(1);
 }
-console.log(`✓ data.js looks extremely correct — ${places.length} places (${places.filter((p) => p.star).length} bangers), ${chains.length} chains, ${zones.length} zones, ${curations.length} friend maps, ${doodles.length} doodles`);
+console.log(`✓ data.js looks extremely correct — ${places.length} places (${places.filter((p) => p.star).length} bangers), ${chains.length} chains, ${zones.length} zones, ${doodles.length} doodles, ${packCount} friend pack${packCount === 1 ? "" : "s"}`);

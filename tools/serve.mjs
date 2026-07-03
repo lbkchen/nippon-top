@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 // Zero-dependency static server with no-cache headers, so edits always show up.
-// Also accepts PUT /img/<file> so the app's dev-only photo drop can save files
-// straight into img/ (localhost only — the server never binds beyond 127.0.0.1).
+// Also accepts PUT /img/<file> (dev-only photo drop) and PUT /friends/<file>
+// (friend-pack export) so the app can save straight into the repo
+// (localhost only — the server never binds beyond 127.0.0.1).
 //   node tools/serve.mjs [port]
 import { createServer } from "node:http";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname, normalize, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,7 +23,19 @@ const MIME = {
   ".jpg": "image/jpeg",
   ".ico": "image/x-icon",
   ".webmanifest": "application/manifest+json",
+  ".enc": "application/octet-stream",
 };
+
+async function readBody(req, res, cap) {
+  const chunks = [];
+  let size = 0;
+  for await (const c of req) {
+    size += c.length;
+    if (size > cap) { res.writeHead(413).end("too big"); return null; }
+    chunks.push(c);
+  }
+  return Buffer.concat(chunks);
+}
 
 createServer(async (req, res) => {
   try {
@@ -30,15 +43,22 @@ createServer(async (req, res) => {
     if (req.method === "PUT" && path.startsWith("/img/")) {
       const name = basename(path);
       if (!/^[\w.-]+\.(jpe?g|png|webp|avif)$/i.test(name)) { res.writeHead(400).end("bad filename"); return; }
-      const chunks = [];
-      let size = 0;
-      for await (const c of req) {
-        size += c.length;
-        if (size > 15e6) { res.writeHead(413).end("too big"); return; }
-        chunks.push(c);
-      }
-      await writeFile(join(ROOT, "img", name), Buffer.concat(chunks));
-      console.log(`  📷 saved img/${name} (${Math.round(size / 1024)} kB)`);
+      const body = await readBody(req, res, 15e6);
+      if (!body) return;
+      await writeFile(join(ROOT, "img", name), body);
+      console.log(`  📷 saved img/${name} (${Math.round(body.length / 1024)} kB)`);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, file: name }));
+      return;
+    }
+    if (req.method === "PUT" && path.startsWith("/friends/")) {
+      const name = basename(path);
+      if (!/^([\w-]+\.enc|index\.json)$/.test(name)) { res.writeHead(400).end("bad filename"); return; }
+      const body = await readBody(req, res, 5e6);
+      if (!body) return;
+      await mkdir(join(ROOT, "friends"), { recursive: true });
+      await writeFile(join(ROOT, "friends", name), body);
+      console.log(`  ✉︎ saved friends/${name} (${Math.round(body.length / 1024) || 1} kB)`);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, file: name }));
       return;

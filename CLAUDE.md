@@ -7,7 +7,8 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 - Serve: `node tools/serve.mjs` on :4173 (no-cache headers — plain `python3 -m http.server`
   serves stale ES modules; never recommend it). `.claude/launch.json` works with preview_start.
-  It also accepts `PUT /img/<file>` for the detail panel's dev-only photo drop (binds 127.0.0.1).
+  It also accepts `PUT /img/<file>` (dev-only photo drop) and `PUT /friends/<file>`
+  (friend-pack export) — binds 127.0.0.1 only.
 - Debug/test in browser: `window.__nippon` = `{ map, state, store, markers, emit, setMode }`.
   Module scope isn't global; always go through this in preview_eval. Simulate lasso/doodle with
   synthetic PointerEvents on `#map` (screenshots downscale ~55% — get coords from
@@ -36,8 +37,13 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 - `tools/build-data.mjs` = master place list → generates `data.js` (never hand-edit data.js).
   Rebuilds MUST carry over what exists only in data.js: `custom-*` places, custom zones,
-  curations, doodles. In-app edits live in localStorage until 💾 export downloads a replacement
+  doodles. In-app edits live in localStorage until 💾 export downloads a replacement
   data.js; both paths stay compatible (export ↔ rebuild are merge-safe by id/slug).
+  Friend maps are NOT in data.js: each exports separately as an encrypted
+  `friends/<file>.enc` pack + `friends/index.json` manifest (dev: saved straight into
+  the repo via serve.mjs PUT; prod: downloads). Pack content sanity checks live in the
+  exporter because CI can't see inside ciphertext; check-data only cross-checks
+  manifest ↔ blobs.
 - Geocoding: build-time only, via Nominatim (`--geocode`, 1 req/s, cached in
   tools/geocode-cache.json; hits >50 km from the hand-placed fallback are auto-rejected).
   Places the geocoder missed carry `approx: true` and show "~ish location". Runtime geocoding
@@ -55,9 +61,21 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 - **Curations (friend maps)** — the fork model, Ken's core feature:
   `mode:"exclude"` = base minus `ids`, auto-inherits new recs ("rebase on head");
   `mode:"include"` = frozen handpicks; `seen` (base ids at last save) powers the
-  "N new recs since last edit" staleness pill. `notes{placeId}` = personal lines only that
-  friend sees. Shared as `#for=<slug>`; links only work for others after export + deploy.
-  Legacy `#mix=` links still parse.
+  "N new recs since last edit" staleness pill. `notes{placeId}` = personal lines only
+  that friend sees. Packs can also carry `extraPlaces/extraZones/extraDoodles` — spots,
+  zones, and ink that exist ONLY on that friend's map (never in plaintext in the public
+  repo; no photos on extras since img/ is public). An edit session survives tool
+  switches (add/zone/pen writes land in the pack via store routing) and ends only via
+  save/nvm. Friend view hides non-included pins outright (never dim them).
+- **Friend packs** (the wire format): each curation ships encrypted as
+  `friends/<file>.enc` — deflate + AES-GCM via js/pack.js; `file` + `key` are minted
+  once on first save and NEVER change (the link depends on them). Share link =
+  `#for=<file>.<key>`; the key lives only in links, Ken's localStorage, and the
+  downloadable keyring — never in the repo. `friends/index.json` = public manifest
+  (names + files, no keys) for the manager drawer and check-data. "adopt this map" on
+  a fetched pack imports it for editing = Ken's cross-browser recovery path.
+  localStorage is staging/cache only: anything durable must be reconstructible from
+  repo artifacts + a link. Legacy `#for=<slug>` and `#mix=` links still parse.
 - **Zones** = ski-map area annotations (draw via zones menu or lasso→save); **chains** =
   pinless everywhere-recs in a drawer; **doodles** = freehand ink in map coords.
 - `state.userLoc` = reference point (GPS or searched address) → distance pills + nearest-first
