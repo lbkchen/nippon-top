@@ -25,7 +25,7 @@ function popupContent(p) {
     <div class="popup-title">${p.emoji || CATS[p.cat].emoji} ${esc(p.name)} ${p.star ? "⭐" : ""}</div>
     <div class="popup-blurb">${linkify(esc(short)) || "<i>no notes, pure vibes</i>"}</div>
     ${p.notes && p.notes.length > 150 ? '<span class="popup-link popup-rant">read the full rant in the list →</span>' : ""}
-    <a class="popup-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener">🧭 open in google maps</a>`;
+    <a class="popup-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener">open in google maps ↗</a>`;
   const link = div.querySelector(".popup-rant");
   if (link) link.addEventListener("click", () => emit("place-selected", { id: p.id, fly: false, openList: true }));
   return div;
@@ -65,7 +65,7 @@ export function refreshMarkers() {
       pin.classList.toggle("cur-in", !!editVis && editVis.has(p.id));
       pin.classList.toggle("cur-out", !!editVis && !editVis.has(p.id));
       const badge = pin.querySelector(".curate-badge");
-      if (badge) badge.textContent = editVis ? (editVis.has(p.id) ? "💌" : "✕") : "";
+      if (badge) badge.textContent = editVis ? (editVis.has(p.id) ? "✓" : "✕") : "";
     }
   }
 }

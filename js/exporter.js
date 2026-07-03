@@ -11,7 +11,7 @@ function exportData() {
   a.download = "data.js";
   a.click();
   URL.revokeObjectURL(a.href);
-  showHint("💾 drop that data.js into the repo — your edits are now canon", 3500);
+  showHint("drop that data.js into the repo — your edits are now canon", 3500);
 }
 
 export const initExporter = () => on("export", exportData);

@@ -34,26 +34,32 @@
     <p class="tagline">ken's extremely correct japan recs<span class="tm">™</span></p>
   </div>
 
+  <!-- find a place / address (Photon geocoder, free + keyless) -->
+  <div class="geo-search" id="geoSearch">
+    <input id="geoInput" type="search" placeholder="find a place or address…" autocomplete="off" spellcheck="false" />
+    <div class="geo-results hidden" id="geoResults"></div>
+  </div>
+
   <!-- region hop chips -->
   <nav class="region-chips" id="regionChips">
-    <button data-group="all">🗾 all of it</button>
-    <button data-group="tokyo" class="active">🗼 tokyo</button>
-    <button data-group="neartokyo">🚆 near tokyo</button>
-    <button data-group="kyoto">⛩️ kyoto</button>
-    <button data-group="osaka">🐙 osaka</button>
-    <button data-group="hiroshima">🚴 hiroshima</button>
-    <button data-group="hokkaido">❄️ hokkaido</button>
+    <button data-group="all">all of it</button>
+    <button data-group="tokyo" class="active">tokyo</button>
+    <button data-group="neartokyo">near tokyo</button>
+    <button data-group="kyoto">kyoto</button>
+    <button data-group="osaka">osaka</button>
+    <button data-group="hiroshima">hiroshima</button>
+    <button data-group="hokkaido">hokkaido</button>
   </nav>
 
   <!-- friend-map edit bar -->
   <div class="mix-bar hidden" id="curateBar">
-    <span class="mix-icon">💌</span>
-    <input id="curEmoji" type="text" placeholder="✨" maxlength="4" title="their emoji" />
+    <span class="mix-bar-tag">friend map</span>
+    <input id="curEmoji" type="text" placeholder="✨" maxlength="4" title="their emoji, if they've earned one" />
     <input id="curName" type="text" placeholder="who's it for?" maxlength="24" />
     <input id="curMessage" type="text" placeholder="lil message for them…" maxlength="90" />
     <button class="btn-ghost" id="curMode" title="switch fork mode"></button>
     <span class="mix-count" id="curCount">0 in</span>
-    <button class="btn-solid" id="curSave">save 💾</button>
+    <button class="btn-solid" id="curSave">save</button>
     <button class="btn-ghost" id="curCancel">nvm</button>
   </div>
 
@@ -67,9 +73,9 @@
   <!-- sidebar: the high-context zone -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
-      <input id="search" type="search" placeholder="🔍 search the recs…" autocomplete="off" />
+      <input id="search" type="search" placeholder="search the recs…" autocomplete="off" />
       <div class="filter-row">
-        <button class="star-toggle" id="starToggle" title="only the certified bangers">⭐ bangers only</button>
+        <button class="star-toggle" id="starToggle" title="only the certified bangers">★ bangers only</button>
         <div class="cat-chips" id="catChips"></div>
       </div>
       <div class="context-bar" id="contextBar"></div>
@@ -80,19 +86,82 @@
       <span class="foot-credit">made with 🍜 by ken</span>
     </div>
   </aside>
-  <button class="sidebar-tab" id="sidebarTab" title="toggle the list">📜</button>
+  <button class="sidebar-tab" id="sidebarTab" title="show the list" aria-label="show the list">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6.2 C10 5.4 16 6.8 20 6" /><path d="M4 12 C9 11.2 15 12.6 20 11.8" /><path d="M4 17.8 C8 17 13 18.2 20 17.5" /></svg>
+  </button>
 
   <!-- toolbox -->
   <div class="toolbar" id="toolbar">
-    <button data-tool="lasso" title="lasso mode — circle some spots, see them all at once">🪢</button>
-    <button data-tool="pen" title="doodle mode — draw on the map like it's a ski trail map">🖊️</button>
-    <button data-tool="add" title="add a new spot — click the map where it goes">📍</button>
-    <button data-tool="zones" title="toggle the vibe zones" class="active">🎿</button>
-    <button data-tool="curations" title="friend maps — fork the map for someone, keep it synced">💌</button>
-    <button data-tool="roulette" title="osusume roulette — let fate pick">🎰</button>
-    <button data-tool="locate" title="find me — see how far the recs are">🧭</button>
-    <button data-tool="chains" title="the chain gang — recs that are everywhere">🔗</button>
-    <button data-tool="export" title="export data.js with all your edits baked in">💾</button>
+    <button data-tool="lasso" aria-label="lasso — circle spots to see them all at once">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke-dasharray="3.2 3" d="M12 4 C17.5 3.2 20.8 6.8 20 10.5 C19.2 14.4 14.5 15.8 10.5 15 C6.8 14.3 4.2 11.5 5.2 8.2 C6 5.6 9 4.4 12 4 Z" />
+        <path d="M9.5 15.5 C8.6 17.8 7 19.2 5 20.2" />
+      </svg>
+      <span class="tool-label">lasso</span>
+    </button>
+    <button data-tool="pen" aria-label="doodle — draw on the map, ink sticks to the terrain">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 19 L6.6 14.4 L16.2 4.8 C17.2 3.8 18.9 3.8 19.9 4.8 C20.9 5.8 20.9 7.5 19.9 8.5 L10.3 18.1 L5 19 Z" />
+        <path d="M14.5 6.5 L18.2 10.2" />
+      </svg>
+      <span class="tool-label">doodle</span>
+    </button>
+    <button data-tool="add" aria-label="add a spot — search or click the map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21 C12 21 5.5 13.8 5.5 9.2 C5.5 5.4 8.4 3.2 12 3.2 C15.6 3.2 18.5 5.4 18.5 9.2 C18.5 13.8 12 21 12 21 Z" />
+        <path d="M12 6.6 V11.4 M9.6 9 H14.4" />
+      </svg>
+      <span class="tool-label">add a spot</span>
+    </button>
+    <button data-tool="zones" aria-label="zones — draw and toggle vibe areas" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke-dasharray="3.4 3" d="M5.2 8 C4.4 5.2 7.4 4 10.4 4.6 C14.2 5.3 19.6 4.2 20 7.6 C20.4 10.8 19 14.2 16.2 16.2 C13.2 18.3 7.4 19.2 5.6 16.2 C4.2 13.6 6.2 10.8 5.2 8 Z" />
+      </svg>
+      <span class="tool-label">zones</span>
+    </button>
+    <button data-tool="curations" aria-label="friend maps — fork the map for someone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3.2" y="5.8" width="17.6" height="13" rx="2" />
+        <path d="M3.5 7 L12 13.2 L20.5 7" />
+      </svg>
+      <span class="tool-label">friend maps</span>
+    </button>
+    <button data-tool="roulette" aria-label="roulette — let fate pick a spot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="16" rx="3.5" />
+        <circle cx="9" cy="9" r="0.6" fill="currentColor" /><circle cx="15" cy="9" r="0.6" fill="currentColor" />
+        <circle cx="12" cy="12" r="0.6" fill="currentColor" />
+        <circle cx="9" cy="15" r="0.6" fill="currentColor" /><circle cx="15" cy="15" r="0.6" fill="currentColor" />
+      </svg>
+      <span class="tool-label">roulette</span>
+    </button>
+    <button data-tool="locate" aria-label="find me — distances from where you stand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="8.4" />
+        <path d="M15.2 8.8 L13.2 13.2 L8.8 15.2 L10.8 10.8 Z" />
+      </svg>
+      <span class="tool-label">find me</span>
+    </button>
+    <button data-tool="chains" aria-label="the chain gang — recs that are everywhere">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 13.2 a4.4 4.4 0 0 0 6.6 0.5 l2.6-2.6 a4.4 4.4 0 0 0-6.2-6.2 l-1.5 1.5" />
+        <path d="M14 10.8 a4.4 4.4 0 0 0-6.6-0.5 l-2.6 2.6 a4.4 4.4 0 0 0 6.2 6.2 l1.5-1.5" />
+      </svg>
+      <span class="tool-label">chain gang</span>
+    </button>
+    <button data-tool="export" aria-label="export — download data.js with your edits baked in">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3.5 V13.5 M8 10 l4 4 4-4" />
+        <path d="M4.5 15.5 v3 a2 2 0 0 0 2 2 h11 a2 2 0 0 0 2-2 v-3" />
+      </svg>
+      <span class="tool-label">export</span>
+    </button>
+  </div>
+
+  <!-- zones flyout menu -->
+  <div class="tool-menu hidden" id="zoneMenu">
+    <button id="zoneDraw">draw a new zone</button>
+    <button id="zoneToggle">hide zones</button>
   </div>
 
   <!-- pen tray -->
@@ -102,8 +171,12 @@
     <button class="swatch" data-color="#2f9e44" style="--c:#2f9e44"></button>
     <button class="swatch" data-color="#f5b301" style="--c:#f5b301"></button>
     <button class="swatch" data-color="#2b2b33" style="--c:#2b2b33"></button>
-    <button class="pen-action" id="penUndo" title="undo last stroke">↩️</button>
-    <button class="pen-action" id="penClear" title="erase all doodles">🧹</button>
+    <button class="pen-action" id="penUndo" title="undo last stroke" aria-label="undo last stroke">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 5 L4 9.5 L8.5 14" /><path d="M4 9.5 h10 a5.5 5.5 0 0 1 0 11 h-4" /></svg>
+    </button>
+    <button class="pen-action" id="penClear" title="erase all doodles" aria-label="erase all doodles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 h16" /><path d="M7 20 L15.5 4.8 C16 3.9 17.3 3.7 18.1 4.4 L20.2 6.2 C21 6.9 21 8.2 20.3 9 L10.5 20" /></svg>
+    </button>
   </div>
 
   <!-- mode hint toast -->
@@ -112,9 +185,9 @@
   <!-- chain gang drawer -->
   <div class="drawer hidden" id="chainsDrawer">
     <div class="drawer-head">
-      <h2>THE CHAIN GANG 🔗</h2>
+      <h2>THE CHAIN GANG</h2>
       <p>no pins for these — they're literally everywhere, and that's the point</p>
-      <button class="drawer-close" id="drawerClose">✕</button>
+      <button class="drawer-close" id="drawerClose" aria-label="close">✕</button>
     </div>
     <div class="drawer-body" id="chainsBody"></div>
   </div>
@@ -122,9 +195,9 @@
   <!-- friend maps drawer -->
   <div class="drawer hidden" id="curationsDrawer">
     <div class="drawer-head">
-      <h2>FRIEND MAPS 💌</h2>
+      <h2>FRIEND MAPS</h2>
       <p>fork the map for a person. exclusions rebase on your newest recs; handpicks stay frozen.</p>
-      <button class="drawer-close" id="curationsClose">✕</button>
+      <button class="drawer-close" id="curationsClose" aria-label="close">✕</button>
       <button class="btn-solid drawer-new" id="curationsNew">+ fork one</button>
     </div>
     <div class="drawer-body drawer-list" id="curationsBody"></div>
@@ -133,7 +206,12 @@
   <!-- add spot modal -->
   <div class="modal-wrap hidden" id="addModal">
     <div class="modal">
-      <h2>📍 new spot just dropped</h2>
+      <h2>NEW SPOT JUST DROPPED</h2>
+      <label>where is it? search, or just click the map
+        <input id="addSearch" type="search" placeholder="e.g. Kagari Ginza, or a hotel address" autocomplete="off" spellcheck="false" />
+      </label>
+      <div class="geo-results in-modal hidden" id="addSearchResults"></div>
+      <div class="add-pin-status" id="addPinStatus"></div>
       <label>what's it called?
         <input id="addName" type="text" placeholder="Secret Ramen Basement" maxlength="60" />
       </label>
@@ -141,14 +219,33 @@
       <div class="cat-pick" id="addCatPick"></div>
       <label class="check-line">
         <input id="addStar" type="checkbox" />
-        <span>⭐ certified banger (best of the best)</span>
+        <span>★ certified banger (best of the best)</span>
       </label>
       <label>the pitch — why should anyone go?
         <textarea id="addNotes" rows="4" placeholder="ok so listen…"></textarea>
       </label>
       <div class="modal-actions">
         <button class="btn-ghost" id="addCancel">nah</button>
-        <button class="btn-solid" id="addSave">pin it 📌</button>
+        <button class="btn-solid" id="addSave">pin it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- zone modal -->
+  <div class="modal-wrap hidden" id="zoneModal">
+    <div class="modal">
+      <h2>STAKE OUT A ZONE</h2>
+      <label>what's this area called?
+        <input id="zoneName" type="text" placeholder="here be tsukemen" maxlength="40" />
+      </label>
+      <label>the vibes, in one line
+        <input id="zoneBlurb" type="text" placeholder="optional but encouraged" maxlength="90" />
+      </label>
+      <label>flag color</label>
+      <div class="zone-colors" id="zoneColors"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="zoneCancel">nah</button>
+        <button class="btn-solid" id="zoneSave">stake the claim</button>
       </div>
     </div>
   </div>

@@ -28,5 +28,11 @@ Read README.md for the architecture map; it's accurate.
   (`config.js`), data (`store.js`), and map plumbing (`map.js`).
 - Style: cream/ink/red/gold palette, Bangers display font, halftone dots, skewed sticker shapes,
   hard offset shadows. Copy is lowercase, playful, a little unhinged. Keep both.
+- Radii come from the token scale in styles.css (--r-cut/sm/md/lg) — never hardcode px radii.
+- Emoji policy (Ken's explicit feedback): pins, category glyphs, and the card↔pin link keep
+  emojis; UI chrome (buttons, pills, hints, headers, toasts) is text-only. Toolbar uses inline
+  SVG line icons with hover labels. No prompt()/alert() — use the styled modals.
+- Runtime geocoding is Photon (photon.komoot.io): free, keyless, typeahead-friendly. Keep the
+  350ms debounce and attribution. Nominatim is for offline build-time geocoding only.
 - Coordinates: places the geocoder missed are `approx: true` and wear "~ish location" tags.
   Geocode fixes go in `build-data.mjs` fallbacks (Nominatim results >50km from fallback are auto-rejected).

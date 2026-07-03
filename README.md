@@ -18,7 +18,8 @@ Any static server works; that one's just nicer for development.
 | thing | how |
 |---|---|
 | 🪢 **Lasso** | draw a loop around pins → everything inside lists in the sidebar with full notes. The "what's worth it around here today" tool. |
-| 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone"). Save any lasso as a zone. |
+| 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone"). Draw one from the zones menu, or save any lasso as a zone — either way you name it and pick its flag color. |
+| 🔎 **Place search** | find any address/venue via Photon (komoot's free, keyless OSM geocoder) — then add a spot there, or measure distances from it ("what's near my hotel?"). Also built into the add-spot form. |
 | 🖊️ **Doodle** | freehand ink that sticks to the terrain. iPad/Pencil friendly. |
 | 📍 **Add a spot** | click the map, fill the form. Lives in your browser until exported. |
 | 💌 **Friend maps** | fork the whole map for a person — see below, this is the good stuff. |

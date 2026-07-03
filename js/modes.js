@@ -6,10 +6,11 @@ import { emit } from "./bus.js";
 
 const MODE_TOOLS = ["lasso", "pen", "add"];
 const HINTS = {
-  lasso: "🪢 draw a loop around some spots — everything inside shows up in the list",
-  pen: "🖊️ scribble on the map — ink sticks to the terrain, iPad approved",
-  add: "📍 click the map right where the new spot goes",
-  curate: "💌 click pins or cards to flip them in/out — 📝 on a card adds a personal note",
+  lasso: "draw a loop around some spots — everything inside shows up in the list",
+  pen: "scribble on the map — ink sticks to the terrain, iPad approved",
+  add: "search for the place, or click the map right where it goes",
+  zone: "circle the whole area — you'll get to name it after",
+  curate: "click pins or cards to flip them in or out — the note button on a card adds a personal line",
 };
 
 export function setMode(mode) {
@@ -18,12 +19,13 @@ export function setMode(mode) {
   $$("#toolbar button[data-tool]").forEach((b) => {
     if (MODE_TOOLS.includes(b.dataset.tool)) b.classList.toggle("active", b.dataset.tool === m);
   });
+  const sketchy = m === "lasso" || m === "pen" || m === "zone";
   const mapEl = $("#map");
-  mapEl.classList.toggle("lassoing", m === "lasso");
+  mapEl.classList.toggle("lassoing", m === "lasso" || m === "zone");
   mapEl.classList.toggle("penning", m === "pen");
   mapEl.classList.toggle("adding", m === "add");
-  mapEl.style.touchAction = m === "lasso" || m === "pen" ? "none" : "";
-  if (m === "lasso" || m === "pen") map.dragging.disable(); else map.dragging.enable();
+  mapEl.style.touchAction = sketchy ? "none" : "";
+  if (sketchy) map.dragging.disable(); else map.dragging.enable();
   $("#penTray").classList.toggle("hidden", m !== "pen");
   if (m) showHint(HINTS[m]); else hideHint();
   emit("mode-changed", m);
@@ -34,6 +36,8 @@ export function initModes() {
   window.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     $("#addModal").classList.add("hidden");
+    $("#zoneModal").classList.add("hidden");
+    $("#zoneMenu").classList.add("hidden");
     $("#chainsDrawer").classList.add("hidden");
     $("#curationsDrawer").classList.add("hidden");
     if (state.mode) setMode(null);
@@ -43,7 +47,7 @@ export function initModes() {
     btn.addEventListener("click", () => {
       const t = btn.dataset.tool;
       if (MODE_TOOLS.includes(t)) setMode(t);
-      else if (t === "zones") emit("toggle-zones");
+      else if (t === "zones") emit("zones-menu");
       else if (t === "chains") emit("toggle-chains");
       else if (t === "curations") emit("open-curations");
       else if (t === "roulette") emit("roulette");

@@ -17,21 +17,21 @@ function renderContextBar() {
   const label = document.createElement("span");
   if (state.curationView) {
     const c = state.curationView;
-    label.textContent = `💌 ${c.emoji || ""} ${c.name}'s map — ${n} spots`;
+    label.textContent = `${c.emoji ? c.emoji + " " : ""}${c.name}'s map — ${n} spots`;
   } else if (state.lasso) {
-    label.textContent = `🪢 lassoed ${n} spot${n === 1 ? "" : "s"}`;
+    label.textContent = `lassoed ${n} spot${n === 1 ? "" : "s"}`;
     const clear = document.createElement("button");
     clear.className = "ctx-btn";
-    clear.textContent = "✕ clear";
+    clear.textContent = "clear";
     clear.onclick = () => emit("lasso-clear");
     const save = document.createElement("button");
     save.className = "ctx-btn gold";
-    save.textContent = "🎿 save as zone";
+    save.textContent = "save as zone";
     save.onclick = () => emit("lasso-save-zone");
     bar.append(label, clear, save);
     return;
   } else {
-    label.textContent = `👀 ${n} in view`;
+    label.textContent = `${n} in view`;
   }
   bar.append(label);
 }
@@ -50,22 +50,22 @@ function cardEl(p) {
     <div class="card-head">
       <span class="card-emoji">${p.emoji || cat.emoji}</span>
       <span class="card-name">${esc(p.name)}</span>
-      ${p.star ? '<span class="card-star">⭐</span>' : ""}
+      ${p.star ? '<span class="card-star">★</span>' : ""}
     </div>
     <div class="card-pills">
-      <span class="pill">${cat.emoji} ${cat.label}</span>
-      <span class="pill">📍 ${esc(p.region)}</span>
+      <span class="pill cat-pill" style="--pin:${cat.color}">${cat.label}</span>
+      <span class="pill">${esc(p.region)}</span>
       ${p.approx ? '<span class="pill approx" title="the geocoder shrugged — pin placed from memory">~ish location</span>' : ""}
-      ${custom ? '<span class="pill custom">✏️ hand-added</span>' : ""}
-      ${state.userLoc ? `<span class="pill dist">🚶 ${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
-      <a class="pill pill-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener" title="open in google maps">🧭 gmaps</a>
+      ${custom ? '<span class="pill custom">hand-added</span>' : ""}
+      ${state.userLoc ? `<span class="pill dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
+      <a class="pill pill-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener" title="open in google maps">gmaps ↗</a>
     </div>
-    ${viewNote ? `<div class="card-personal">💌 ${esc(viewNote)}</div>` : ""}
+    ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="card-notes">${linkify(esc(p.notes))}</div>
     ${p.notes && p.notes.length > 180 ? '<button class="card-more">the whole rant ▾</button>' : ""}
-    ${editing ? `<button class="card-note-btn">📝 ${editNote ? "edit" : "add"} note for ${esc(editing.name || "them")}</button>` : ""}
-    ${editNote ? `<div class="card-personal">💌 ${esc(editNote)}</div>` : ""}
-    ${custom ? '<button class="card-del" title="delete this spot">🗑️</button>' : ""}`;
+    ${editing ? `<button class="card-note-btn">${editNote ? "edit the" : "add a"} note for ${esc(editing.name || "them")}</button>` : ""}
+    ${editNote ? `<div class="card-personal">for ${esc(editing.name || "them")}: ${esc(editNote)}</div>` : ""}
+    ${custom ? '<button class="card-del" title="delete this spot">delete</button>' : ""}`;
 
   card.addEventListener("click", (e) => {
     if (e.target.closest("a")) return;
@@ -75,7 +75,27 @@ function cardEl(p) {
       return;
     }
     if (e.target.classList.contains("card-note-btn")) {
-      emit("curation-note", p.id);
+      const btn = e.target;
+      const wrap = document.createElement("div");
+      wrap.className = "note-editor";
+      const input = document.createElement("input");
+      input.type = "text";
+      input.maxLength = 90;
+      input.placeholder = `a line just for ${editing?.name || "them"}…`;
+      input.value = editing?.notes?.[p.id] || "";
+      const save = document.createElement("button");
+      save.textContent = "save";
+      save.className = "btn-solid";
+      wrap.append(input, save);
+      btn.replaceWith(wrap);
+      input.focus();
+      wrap.addEventListener("click", (ev) => ev.stopPropagation());
+      save.addEventListener("click", () => emit("curation-note-set", { id: p.id, text: input.value }));
+      input.addEventListener("keydown", (ev) => {
+        ev.stopPropagation();
+        if (ev.key === "Enter") emit("curation-note-set", { id: p.id, text: input.value });
+        if (ev.key === "Escape") emit("refresh-list");
+      });
       return;
     }
     if (e.target.classList.contains("card-del")) {

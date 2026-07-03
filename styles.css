@@ -13,6 +13,11 @@
   --shadow: 5px 5px 0 var(--ink);
   --shadow-sm: 3px 3px 0 var(--ink);
   --border: 3px solid var(--ink);
+  /* radius scale — cut (sharp sticker), sm (small controls), md (cards/buttons), lg (panels) */
+  --r-cut: 4px;
+  --r-sm: 7px;
+  --r-md: 11px;
+  --r-lg: 16px;
   --font-display: "Bangers", "Fredoka", sans-serif;
   --font-head: "Fredoka", sans-serif;
   --font-body: "Nunito", sans-serif;
@@ -129,7 +134,7 @@ button {
   color: var(--cream);
   background: var(--red);
   border: 3px solid var(--cream);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 8px 10px;
   transform: rotate(8deg);
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.45);
@@ -148,7 +153,7 @@ button {
   z-index: 900;
   background: var(--cream);
   border: var(--border);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   padding: 8px 16px 10px;
   box-shadow: var(--shadow);
   transform: rotate(-2.5deg);
@@ -203,7 +208,7 @@ button {
 .region-chips button {
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 4px;
+  border-radius: var(--r-cut);
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 600;
@@ -229,7 +234,7 @@ button {
   z-index: 800;
   background: var(--cream);
   border: var(--border);
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
@@ -248,7 +253,7 @@ button {
   font-size: 22px;
   background: var(--paper);
   border: var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
   transform: rotate(2deg);
 }
@@ -267,7 +272,7 @@ button {
   width: 34px;
   height: 38px;
   border: 2.5px solid var(--ink);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   background: var(--paper);
   font-size: 15px;
   box-shadow: 2px 2px 0 var(--ink);
@@ -279,7 +284,7 @@ button {
   font-size: 14px;
   padding: 9px 13px;
   border: 2.5px solid var(--ink);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   background: var(--paper);
   outline: none;
   box-shadow: 2px 2px 0 var(--ink);
@@ -292,7 +297,7 @@ button {
   align-self: flex-start;
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 4px;
+  border-radius: var(--r-cut);
   padding: 4px 12px;
   font-size: 13px;
   font-weight: 600;
@@ -308,7 +313,7 @@ button {
 .cat-chips button {
   border: 2px solid var(--ink);
   background: var(--paper);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   font-size: 16px;
   padding: 3px 7px;
   line-height: 1;
@@ -367,13 +372,13 @@ button {
 .cards::-webkit-scrollbar-thumb {
   background: var(--red);
   border: 2px solid var(--cream);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
 }
 
 .card {
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 11px 13px;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
@@ -417,7 +422,7 @@ button {
   right: 10px;
   background: var(--gold);
   border: 2px solid var(--ink);
-  border-radius: 3px;
+  border-radius: var(--r-cut);
   font-family: var(--font-display);
   font-size: 12px;
   letter-spacing: 1.5px;
@@ -450,7 +455,7 @@ a.pill-link:hover { background: var(--gold); color: var(--ink); }
   font-weight: 700;
   background: var(--pink);
   border: 2px dashed var(--red);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 5px 9px;
   transform: rotate(-0.5deg);
 }
@@ -486,7 +491,7 @@ a.pill-link:hover { background: var(--gold); color: var(--ink); }
   font-weight: 600;
   border: 2px dashed var(--ink);
   background: var(--pink);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 3px 9px;
 }
 .card-del {
@@ -591,7 +596,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   background: var(--ink);
   color: var(--cream);
   border: 2px solid var(--cream);
-  border-radius: 3px;
+  border-radius: var(--r-cut);
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 14px;
@@ -605,7 +610,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .leaflet-popup-content-wrapper {
   background: var(--cream);
   border: var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   box-shadow: var(--shadow);
   font-family: var(--font-body);
 }
@@ -634,7 +639,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   letter-spacing: 1.5px;
   padding: 3px 13px;
   border: 2.5px solid var(--ink);
-  border-radius: 3px;
+  border-radius: var(--r-cut);
   box-shadow: var(--shadow-sm);
   white-space: nowrap;
   text-shadow: 1.5px 1.5px 0 var(--ink);
@@ -651,23 +656,77 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   gap: 9px;
 }
 .toolbar button {
-  width: 50px;
-  height: 50px;
-  font-size: 22px;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
   background: var(--paper);
   border: var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
 }
-.toolbar button:nth-child(odd) { transform: rotate(-1.5deg); }
-.toolbar button:nth-child(even) { transform: rotate(1.5deg); }
-.toolbar button:hover { transform: scale(1.12) rotate(-5deg); }
+.toolbar button svg { width: 24px; height: 24px; }
+.toolbar button:nth-child(odd) { transform: rotate(-1.2deg); }
+.toolbar button:nth-child(even) { transform: rotate(1.2deg); }
+.toolbar button:hover { transform: translateX(3px) scale(1.08) rotate(-2deg); background: var(--cream); }
+.toolbar button:focus-visible { outline: 3px solid var(--gold); }
 .toolbar button.active {
   background: var(--red);
-  transform: scale(1.06);
+  color: var(--cream);
   box-shadow: 0 0 0 3px rgba(224, 49, 49, 0.35), var(--shadow-sm);
 }
+
+.tool-label {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) rotate(-1.5deg) translateX(-6px);
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-head);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  padding: 4px 11px;
+  border-radius: var(--r-cut);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.toolbar button:hover .tool-label,
+.toolbar button:focus-visible .tool-label {
+  opacity: 1;
+  transform: translateY(-50%) rotate(-1.5deg) translateX(0);
+}
+
+.tool-menu {
+  position: fixed;
+  z-index: 940;
+  background: var(--cream);
+  border: var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform: rotate(-0.6deg);
+}
+.tool-menu button {
+  border: none;
+  background: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  padding: 7px 12px;
+  border-radius: var(--r-sm);
+}
+.tool-menu button:hover { background: var(--gold); }
 
 .pen-tray {
   position: fixed;
@@ -706,7 +765,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   font-weight: 600;
   font-size: 14.5px;
   padding: 9px 20px;
-  border-radius: 4px;
+  border-radius: var(--r-cut);
   border: 2.5px solid var(--cream);
   box-shadow: var(--shadow);
   pointer-events: none;
@@ -726,7 +785,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   background: var(--cream);
   border: var(--border);
   border-bottom: none;
-  border-radius: 18px 18px 0 0;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
@@ -758,7 +817,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   width: 34px;
   height: 34px;
   border: 2.5px solid var(--ink);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   background: var(--paper);
   font-size: 15px;
   box-shadow: 2px 2px 0 var(--ink);
@@ -779,7 +838,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .chain-card {
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 10px 12px;
   box-shadow: var(--shadow-sm);
 }
@@ -792,7 +851,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .cur-row {
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 11px 13px;
   box-shadow: var(--shadow-sm);
 }
@@ -807,7 +866,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .cur-row-actions button {
   border: 2px solid var(--ink);
   background: var(--cream);
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   font-size: 12px;
   font-weight: 600;
   padding: 3px 10px;
@@ -824,7 +883,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   z-index: 950;
   background: var(--pink);
   border: var(--border);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
@@ -839,7 +898,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   font-weight: 600;
   font-size: 14px;
   border: 2.5px solid var(--ink);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 5px 10px;
   background: var(--paper);
   outline: none;
@@ -857,7 +916,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   z-index: 950;
   background: var(--pink);
   border: var(--border);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   box-shadow: var(--shadow);
   padding: 12px 18px;
   text-align: center;
@@ -879,7 +938,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   background: var(--ink);
   color: var(--cream);
   border: 2.5px solid var(--ink);
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   font-weight: 600;
   font-size: 13px;
   padding: 5px 14px;
@@ -889,7 +948,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .btn-ghost {
   background: var(--paper);
   border: 2.5px solid var(--ink);
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   font-weight: 600;
   font-size: 13px;
   padding: 5px 14px;
@@ -914,7 +973,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   overflow-y: auto;
   background: var(--cream);
   border: var(--border);
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   box-shadow: 7px 7px 0 var(--ink);
   padding: 20px 22px;
   transform: rotate(-0.6deg);
@@ -939,7 +998,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   font-weight: 600;
   font-size: 14px;
   border: 2.5px solid var(--ink);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   background: var(--paper);
   padding: 8px 12px;
   outline: none;
@@ -950,7 +1009,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .cat-pick button {
   border: 2.5px solid var(--ink);
   background: var(--paper);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   padding: 5px 9px;
   font-size: 13px;
 }
@@ -972,7 +1031,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 /* ---------- leaflet chrome ---------- */
 .leaflet-control-zoom {
   border: var(--border) !important;
-  border-radius: 10px !important;
+  border-radius: var(--r-md) !important;
   overflow: hidden;
   box-shadow: var(--shadow-sm) !important;
 }
@@ -1028,7 +1087,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
     padding: 7px 9px;
   }
   .drawer-body { grid-template-columns: 1fr; }
-  .mix-bar { width: calc(100vw - 20px); border-radius: 14px; top: auto; bottom: 8px; }
+  .mix-bar { width: calc(100vw - 20px); border-radius: var(--r-lg); top: auto; bottom: 8px; }
   .mix-bar input { flex: 1; min-width: 110px; }
   .splash-stamp { right: 4px; bottom: -40px; }
 }
@@ -1037,4 +1096,184 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 @media (prefers-reduced-motion: reduce) {
   .pin.star { animation: none; }
   * { transition-duration: 0.01s !important; animation-duration: 0.01s !important; }
+}
+
+/* ---------- geosearch ---------- */
+.geo-search {
+  position: fixed;
+  top: 92px;
+  left: 14px;
+  z-index: 890;
+  width: 264px;
+}
+.geo-search input, #addSearch {
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 8px 13px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+}
+.geo-search input:focus, #addSearch:focus { box-shadow: var(--shadow-sm), 0 0 0 3px rgba(245, 179, 1, 0.55); }
+.geo-results {
+  margin-top: 6px;
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.geo-results.in-modal { position: static; margin-top: 6px; }
+.geo-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 8px 12px;
+  border-bottom: 2px dashed rgba(29, 29, 36, 0.15);
+}
+.geo-result:last-child { border-bottom: none; }
+.geo-result:hover { background: var(--gold); }
+.geo-name { font-family: var(--font-head); font-weight: 600; font-size: 13.5px; }
+.geo-where { font-size: 11px; font-weight: 700; opacity: 0.65; }
+.geo-empty { padding: 10px 12px; font-size: 12px; font-weight: 700; opacity: 0.6; }
+
+.seek-pin, .ref-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--gold);
+  box-shadow: 2px 2px 0 rgba(29, 29, 36, 0.5);
+  position: relative;
+}
+.ref-pin { background: var(--indigo); }
+.seek-pin::after, .ref-pin::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+.seek-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+
+.add-pin-status {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border: 2px dashed var(--ink);
+  border-radius: var(--r-sm);
+  background: #ffe3e3;
+}
+.add-pin-status.ok { background: #d3f9d8; border-style: solid; }
+.linkish {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--indigo);
+  text-decoration: underline;
+}
+
+/* ---------- small identity bits ---------- */
+.cat-pill::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--pin, var(--ink));
+  border: 1.5px solid var(--ink);
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+.card-star { color: var(--gold); text-shadow: 1px 1px 0 var(--ink); font-size: 16px; }
+.card-del {
+  position: absolute;
+  bottom: 9px;
+  right: 11px;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0.45;
+  text-decoration: underline;
+  padding: 0;
+}
+.card-del:hover { opacity: 1; color: var(--red); }
+
+.note-editor { display: flex; gap: 6px; margin-top: 7px; }
+.note-editor input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12.5px;
+  border: 2px dashed var(--red);
+  border-radius: var(--r-sm);
+  background: var(--pink);
+  padding: 4px 9px;
+  outline: none;
+}
+
+.mix-bar-tag {
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 1px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 2px 10px;
+  border-radius: var(--r-cut);
+  transform: rotate(-2deg);
+}
+
+.zone-colors { display: flex; gap: 8px; margin-top: 6px; }
+
+.sidebar-tab svg { width: 22px; height: 22px; }
+.pen-action svg { width: 18px; height: 18px; display: block; }
+
+.pin .curate-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 17px;
+  height: 17px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 900;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  transform: rotate(calc(45deg - var(--tilt, 0deg)));
+}
+.pin.cur-in .curate-badge { display: flex; background: var(--matcha); color: #fff; }
+.pin.cur-out .curate-badge { display: flex; background: var(--red); color: #fff; font-size: 12px; }
+
+@media (max-width: 940px) {
+  .tool-label { display: none; }
+  .toolbar button { width: 40px; height: 40px; }
+  .toolbar button svg { width: 20px; height: 20px; }
+  .geo-search {
+    top: auto;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 190px;
+    width: auto;
+  }
 }
