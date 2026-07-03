@@ -80,15 +80,16 @@ button {
   width: 560px;
   height: 560px;
   transform: translate(-50%, -54%);
+  /* gold, deliberately: red rays + "NIPPON" reads too close to the rising-sun ensign */
   background: conic-gradient(
-    var(--red) 0 8deg, transparent 8deg 24deg, var(--red) 24deg 32deg, transparent 32deg 48deg,
-    var(--red) 48deg 56deg, transparent 56deg 72deg, var(--red) 72deg 80deg, transparent 80deg 96deg,
-    var(--red) 96deg 104deg, transparent 104deg 120deg, var(--red) 120deg 128deg, transparent 128deg 144deg,
-    var(--red) 144deg 152deg, transparent 152deg 168deg, var(--red) 168deg 176deg, transparent 176deg 192deg,
-    var(--red) 192deg 200deg, transparent 200deg 216deg, var(--red) 216deg 224deg, transparent 224deg 240deg,
-    var(--red) 240deg 248deg, transparent 248deg 264deg, var(--red) 264deg 272deg, transparent 272deg 288deg,
-    var(--red) 288deg 296deg, transparent 296deg 312deg, var(--red) 312deg 320deg, transparent 320deg 336deg,
-    var(--red) 336deg 344deg, transparent 344deg 360deg
+    var(--gold) 0 8deg, transparent 8deg 24deg, var(--gold) 24deg 32deg, transparent 32deg 48deg,
+    var(--gold) 48deg 56deg, transparent 56deg 72deg, var(--gold) 72deg 80deg, transparent 80deg 96deg,
+    var(--gold) 96deg 104deg, transparent 104deg 120deg, var(--gold) 120deg 128deg, transparent 128deg 144deg,
+    var(--gold) 144deg 152deg, transparent 152deg 168deg, var(--gold) 168deg 176deg, transparent 176deg 192deg,
+    var(--gold) 192deg 200deg, transparent 200deg 216deg, var(--gold) 216deg 224deg, transparent 224deg 240deg,
+    var(--gold) 240deg 248deg, transparent 248deg 264deg, var(--gold) 264deg 272deg, transparent 272deg 288deg,
+    var(--gold) 288deg 296deg, transparent 296deg 312deg, var(--gold) 312deg 320deg, transparent 320deg 336deg,
+    var(--gold) 336deg 344deg, transparent 344deg 360deg
   );
   clip-path: circle(50%);
   opacity: 0.85;
