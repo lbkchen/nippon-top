@@ -1,0 +1,503 @@
+{
+  "kichijoji": {
+    "coords": [
+      35.7020598,
+      139.5797771
+    ],
+    "matched": "吉祥寺駅, 井ノ頭通り, 吉祥寺南町一丁目, 吉祥寺本町, 武蔵野市, 東京都, 180-0000, 日本",
+    "km_from_fallback": 0.1
+  },
+  "inokashira-park": {
+    "coords": [
+      35.6962563,
+      139.5714873
+    ],
+    "matched": "井の頭恩賜公園（西園）, 三鷹市, 東京都, 181-8555, 日本",
+    "km_from_fallback": 0.5
+  },
+  "higashi-koganei": {
+    "coords": [
+      35.7015414,
+      139.5240561
+    ],
+    "matched": "東小金井, 地蔵通り, 梶野町五丁目, 緑町, 小金井市, 東京都, 184-0003, 日本",
+    "km_from_fallback": 0.2
+  },
+  "ghibli-museum": {
+    "coords": [
+      35.6961731,
+      139.5706324
+    ],
+    "matched": "三鷹の森ジブリ美術館, 83, 下連雀一丁目, 下連雀, 三鷹市, 東京都, 181-0013, 日本",
+    "km_from_fallback": 0
+  },
+  "ramenya-shima": {
+    "miss": true
+  },
+  "tonkatsu-narikura": {
+    "miss": true
+  },
+  "takaosan": {
+    "coords": [
+      35.6245849,
+      139.2431553
+    ],
+    "matched": "高尾山　大見晴園地, 稲荷山線歩道, 八王子市, 東京都, 193-0841, 日本",
+    "km_from_fallback": 0.1
+  },
+  "koenji": {
+    "coords": [
+      35.7055421,
+      139.6499648
+    ],
+    "matched": "高円寺, 高南通り, 高円寺北二丁目, 高円寺北, 高円寺, 杉並区, 東京都, 166-0003, 日本",
+    "km_from_fallback": 0
+  },
+  "asagaya": {
+    "coords": [
+      35.7048403,
+      139.6354724
+    ],
+    "matched": "阿佐ケ谷, スターロード, 阿佐谷北二丁目, 阿佐谷北, 高円寺, 杉並区, 東京都, 166-0004, 日本",
+    "km_from_fallback": 0
+  },
+  "omoide-yokocho": {
+    "coords": [
+      35.6928662,
+      139.6995502
+    ],
+    "matched": "思い出横丁, 西新宿一丁目, 西新宿, 新宿区, 東京都, 160-0023, 日本",
+    "km_from_fallback": 0
+  },
+  "golden-gai": {
+    "coords": [
+      35.6939905,
+      139.7047001
+    ],
+    "matched": "新宿ゴールデン街, あかるい花園八番街, 歌舞伎町一丁目, 歌舞伎町, 新宿区, 東京都, 160-0021, 日本",
+    "km_from_fallback": 0
+  },
+  "shinjuku-gyoen": {
+    "coords": [
+      35.6850716,
+      139.7095466
+    ],
+    "matched": "新宿御苑, 新宿区, 東京都, 160-0014, 日本",
+    "km_from_fallback": 0
+  },
+  "shin-okubo": {
+    "coords": [
+      35.7015949,
+      139.7007067
+    ],
+    "matched": "ヨプの王豚塩焼×マイマイチキン, 都市計画道路補助第72号線(つつじ通り), 百人町二丁目, 百人町, 新宿区, 東京都, 169-0073, 日本",
+    "km_from_fallback": 0
+  },
+  "kabukicho": {
+    "coords": [
+      35.6945429,
+      139.7027105
+    ],
+    "matched": "歌舞伎町, 新宿区, 東京都, 160-0021, 日本",
+    "km_from_fallback": 0.1
+  },
+  "harajuku-cat-street": {
+    "coords": [
+      35.6711612,
+      139.7049553
+    ],
+    "matched": "竹下通り, 神宮前一丁目, 神宮前, 渋谷区, 東京都, 150-0001, 日本",
+    "km_from_fallback": 0.2
+  },
+  "meiji-jingu": {
+    "coords": [
+      35.6748417,
+      139.6996266
+    ],
+    "matched": "明治神宮, 1, 代々木神園町, 渋谷区, 東京都, 151-8557, 日本",
+    "km_from_fallback": 0.2
+  },
+  "roastery-nozy": {
+    "coords": [
+      35.6654945,
+      139.7048132
+    ],
+    "matched": "The Roastery by Nozy Coffee, 13, 神宮前五丁目, 神宮前, 渋谷区, 東京都, 150-0001, 日本",
+    "km_from_fallback": 0.2
+  },
+  "meguro-river": {
+    "coords": [
+      35.6441395,
+      139.6988317
+    ],
+    "matched": "中目黒, 上目黒三丁目, 上目黒, 目黒区, 東京都, 153-0051, 日本",
+    "km_from_fallback": 0.1
+  },
+  "shibuya-crossing": {
+    "coords": [
+      35.6594951,
+      139.7004982
+    ],
+    "matched": "渋谷駅前交差点, 旧大山街道, 道玄坂二丁目, 道玄坂, 渋谷区, 東京都, 150-0043, 日本",
+    "km_from_fallback": 0
+  },
+  "shimokitazawa": {
+    "coords": [
+      35.6615657,
+      139.6670604
+    ],
+    "matched": "下北沢, 下北沢駅中央口改札(京王側), 北沢二丁目, 北沢, 世田谷区, 東京都, 155-0031, 日本",
+    "km_from_fallback": 0.1
+  },
+  "asakusa-sensoji": {
+    "coords": [
+      35.7134032,
+      139.7955265
+    ],
+    "matched": "金龍山 浅草寺, 1, 浅草二丁目, 浅草, 台東区, 東京都, 111-0032, 日本",
+    "km_from_fallback": 0.2
+  },
+  "ueno-ameyoko": {
+    "coords": [
+      35.7100592,
+      139.7745428
+    ],
+    "matched": "アメヤ横丁, アメ横通り, 上野六丁目, 上野, 台東区, 東京都, 110-0005, 日本",
+    "km_from_fallback": 0.1
+  },
+  "kamo-to-negi": {
+    "coords": [
+      35.708331,
+      139.7751032
+    ],
+    "matched": "らーめん 鴨to葱, アメ横ウェルカム・モール, 上野六丁目, 上野, 台東区, 東京都, 110-0005, 日本",
+    "km_from_fallback": 0.1
+  },
+  "nezu-shrine": {
+    "coords": [
+      35.7199731,
+      139.7606625
+    ],
+    "matched": "根津神社, 9, 根津一丁目, 根津, 文京区, 東京都, 113-0031, 日本",
+    "km_from_fallback": 0
+  },
+  "kappabashi": {
+    "miss": true
+  },
+  "skytree-solamachi": {
+    "coords": [
+      35.7100543,
+      139.8107141
+    ],
+    "matched": "東京スカイツリー, 2, 押上一丁目, 押上, 墨田区, 東京都, 131-0045, 日本",
+    "km_from_fallback": 0
+  },
+  "yakitori-omino": {
+    "miss": true
+  },
+  "takesue": {
+    "miss": true
+  },
+  "tomita": {
+    "miss": true
+  },
+  "rokurinsha": {
+    "miss": true
+  },
+  "kagari": {
+    "miss": true,
+    "note": "nominatim matched a 7-eleven in Chiba, using hand-placed Ginza coords"
+  },
+  "uniqlo-ginza": {
+    "coords": [
+      35.6701983,
+      139.7634253
+    ],
+    "matched": "ユニクロ, 銀座すずらん通り, 銀座六丁目, 銀座, 中央区, 東京都, 104-0061, 日本",
+    "km_from_fallback": 0.2
+  },
+  "tokyo-tower": {
+    "coords": [
+      35.6584491,
+      139.745536
+    ],
+    "matched": "東京タワー, タクシー乗り場, 芝公園四丁目, 芝公園, 港区, 東京都, 105-0011, 日本",
+    "km_from_fallback": 0
+  },
+  "garden-lounge": {
+    "miss": true
+  },
+  "akihabara": {
+    "coords": [
+      35.6990325,
+      139.7736805
+    ],
+    "matched": "秋葉原駅前, 東側交通広場, 神田花岡町, 千代田区, 東京都, 101-0028, 日本",
+    "km_from_fallback": 0.1
+  },
+  "nakiryu": {
+    "miss": true,
+    "note": "nominatim matched a bus stop in Kita-ku, using hand-placed Minami-Otsuka coords"
+  },
+  "teamlab-planets": {
+    "coords": [
+      35.64938,
+      139.789728
+    ],
+    "matched": "チームラボ プラネッツ, 16, 豊洲六丁目, 豊洲, 江東区, 東京都, 135-0061, 日本",
+    "km_from_fallback": 0
+  },
+  "kamakura": {
+    "coords": [
+      35.319003,
+      139.5506805
+    ],
+    "matched": "鎌倉駅, 1, 小町一丁目, 鎌倉市, 神奈川県, 248-0006, 日本",
+    "km_from_fallback": 0.4
+  },
+  "nikko": {
+    "coords": [
+      36.7577934,
+      139.6003825
+    ],
+    "matched": "東照宮美術館, 上新道, 安川町, 日光市, 栃木県, 321-1431, 日本",
+    "km_from_fallback": 0.1
+  },
+  "hakone": {
+    "coords": [
+      35.2331952,
+      139.1034651
+    ],
+    "matched": "箱根湯本駅, 国道1号, 塔之澤, 箱根町, 足柄下郡, 神奈川県, 250-0315, 日本",
+    "km_from_fallback": 0.3
+  },
+  "mt-fuji": {
+    "coords": [
+      35.3628384,
+      138.7307677
+    ],
+    "matched": "富士山, 小山町, 駿東郡, 静岡県, 日本",
+    "km_from_fallback": 0.4
+  },
+  "yokohama": {
+    "coords": [
+      35.4594441,
+      139.6323669
+    ],
+    "matched": "Minato Mirai, 高島, 西区, 横浜市, 神奈川県, 231-0017, 日本",
+    "km_from_fallback": 0.3
+  },
+  "kiyomizudera": {
+    "coords": [
+      34.994303,
+      135.7844389
+    ],
+    "matched": "清水寺, Kiyomizu Slope, 清水一丁目, 辰巳町, 東山区, 京都市, 京都府, 605-0862, 日本",
+    "km_from_fallback": 0.1
+  },
+  "fushimi-inari": {
+    "coords": [
+      34.9675192,
+      135.7797101
+    ],
+    "matched": "伏見稲荷大社, 伏見区, 京都市, 京都府, 612-0882, 日本",
+    "km_from_fallback": 0.6
+  },
+  "arashiyama": {
+    "coords": [
+      35.0167419,
+      135.6711482
+    ],
+    "matched": "嵐山竹林, 竹林の道, 嵯峨小倉山田淵山町, 右京区, 京都市, 京都府, 616-0000, 日本",
+    "km_from_fallback": 0
+  },
+  "monkey-park": {
+    "coords": [
+      35.0090864,
+      135.6749673
+    ],
+    "matched": "嵐山モンキーパークいわたやま, 宇多野嵐山山田線, 嵐山中尾下町, 西京区, 京都市, 京都府, 615-0000, 日本",
+    "km_from_fallback": 0.5
+  },
+  "nisonin-gioji": {
+    "coords": [
+      35.0215552,
+      135.6678367
+    ],
+    "matched": "二尊院, 京都日吉美山線, 嵯峨二尊院門前往生院町, 右京区, 京都市, 京都府, 616-0000, 日本",
+    "km_from_fallback": 0.2
+  },
+  "adashino-otagi": {
+    "coords": [
+      35.0311595,
+      135.6612344
+    ],
+    "matched": "愛宕念仏寺, 清滝鳥居本線, 嵯峨鳥居本仙翁町, 右京区, 京都市, 京都府, 616-0000, 日本",
+    "km_from_fallback": 0
+  },
+  "ginkakuji": {
+    "coords": [
+      35.0268996,
+      135.7983714
+    ],
+    "matched": "銀閣寺, 銀閣寺町, 左京区, 京都市, 京都府, 606-8402, 日本",
+    "km_from_fallback": 0
+  },
+  "ikazuchi-udon": {
+    "miss": true
+  },
+  "kifune": {
+    "coords": [
+      35.1218892,
+      135.7629362
+    ],
+    "matched": "貴船神社, 上黒田貴船線, 鞍馬貴船町, 鞍馬, 左京区, 京都市, 京都府, 601-1112, 日本",
+    "km_from_fallback": 0
+  },
+  "murin-an": {
+    "coords": [
+      35.0115514,
+      135.7872657
+    ],
+    "matched": "無鄰菴, 永観堂町飛地, 左京区, 京都市, 京都府, 日本",
+    "km_from_fallback": 0.3
+  },
+  "nishiki-market": {
+    "coords": [
+      35.0050244,
+      135.7655699
+    ],
+    "matched": "錦市場, 錦小路通, 東魚屋町, 中京区, 京都市, 京都府, 600-8006, 日本",
+    "km_from_fallback": 0.1
+  },
+  "gion-shijo": {
+    "coords": [
+      35.0046897,
+      135.778403
+    ],
+    "matched": "祇園, 東山区, 京都市, 京都府, 日本",
+    "km_from_fallback": 0.3
+  },
+  "nara": {
+    "coords": [
+      34.6829008,
+      135.8545975
+    ],
+    "matched": "奈良公園, 奈良市, 奈良県, 日本",
+    "km_from_fallback": 1.1
+  },
+  "uji": {
+    "coords": [
+      34.8895001,
+      135.8074525
+    ],
+    "matched": "平等院, 大津南郷宇治線, 宇治, 宇治市, 京都府, 611-0021, 日本",
+    "km_from_fallback": 0
+  },
+  "kobe": {
+    "coords": [
+      34.6934254,
+      135.1955442
+    ],
+    "matched": "三宮駅前, 神戸明石線, 小野柄通七丁目, 中央区, 神戸市, 兵庫県, 651-0088, 日本",
+    "km_from_fallback": 0.2
+  },
+  "miyama": {
+    "miss": true
+  },
+  "amanohashidate": {
+    "coords": [
+      35.5680023,
+      135.1906382
+    ],
+    "matched": "天橋立, 江尻, 宮津市, 京都府, 日本",
+    "km_from_fallback": 0.2
+  },
+  "dotonbori": {
+    "coords": [
+      34.6690306,
+      135.5015715
+    ],
+    "matched": "道頓堀, 道頓堀一丁目, 中央区, 大阪市, 大阪府, 542-0071, 日本",
+    "km_from_fallback": 0
+  },
+  "okonomiyaki-chitose": {
+    "miss": true
+  },
+  "osaka-castle": {
+    "coords": [
+      34.6873735,
+      135.5258555
+    ],
+    "matched": "大阪城, 1, 大阪城, 中央区, 大阪市, 大阪府, 540-0002, 日本",
+    "km_from_fallback": 0
+  },
+  "onigiri-gorichan": {
+    "miss": true
+  },
+  "kadoya-shokudo": {
+    "miss": true
+  },
+  "mount-koya": {
+    "coords": [
+      34.21878,
+      135.6053745
+    ],
+    "matched": "奥之院, 高野町, 伊都郡, 和歌山県, 日本",
+    "km_from_fallback": 2.1
+  },
+  "shimanami-kaido": {
+    "coords": [
+      34.4039069,
+      133.1937736
+    ],
+    "matched": "尾道駅前, 国道2号, 東御所町, 尾道市, 広島県, 722-0036, 日本",
+    "km_from_fallback": 0.1
+  },
+  "itsukushima": {
+    "coords": [
+      34.2965418,
+      132.3190077
+    ],
+    "matched": "厳島神社, 廿日市市, 広島県, 日本",
+    "km_from_fallback": 0.1
+  },
+  "hiroshima-peace-museum": {
+    "coords": [
+      34.3915495,
+      132.4530979
+    ],
+    "matched": "広島平和記念資料館東館, 2, 平和大通り, 中島町, 中区, 広島市, 広島県, 730-0811, 日本",
+    "km_from_fallback": 0
+  },
+  "lake-toya": {
+    "coords": [
+      42.563588,
+      140.817795
+    ],
+    "matched": "洞爺湖温泉, 洞爺湖町, 虻田郡, 胆振総合振興局, 北海道, 北海道地方, 049-5721, 日本",
+    "km_from_fallback": 0.3
+  },
+  "soup-curry-mogmog": {
+    "miss": true
+  },
+  "noboribetsu": {
+    "coords": [
+      42.4963864,
+      141.1452929
+    ],
+    "matched": "登別地獄谷駐車場, 北海道道350号倶多楽湖公園線, 登別市, 白老郡, 胆振総合振興局, 北海道, 北海道地方, 059-0551, 日本",
+    "km_from_fallback": 0.4
+  },
+  "onuma-park": {
+    "coords": [
+      41.9853726,
+      140.6570209
+    ],
+    "matched": "大沼国定公園, 七飯町, 亀田郡, 渡島総合振興局, 北海道, 北海道地方, 日本",
+    "km_from_fallback": 1.3
+  },
+  "mt-hakodate": {
+    "miss": true
+  }
+}
