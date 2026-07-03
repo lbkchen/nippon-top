@@ -1,4 +1,4 @@
-// The Chain Gang: recs with no fixed address.
+// The usual chains: recs with no fixed address.
 import { $, esc, linkify } from "./config.js";
 import { BASE } from "./store.js";
 import { on } from "./bus.js";

@@ -32,7 +32,7 @@ old code after edits) and photo drag-and-drop can't save through it. If :4173 is
 | 💌 **Friend maps** | fork the whole map for a person — see below, this is the good stuff. |
 | 🎰 **Roulette** | can't decide? fate picks from what's on screen. Bangers weighted 3×. |
 | 🧭 **Find me** | blue dot + walking distance on every card, list re-sorts nearest-first. Every card/popup also links straight into Google Maps for actual navigation (plain URL, no API). |
-| 🔗 **Chain Gang** | recs that are everywhere on purpose (Torikizoku, konbini, Donki…) live in a drawer, not on pins. |
+| 🔗 **The Usual Chains** | recs that are everywhere on purpose (Torikizoku, konbini, Donki…) live in a drawer, not on pins. |
 | 💾 **Export** | downloads a fresh `data.js` with every in-browser edit baked in. Drop it in the repo → canon. |
 | ⭐ **Bangers only** | the spreadsheet's star system, honored. Star pins are bigger, golden, and gently smug. |
 | 📖 **Spot detail** | clicking a card/search result/roulette pick drills the sidebar into one spot: photo, the whole rant, which vibe zone it's inside, and "pairs well with" — the 3 nearest recs, clickable, so you can hop rec to rec. On localhost, just drag a photo onto the panel — it web-sizes itself, lands in `img/`, and ships with your next export (see `img/README.md`). |
