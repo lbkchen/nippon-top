@@ -4,19 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>NIPPON TOP 🗾 — ken's extremely correct japan recs</title>
+  <meta name="description" content="A very serious map of very correct Japan recommendations. Ramen, temples, vibe zones, certified bangers." />
+  <meta property="og:title" content="NIPPON TOP 🗾" />
+  <meta property="og:description" content="ken's extremely correct japan recs™ — ramen, temples, vibe zones, certified bangers." />
+  <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛩️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=DotGothic16&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- splash title card -->
+  <div id="splash">
+    <div class="splash-inner">
+      <div class="splash-burst" aria-hidden="true"></div>
+      <h1 class="splash-title">NIPPON<span class="splash-top">TOP</span></h1>
+      <p class="splash-sub">the extremely correct japan recs</p>
+      <span class="splash-stamp">頂</span>
+    </div>
+  </div>
+
   <div id="map"></div>
 
   <!-- logo sticker -->
   <div class="logo-card">
-    <h1>NIPPON <span class="top">TOP</span> <span class="flag">🗾</span></h1>
+    <h1>NIPPON <span class="top">TOP</span> <span class="stamp" title="itadaki — the top">頂</span></h1>
     <p class="tagline">ken's extremely correct japan recs<span class="tm">™</span></p>
   </div>
 
@@ -31,19 +45,23 @@
     <button data-group="hokkaido">❄️ hokkaido</button>
   </nav>
 
-  <!-- mixtape edit bar -->
-  <div class="mix-bar hidden" id="mixBar">
+  <!-- friend-map edit bar -->
+  <div class="mix-bar hidden" id="curateBar">
     <span class="mix-icon">💌</span>
-    <input id="mixName" type="text" placeholder="who's this mixtape for?" maxlength="24" />
-    <span class="mix-count" id="mixCount">0 spots</span>
-    <button class="btn-solid" id="mixCopy">copy link</button>
-    <button class="btn-ghost" id="mixCancel">nvm</button>
+    <input id="curEmoji" type="text" placeholder="✨" maxlength="4" title="their emoji" />
+    <input id="curName" type="text" placeholder="who's it for?" maxlength="24" />
+    <input id="curMessage" type="text" placeholder="lil message for them…" maxlength="90" />
+    <button class="btn-ghost" id="curMode" title="switch fork mode"></button>
+    <span class="mix-count" id="curCount">0 in</span>
+    <button class="btn-solid" id="curSave">save 💾</button>
+    <button class="btn-ghost" id="curCancel">nvm</button>
   </div>
 
-  <!-- mixtape view banner -->
-  <div class="mix-banner hidden" id="mixBanner">
-    <div class="mix-banner-text" id="mixBannerText">🎁 a hand-rolled japan mixtape</div>
-    <button class="btn-ghost" id="mixShowAll">show me everything instead</button>
+  <!-- friend-map viewer banner -->
+  <div class="mix-banner hidden" id="curBanner">
+    <div class="mix-banner-text" id="curBannerText"></div>
+    <div class="mix-banner-msg hidden" id="curBannerMsg"></div>
+    <button class="btn-ghost" id="curBannerShowAll">show me the whole map instead</button>
   </div>
 
   <!-- sidebar: the high-context zone -->
@@ -70,8 +88,9 @@
     <button data-tool="pen" title="doodle mode — draw on the map like it's a ski trail map">🖊️</button>
     <button data-tool="add" title="add a new spot — click the map where it goes">📍</button>
     <button data-tool="zones" title="toggle the vibe zones" class="active">🎿</button>
+    <button data-tool="curations" title="friend maps — fork the map for someone, keep it synced">💌</button>
+    <button data-tool="roulette" title="osusume roulette — let fate pick">🎰</button>
     <button data-tool="chains" title="the chain gang — recs that are everywhere">🔗</button>
-    <button data-tool="mix" title="mixtape mode — pick spots, share a custom map with a friend">💌</button>
     <button data-tool="export" title="export data.js with all your edits baked in">💾</button>
   </div>
 
@@ -99,6 +118,17 @@
     <div class="drawer-body" id="chainsBody"></div>
   </div>
 
+  <!-- friend maps drawer -->
+  <div class="drawer hidden" id="curationsDrawer">
+    <div class="drawer-head">
+      <h2>FRIEND MAPS 💌</h2>
+      <p>fork the map for a person. exclusions rebase on your newest recs; handpicks stay frozen.</p>
+      <button class="drawer-close" id="curationsClose">✕</button>
+      <button class="btn-solid drawer-new" id="curationsNew">+ fork one</button>
+    </div>
+    <div class="drawer-body drawer-list" id="curationsBody"></div>
+  </div>
+
   <!-- add spot modal -->
   <div class="modal-wrap hidden" id="addModal">
     <div class="modal">
@@ -122,8 +152,18 @@
     </div>
   </div>
 
+  <!-- rough-ink filters for map scribbles & zones -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="roughen" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="n" seed="7" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="5" />
+      </filter>
+    </defs>
+  </svg>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

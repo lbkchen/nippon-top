@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "nippon-top",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4173", "--bind", "127.0.0.1"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/serve.mjs", "4173"],
       "port": 4173
     }
   ]

@@ -1,0 +1,185 @@
+// The high-context list: cards, filters, search, region hops, context bar.
+import { CATS, $, $$, esc, linkify } from "./config.js";
+import { map, PAD } from "./map.js";
+import { state, allPlaces, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
+import { emit, on } from "./bus.js";
+import { highlightPin } from "./pins.js";
+
+export function openSidebar() {
+  $("#sidebar").classList.remove("collapsed");
+  $("#sidebarTab").classList.add("hidden");
+}
+
+function renderContextBar() {
+  const bar = $("#contextBar");
+  bar.innerHTML = "";
+  const n = currentList().length;
+  const label = document.createElement("span");
+  if (state.curationView) {
+    const c = state.curationView;
+    label.textContent = `💌 ${c.emoji || ""} ${c.name}'s map — ${n} spots`;
+  } else if (state.lasso) {
+    label.textContent = `🪢 lassoed ${n} spot${n === 1 ? "" : "s"}`;
+    const clear = document.createElement("button");
+    clear.className = "ctx-btn";
+    clear.textContent = "✕ clear";
+    clear.onclick = () => emit("lasso-clear");
+    const save = document.createElement("button");
+    save.className = "ctx-btn gold";
+    save.textContent = "🎿 save as zone";
+    save.onclick = () => emit("lasso-save-zone");
+    bar.append(label, clear, save);
+    return;
+  } else {
+    label.textContent = `👀 ${n} in view`;
+  }
+  bar.append(label);
+}
+
+function cardEl(p) {
+  const card = document.createElement("article");
+  card.className = `card${p.star ? " starred" : ""}`;
+  card.dataset.id = p.id;
+  const cat = CATS[p.cat] || CATS.fun;
+  const custom = isCustom(p.id);
+  const editing = state.editingCuration;
+  const viewNote = state.curationView?.notes?.[p.id];
+  const editNote = editing?.notes?.[p.id];
+  card.innerHTML = `
+    ${p.star ? '<span class="banger-ribbon">CERTIFIED BANGER</span>' : ""}
+    <div class="card-head">
+      <span class="card-emoji">${p.emoji || cat.emoji}</span>
+      <span class="card-name">${esc(p.name)}</span>
+      ${p.star ? '<span class="card-star">⭐</span>' : ""}
+    </div>
+    <div class="card-pills">
+      <span class="pill">${cat.emoji} ${cat.label}</span>
+      <span class="pill">📍 ${esc(p.region)}</span>
+      ${p.approx ? '<span class="pill approx" title="the geocoder shrugged — pin placed from memory">~ish location</span>' : ""}
+      ${custom ? '<span class="pill custom">✏️ hand-added</span>' : ""}
+    </div>
+    ${viewNote ? `<div class="card-personal">💌 ${esc(viewNote)}</div>` : ""}
+    <div class="card-notes">${linkify(esc(p.notes))}</div>
+    ${p.notes && p.notes.length > 180 ? '<button class="card-more">the whole rant ▾</button>' : ""}
+    ${editing ? `<button class="card-note-btn">📝 ${editNote ? "edit" : "add"} note for ${esc(editing.name || "them")}</button>` : ""}
+    ${editNote ? `<div class="card-personal">💌 ${esc(editNote)}</div>` : ""}
+    ${custom ? '<button class="card-del" title="delete this spot">🗑️</button>' : ""}`;
+
+  card.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return;
+    if (e.target.classList.contains("card-more")) {
+      card.classList.toggle("open");
+      e.target.textContent = card.classList.contains("open") ? "less ▴" : "the whole rant ▾";
+      return;
+    }
+    if (e.target.classList.contains("card-note-btn")) {
+      emit("curation-note", p.id);
+      return;
+    }
+    if (e.target.classList.contains("card-del")) {
+      if (confirm(`delete "${p.name}"? it never happened.`)) {
+        deletePlace(p.id);
+        emit("place-removed", { id: p.id });
+        emit("refresh");
+      }
+      return;
+    }
+    if (state.mode === "curate") { emit("mix-toggle", p.id); return; }
+    emit("place-selected", { id: p.id, fly: true });
+  });
+  card.addEventListener("mouseenter", () => highlightPin(p.id, true));
+  card.addEventListener("mouseleave", () => highlightPin(p.id, false));
+  return card;
+}
+
+export function renderList() {
+  const wrap = $("#cards");
+  wrap.innerHTML = "";
+  const list = currentList().sort((a, b) => (b.star - a.star) || a.name.localeCompare(b.name));
+  if (!list.length) {
+    wrap.innerHTML = `<div class="empty-state"><span class="big">🍥</span>nothing here…<br>zoom out, clear filters, or lasso somewhere tastier</div>`;
+  } else {
+    for (const p of list) wrap.append(cardEl(p));
+  }
+  renderContextBar();
+  if (state.selectedId) selectCard(state.selectedId, { scroll: false });
+  const total = allPlaces().length;
+  $("#footCount").textContent = `${total} recs · ${allPlaces().filter((p) => p.star).length} bangers · ${BASE.chains.length} chains`;
+}
+
+function selectCard(id, { scroll = true } = {}) {
+  $$(".card.selected").forEach((c) => c.classList.remove("selected"));
+  const card = document.querySelector(`.card[data-id="${CSS.escape(String(id))}"]`);
+  if (card) {
+    card.classList.add("selected");
+    if (scroll) card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+}
+
+function buildCatChips() {
+  const wrap = $("#catChips");
+  const keys = Object.keys(CATS);
+  for (const [key, cat] of Object.entries(CATS)) {
+    const b = document.createElement("button");
+    b.textContent = cat.emoji;
+    b.title = cat.label;
+    b.onclick = () => {
+      if (state.cats.has(key) && state.cats.size === keys.length) {
+        state.cats = new Set([key]); // first click on a full set = solo that category
+      } else if (state.cats.has(key)) {
+        state.cats.delete(key);
+        if (!state.cats.size) state.cats = new Set(keys); // never strand an empty map
+      } else {
+        state.cats.add(key);
+      }
+      [...wrap.children].forEach((c, i) => c.classList.toggle("off", !state.cats.has(keys[i])));
+      emit("refresh");
+    };
+    wrap.append(b);
+  }
+}
+
+export function initSidebar() {
+  buildCatChips();
+
+  $("#starToggle").addEventListener("click", (e) => {
+    state.starOnly = !state.starOnly;
+    e.currentTarget.classList.toggle("active", state.starOnly);
+    emit("refresh");
+  });
+
+  $("#search").addEventListener("input", (e) => {
+    state.q = e.target.value.trim().toLowerCase();
+    emit("refresh");
+  });
+
+  $("#regionChips").addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    $$("#regionChips button").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    map.flyToBounds(groupBounds(btn.dataset.group), { ...PAD(), duration: 1.1 });
+  });
+
+  // collapse / restore
+  const sidebar = $("#sidebar");
+  const tab = $("#sidebarTab");
+  const collapseBtn = document.createElement("button");
+  collapseBtn.className = "sidebar-collapse";
+  collapseBtn.title = "tuck the list away";
+  collapseBtn.textContent = "▸";
+  $(".sidebar-head").append(collapseBtn);
+  collapseBtn.addEventListener("click", () => { sidebar.classList.add("collapsed"); tab.classList.remove("hidden"); });
+  tab.addEventListener("click", openSidebar);
+  tab.classList.add("hidden");
+
+  map.on("moveend", () => { if (!state.lasso && !state.curationView) renderList(); });
+
+  on("refresh", renderList);
+  on("refresh-list", renderList);
+  on("place-selected", ({ id, openList }) => {
+    state.selectedId = id;
+    if (openList) openSidebar();
+    selectCard(id);
+  });
+}
