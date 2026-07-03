@@ -78,6 +78,8 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 
 ## Shipping
 
-- GitHub Pages workflow (.github/workflows/pages.yml) validates data then deploys on push.
-  Ken hasn't created the GitHub repo — never create/push/publish without his explicit OK.
+- Repo: github.com/lbkchen/nippon-top, **private**. Pushing there is fine; the Pages workflow
+  (.github/workflows/pages.yml) validates data on every push and its deploy job skips itself
+  while the repo is private. NEVER flip the repo public (= publishing the site + Ken's
+  personal notes) without his explicit OK.
 - Commit per coherent phase with descriptive messages; run check-data first.
