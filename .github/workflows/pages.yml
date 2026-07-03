@@ -27,6 +27,8 @@ jobs:
 
   deploy:
     needs: check
+    # Pages needs a public repo (or GitHub Pro) — skip while private, auto-arms when flipped public
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

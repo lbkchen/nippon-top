@@ -5,13 +5,20 @@
 A zero-build, zero-API-key, zero-dollar map of every Japan rec from the spreadsheet:
 74 places, 17 certified bangers ⭐, 10 chains, vibe zones, and forkable friend maps.
 
-## Run it
+## Run it locally
+
+All you need is [Node](https://nodejs.org) 18+. No `npm install` — there are no dependencies.
 
 ```sh
-node tools/serve.mjs        # → http://localhost:4173  (no-cache headers, edits show instantly)
+git clone <this repo> && cd nippon-top
+node tools/serve.mjs
 ```
 
-Any static server works; that one's just nicer for development.
+→ open **http://localhost:4173**. That's the whole thing.
+
+Use that server, not `python3 -m http.server` — python caches ES modules stale (you'll get
+old code after edits) and photo drag-and-drop can't save through it. If :4173 is taken,
+`node tools/serve.mjs 5000` picks another port.
 
 ## What it does
 
@@ -65,16 +72,20 @@ in Japan, friend maps referencing real places). CI runs it before every deploy.
 
 ## Deploying (free, one push)
 
-The repo ships with a GitHub Pages workflow ([.github/workflows/pages.yml](.github/workflows/pages.yml)):
+The repo ships with a GitHub Pages workflow ([.github/workflows/pages.yml](.github/workflows/pages.yml)).
+Every push to `main` validates the data; the deploy step runs once the repo is **public**
+(GitHub Pages is a paid feature on private repos, so it skips itself while private).
+
+To go live:
 
 ```sh
-gh repo create nippon-top --public --source . --push   # or push to any GitHub repo
+gh repo edit --visibility public --accept-visibility-change-consequences
 # then once, in the repo settings: Settings → Pages → Source: "GitHub Actions"
 ```
 
-Every push to `main` after that validates the data and deploys. No keys, no backend, no bill —
-map tiles are OpenStreetMap data via Carto's free basemaps, geocoding was a one-time offline step.
-Netlify/Cloudflare Pages work identically (it's just static files).
+No keys, no backend, no bill — map tiles are OpenStreetMap data via Carto's free basemaps,
+geocoding was a one-time offline step. Netlify/Cloudflare Pages work identically (it's just
+static files) and both deploy private repos for free, if going public isn't the vibe.
 
 ## Architecture
 
