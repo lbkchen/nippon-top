@@ -33,6 +33,7 @@ function startEdit(cur) {
   $("#curName").value = cur.name || "";
   $("#curEmoji").value = cur.emoji || "";
   $("#curMessage").value = cur.message || "";
+  emit("pack-changed"); // the pack's extra zones/ink come into view
   if (state.mode !== "curate") setMode("curate");
   else emit("refresh");
   updateEditUI();
@@ -180,6 +181,7 @@ function parseHash() {
 export function enterHashView() {
   const cur = parseHash();
   state.curationView = cur;
+  emit("pack-changed");
   $("#curBanner").classList.toggle("hidden", !cur);
   if (cur) {
     const vis = curationVisibleIds(cur);
@@ -198,7 +200,10 @@ export function initCurations() {
   on("curation-note-set", setNote);
   on("mode-changed", (m) => {
     $("#curateBar").classList.toggle("hidden", m !== "curate");
-    if (m !== "curate") state.editingCuration = null;
+    if (m !== "curate" && state.editingCuration) {
+      state.editingCuration = null;
+      emit("pack-changed"); // unsaved extras vanish with the edit
+    }
   });
 
   $("#curationsClose").onclick = () => $("#curationsDrawer").classList.add("hidden");

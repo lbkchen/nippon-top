@@ -54,20 +54,30 @@ export function refreshMarkers() {
   const viewIds = state.curationView ? curationVisibleIds(state.curationView) : null;
   const editing = state.editingCuration;
   const editVis = editing ? curationVisibleIds(editing) : null;
+  const live = new Set();
   for (const p of allPlaces()) {
+    live.add(p.id);
     const m = markers[p.id] || makeMarker(p);
-    const show = placePassesFilters(p);
+    // in a friend's view, spots outside their map are gone, not dimmed —
+    // no half-visible ghosts of what they weren't sent
+    const show = placePassesFilters(p) && (!viewIds || viewIds.has(p.id));
     if (show && !map.hasLayer(m)) m.addTo(map);
     if (!show && map.hasLayer(m)) m.remove();
     const el = m.getElement();
     if (!el) continue;
-    el.classList.toggle("dimmed", !!viewIds && !viewIds.has(p.id));
     const pin = el.querySelector(".pin");
     if (pin) {
       pin.classList.toggle("cur-in", !!editVis && editVis.has(p.id));
       pin.classList.toggle("cur-out", !!editVis && !editVis.has(p.id));
       const badge = pin.querySelector(".curate-badge");
       if (badge) badge.textContent = editVis ? (editVis.has(p.id) ? "✓" : "✕") : "";
+    }
+  }
+  // sweep markers for places that left allPlaces (pack extras after leaving a friend view)
+  for (const id of Object.keys(markers)) {
+    if (!live.has(id)) {
+      markers[id].remove();
+      delete markers[id];
     }
   }
 }

@@ -39,16 +39,36 @@ export const state = {
   userLoc: null,              // [lat, lng] once located
 };
 
+// ---------- friend-pack overlay ----------
+// The pack being viewed (#for= link) or edited (curate mode) can carry its own
+// extra places/zones/ink. Reads merge them in; writes made while editing a
+// friend map land in that pack (in-memory until saved), not the global overlay.
+const activePack = () => state.curationView || state.editingCuration;
+
+function packTarget(kind) {
+  const cur = state.editingCuration;
+  if (!cur) return null;
+  cur[kind] = cur[kind] || [];
+  return cur[kind];
+}
+
 // ---------- places ----------
-export const allPlaces = () => [...BASE.places, ...customPlaces];
+export const allPlaces = () => [...BASE.places, ...customPlaces, ...(activePack()?.extraPlaces || [])];
 export const placeById = (id) => allPlaces().find((p) => p.id === id);
 export const isCustom = (id) => String(id).startsWith("custom-");
 
 export function addPlace(p) {
+  const t = packTarget("extraPlaces");
+  if (t) { t.push(p); return; }
   customPlaces.push(p);
   lsSet(LS.places, customPlaces);
 }
 export function deletePlace(id) {
+  const t = packTarget("extraPlaces");
+  if (t && t.some((p) => p.id === id)) {
+    state.editingCuration.extraPlaces = t.filter((p) => p.id !== id);
+    return;
+  }
   customPlaces = customPlaces.filter((c) => c.id !== id);
   lsSet(LS.places, customPlaces);
   delete photoOverlay[id];
@@ -92,14 +112,54 @@ export function groupBounds(group) {
 
 // ---------- doodles ----------
 const persistDoodles = () => lsSet(LS.doodles, doodles.filter((d) => !BASE.doodles.includes(d)));
-export function addDoodle(d) { doodles.push(d); persistDoodles(); }
-export function removeDoodle(d) { doodles = doodles.filter((x) => x !== d); persistDoodles(); }
-export function clearDoodles() { doodles = []; lsSet(LS.doodles, []); }
+export const allDoodles = () => [...doodles, ...(activePack()?.extraDoodles || [])];
+export function addDoodle(d) {
+  const t = packTarget("extraDoodles");
+  if (t) { t.push(d); return; }
+  doodles.push(d);
+  persistDoodles();
+}
+// returns whether anything was removed — a friend's undo must skip pack ink they don't own
+export function removeDoodle(d) {
+  const t = packTarget("extraDoodles");
+  if (t && t.includes(d)) {
+    state.editingCuration.extraDoodles = t.filter((x) => x !== d);
+    return true;
+  }
+  if (!doodles.includes(d)) return false;
+  doodles = doodles.filter((x) => x !== d);
+  persistDoodles();
+  return true;
+}
+export function clearDoodles() {
+  const t = packTarget("extraDoodles");
+  if (t) { state.editingCuration.extraDoodles = []; return; }
+  doodles = [];
+  lsSet(LS.doodles, []);
+}
 
 // ---------- zones ----------
-export const allZones = () => [...BASE.zones.map((z) => ({ ...z, custom: false })), ...customZones.map((z) => ({ ...z, custom: true }))];
-export function addZone(z) { customZones.push(z); lsSet(LS.zones, customZones); }
-export function removeZone(id) { customZones = customZones.filter((z) => z.id !== id); lsSet(LS.zones, customZones); }
+// pack zones are only removable while editing the pack — a friend viewing can't nuke them
+export const allZones = () => [
+  ...BASE.zones.map((z) => ({ ...z, custom: false })),
+  ...customZones.map((z) => ({ ...z, custom: true })),
+  ...(activePack()?.extraZones || []).map((z) => ({ ...z, custom: !!state.editingCuration })),
+];
+export function addZone(z) {
+  const t = packTarget("extraZones");
+  if (t) { t.push(z); return; }
+  customZones.push(z);
+  lsSet(LS.zones, customZones);
+}
+export function removeZone(id) {
+  const t = packTarget("extraZones");
+  if (t && t.some((z) => z.id === id)) {
+    state.editingCuration.extraZones = t.filter((z) => z.id !== id);
+    return;
+  }
+  customZones = customZones.filter((z) => z.id !== id);
+  lsSet(LS.zones, customZones);
+}
 export const zoneCount = () => BASE.zones.length + customZones.length;
 
 // ---------- curations (friend-map forks) ----------
@@ -118,6 +178,7 @@ export function curationVisibleIds(cur) {
   for (const p of allPlaces()) {
     if (cur.mode === "include" ? ids.has(p.id) : !ids.has(p.id)) vis.add(p.id);
   }
+  for (const p of cur.extraPlaces || []) vis.add(p.id); // pack extras are always on their map
   return vis;
 }
 
@@ -140,12 +201,13 @@ export function deleteCuration(slug) {
 }
 
 // ---------- export ----------
+// raw arrays only: pack extras and curations never ride into data.js —
+// friend maps ship separately as encrypted packs (js/pack.js)
 export function mergedData() {
   return {
-    places: allPlaces(),
+    places: [...BASE.places, ...customPlaces],
     chains: BASE.chains,
-    zones: allZones().map(({ custom, ...z }) => z),
+    zones: [...BASE.zones, ...customZones],
     doodles,
-    curations: allCurations(),
   };
 }

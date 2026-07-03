@@ -1,7 +1,8 @@
 // Freehand ink that sticks to the terrain.
 import { $, $$ } from "./config.js";
 import { doodleLayer } from "./map.js";
-import { state, doodles, addDoodle, removeDoodle, clearDoodles } from "./store.js";
+import { state, allDoodles, addDoodle, removeDoodle, clearDoodles } from "./store.js";
+import { on } from "./bus.js";
 import { registerSketchMode } from "./sketch.js";
 
 function drawDoodle(d) {
@@ -10,8 +11,14 @@ function drawDoodle(d) {
     ._nipponDoodle = d;
 }
 
+function renderDoodles() {
+  doodleLayer.clearLayers();
+  allDoodles().forEach(drawDoodle);
+}
+
 export function initDoodle() {
-  doodles.forEach(drawDoodle);
+  renderDoodles();
+  on("pack-changed", renderDoodles);
 
   registerSketchMode("pen", {
     style: () => ({ color: state.penColor, weight: 4, lineCap: "round", lineJoin: "round" }),
@@ -31,16 +38,20 @@ export function initDoodle() {
   });
 
   $("#penUndo").addEventListener("click", () => {
+    // newest-first, skipping strokes the store won't let us remove
+    // (a friend undoing on a shared map shouldn't eat Ken's pack ink)
     const layers = doodleLayer.getLayers();
-    if (!layers.length) return;
-    const last = layers[layers.length - 1];
-    removeDoodle(last._nipponDoodle);
-    doodleLayer.removeLayer(last);
+    for (let i = layers.length - 1; i >= 0; i--) {
+      if (removeDoodle(layers[i]._nipponDoodle)) {
+        doodleLayer.removeLayer(layers[i]);
+        return;
+      }
+    }
   });
 
   $("#penClear").addEventListener("click", () => {
     if (!doodleLayer.getLayers().length || !confirm("erase ALL the ink? no take-backs.")) return;
     clearDoodles();
-    doodleLayer.clearLayers();
+    renderDoodles(); // clear only wipes ink you own — redraw what survives
   });
 }

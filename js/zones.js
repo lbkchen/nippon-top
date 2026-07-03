@@ -87,8 +87,15 @@ function toggleZones() {
   if (state.zonesOn) zoneLayer.addTo(map); else zoneLayer.remove();
 }
 
-export function initZones() {
+// full relayer — cheap enough, and the only sane way to add/remove pack zones
+function renderZones() {
+  zoneLayer.clearLayers();
   allZones().forEach(drawZone);
+}
+
+export function initZones() {
+  renderZones();
+  on("pack-changed", renderZones);
 
   // color swatches in the modal
   const wrap = $("#zoneColors");
