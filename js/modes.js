@@ -31,6 +31,14 @@ export function setMode(mode) {
 }
 
 export function initModes() {
+  window.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    $("#addModal").classList.add("hidden");
+    $("#chainsDrawer").classList.add("hidden");
+    $("#curationsDrawer").classList.add("hidden");
+    if (state.mode) setMode(null);
+  });
+
   $$("#toolbar button[data-tool]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const t = btn.dataset.tool;

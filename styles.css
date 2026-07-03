@@ -204,8 +204,8 @@ button {
   background: var(--paper);
   border: 2.5px solid var(--ink);
   border-radius: 4px;
-  padding: 6px 15px;
-  font-size: 13.5px;
+  padding: 6px 12px;
+  font-size: 13px;
   font-weight: 600;
   box-shadow: var(--shadow-sm);
   transform: skewX(-8deg);
@@ -815,7 +815,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 /* ---------- friend-map bar + banner ---------- */
 .mix-bar {
   position: fixed;
-  top: 74px;
+  top: 118px;
   left: 50%;
   transform: translateX(-50%) rotate(-0.5deg);
   z-index: 950;
@@ -848,7 +848,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 
 .mix-banner {
   position: fixed;
-  top: 74px;
+  top: 118px;
   left: 50%;
   transform: translateX(-50%) rotate(-0.5deg);
   z-index: 950;
@@ -1010,11 +1010,13 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   .sidebar-tab { top: auto; bottom: 14px; }
   .toolbar {
     flex-direction: row;
+    flex-wrap: wrap;
     left: 10px;
+    right: 64px;
     bottom: auto;
     top: 138px;
   }
-  .toolbar button { width: 42px; height: 42px; font-size: 18px; }
+  .toolbar button { width: 40px; height: 40px; font-size: 17px; }
   .pen-tray {
     flex-direction: row;
     left: 10px;

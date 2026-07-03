@@ -1125,5 +1125,7 @@ window.NIPPON = {
         ]
       ]
     }
-  ]
+  ],
+  "curations": [],
+  "doodles": []
 };
