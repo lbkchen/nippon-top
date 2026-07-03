@@ -28,6 +28,7 @@ export const state = {
   editingCuration: null,      // curation object being edited in curate mode
   zonesOn: true,
   penColor: "#e03131",
+  userLoc: null,              // [lat, lng] once located
 };
 
 // ---------- places ----------

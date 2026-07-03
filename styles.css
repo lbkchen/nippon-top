@@ -436,6 +436,9 @@ button {
   background: var(--cream);
 }
 .pill.approx { background: #ffe3e3; border-style: dashed; }
+.pill.dist { background: #e7f0ff; }
+a.pill-link { text-decoration: none; color: var(--indigo); background: var(--paper); }
+a.pill-link:hover { background: var(--gold); color: var(--ink); }
 .pill.custom { background: #d3f9d8; }
 .pill.fresh { background: #d3f9d8; }
 .pill.stale { background: #fff3bf; }

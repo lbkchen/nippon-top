@@ -1,5 +1,5 @@
 // The high-context list: cards, filters, search, region hops, context bar.
-import { CATS, $, $$, esc, linkify } from "./config.js";
+import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl } from "./config.js";
 import { map, PAD } from "./map.js";
 import { state, allPlaces, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -57,6 +57,8 @@ function cardEl(p) {
       <span class="pill">📍 ${esc(p.region)}</span>
       ${p.approx ? '<span class="pill approx" title="the geocoder shrugged — pin placed from memory">~ish location</span>' : ""}
       ${custom ? '<span class="pill custom">✏️ hand-added</span>' : ""}
+      ${state.userLoc ? `<span class="pill dist">🚶 ${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
+      <a class="pill pill-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener" title="open in google maps">🧭 gmaps</a>
     </div>
     ${viewNote ? `<div class="card-personal">💌 ${esc(viewNote)}</div>` : ""}
     <div class="card-notes">${linkify(esc(p.notes))}</div>
@@ -95,7 +97,10 @@ function cardEl(p) {
 export function renderList() {
   const wrap = $("#cards");
   wrap.innerHTML = "";
-  const list = currentList().sort((a, b) => (b.star - a.star) || a.name.localeCompare(b.name));
+  const list = currentList().sort((a, b) =>
+    state.userLoc
+      ? distKm(state.userLoc, [a.lat, a.lng]) - distKm(state.userLoc, [b.lat, b.lng]) // located: nearest first
+      : (b.star - a.star) || a.name.localeCompare(b.name));
   if (!list.length) {
     wrap.innerHTML = `<div class="empty-state"><span class="big">🍥</span>nothing here…<br>zoom out, clear filters, or lasso somewhere tastier</div>`;
   } else {

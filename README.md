@@ -23,6 +23,7 @@ Any static server works; that one's just nicer for development.
 | 📍 **Add a spot** | click the map, fill the form. Lives in your browser until exported. |
 | 💌 **Friend maps** | fork the whole map for a person — see below, this is the good stuff. |
 | 🎰 **Roulette** | can't decide? fate picks from what's on screen. Bangers weighted 3×. |
+| 🧭 **Find me** | blue dot + walking distance on every card, list re-sorts nearest-first. Every card/popup also links straight into Google Maps for actual navigation (plain URL, no API). |
 | 🔗 **Chain Gang** | recs that are everywhere on purpose (Torikizoku, konbini, Donki…) live in a drawer, not on pins. |
 | 💾 **Export** | downloads a fresh `data.js` with every in-browser edit baked in. Drop it in the repo → canon. |
 | ⭐ **Bangers only** | the spreadsheet's star system, honored. Star pins are bigger, golden, and gently smug. |

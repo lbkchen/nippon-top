@@ -17,6 +17,7 @@ import { initChains } from "./chains.js";
 import { initCurations, enterHashView } from "./curations.js";
 import { initExporter } from "./exporter.js";
 import { initRoulette } from "./roulette.js";
+import { initLocate } from "./locate.js";
 
 initSplash();
 initPins();
@@ -31,6 +32,7 @@ initChains();
 initCurations();
 initExporter();
 initRoulette();
+initLocate();
 
 map.fitBounds(groupBounds("tokyo"), PAD());
 emit("refresh");

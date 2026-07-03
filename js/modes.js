@@ -47,6 +47,7 @@ export function initModes() {
       else if (t === "chains") emit("toggle-chains");
       else if (t === "curations") emit("open-curations");
       else if (t === "roulette") emit("roulette");
+      else if (t === "locate") emit("locate");
       else if (t === "export") emit("export");
     });
   });
