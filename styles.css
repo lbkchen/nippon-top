@@ -745,6 +745,14 @@ body[data-zoom="far"] .zone-label { display: none; }
   padding: 9px 7px;
   box-shadow: var(--shadow-sm);
 }
+.pen-tray button { position: relative; flex: none; }
+.pen-tray button:hover .tool-label,
+.pen-tray button:focus-visible .tool-label,
+.pen-tray button.armed .tool-label {
+  opacity: 1;
+  transform: translateY(-50%) rotate(-1.5deg) translateX(0);
+}
+.pen-tray .tool-label { z-index: 5; }
 .swatch {
   width: 26px;
   height: 26px;
@@ -766,7 +774,17 @@ body[data-zoom="far"] .zone-label { display: none; }
 }
 .pen-size .size-dot { width: var(--d); height: var(--d); border-radius: 50%; background: var(--ink); }
 .pen-size.active { box-shadow: 0 0 0 3px rgba(245, 179, 1, 0.8); }
-.pen-action { border: none; background: none; font-size: 17px; padding: 0; border-radius: 50%; }
+.pen-action {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.pen-action:hover { background: rgba(29, 29, 36, 0.08); }
 .pen-action.active { background: var(--gold); box-shadow: 0 0 0 3px rgba(245, 179, 1, 0.5); }
 #map.erasing { cursor: cell; }
 
@@ -798,6 +816,22 @@ body[data-zoom="far"] .zone-label { display: none; }
   mix-blend-mode: multiply;
 }
 .ink-stamp svg { width: 100%; height: 100%; filter: url(#roughen); }
+/* stickers you own become grabbable in pen mode (the eraser passes through) */
+body[data-mode="pen"] .ink-text.mine,
+body[data-mode="pen"] .ink-stamp.mine { pointer-events: auto; cursor: grab; }
+#map.erasing .ink-text.mine,
+#map.erasing .ink-stamp.mine { pointer-events: none; }
+.ink-text.dragging, .ink-stamp.dragging { cursor: grabbing; }
+.ink-text.sel, .ink-stamp.sel { outline: 2.5px dashed var(--ink); outline-offset: 5px; }
+.sticker-menu { min-width: 132px; }
+.sticker-menu-tip {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  opacity: 0.55;
+  padding: 4px 12px 2px;
+}
 .ink-text-input {
   position: fixed;
   z-index: 1200;
@@ -1068,6 +1102,14 @@ button.armed {
   align-items: center;
   justify-content: center;
 }
+/* side-dock variant: light backdrop + modal hugs the right edge so whatever
+   it's naming (a fresh zone) stays visible on the map */
+.modal-wrap.modal-side {
+  background: rgba(29, 29, 36, 0.14);
+  background-image: none;
+  justify-content: flex-end;
+}
+.modal-wrap.modal-side .modal { margin-right: 20px; }
 .modal {
   width: min(430px, calc(100vw - 30px));
   max-height: 88vh;
@@ -1191,6 +1233,17 @@ button.armed {
     border-radius: var(--r-lg);
   }
   .pen-sep { width: 2.5px; height: 20px; margin: auto 1px; }
+  /* no hover on touch — but an armed confirm must still say its piece, above the tray */
+  .pen-tray button.armed .tool-label {
+    display: block;
+    opacity: 1;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) rotate(-1.5deg);
+  }
+  .modal-wrap.modal-side { align-items: flex-end; justify-content: center; }
+  .modal-wrap.modal-side .modal { margin: 0 0 12px; max-height: 54vh; }
   .drawer-body { grid-template-columns: 1fr; }
   .mix-bar { width: calc(100vw - 20px); border-radius: var(--r-lg); top: auto; bottom: 8px; }
   .mix-bar input { flex: 1; min-width: 110px; }
@@ -1414,10 +1467,13 @@ button.armed {
   background: var(--paper);
 }
 .zone-fills button.active { background: var(--gold); box-shadow: 2px 2px 0 var(--ink); }
+/* the not-yet-staked zone, marching while the naming modal is open */
+.zone-preview { animation: zone-ants 1s linear infinite; }
+@keyframes zone-ants { to { stroke-dashoffset: -20; } }
 .zone-row .cur-row-head { align-items: center; }
 
 .sidebar-tab svg { width: 22px; height: 22px; }
-.pen-action svg { width: 18px; height: 18px; display: block; }
+.pen-action svg { width: 20px; height: 20px; display: block; }
 
 .pin .curate-badge {
   position: absolute;

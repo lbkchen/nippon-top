@@ -27,10 +27,10 @@ taken, `node tools/serve.mjs 5000` picks another port.
 | thing | how |
 |---|---|
 | 🪢 **Lasso** | draw a loop around pins → everything inside lists in the sidebar with full notes. The "what's worth it around here today" tool. |
-| 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone") with solid, halftone-dot, or hatch fills. Draw one, retouch it later, hide it, or ask it "show me the recs inside" — zone control drawer runs the show. |
+| 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone") with solid, halftone-dot, or hatch fills. Draw one and watch the live preview while you name it, retouch it later, hide it, or ask it "show me the recs inside" — zone control drawer runs the show. |
 | 🔎 **Omnisearch** | one bar that live-filters the rec pins AND searches real places/addresses (Photon — komoot's free, keyless OSM geocoder). Pick a rec → fly to it; pick an address → add a spot there or measure distances from it ("what's near my hotel?"). |
 | 🖊️ **Doodle** | freehand ink that sticks to the terrain AND keeps its scale (zoom out, your street scribble stays street-sized). Three brushes, highlighter, eraser, undo/redo, pressure support. iPad/Pencil friendly. |
-| 🈴 **Stamps & words** | press hand-drawn hanko seals (頂, banger star, ramen, torii, GO…) onto the map, or type text stickers straight onto a street. They ride friend maps too. |
+| 🈴 **Stamps & words** | press one of 16 hand-drawn hanko seals (頂, banger star, ramen, fuji, sakura, GO…) onto the map, or type text stickers straight onto a street. Drag to move them, tap to resize/reword/peel off. They ride friend maps too. |
 | 📍 **Add a spot** | click the map, fill the form. Lives in your browser until exported. |
 | 💌 **Friend maps** | fork the whole map for a person — see below, this is the good stuff. |
 | 🎰 **Roulette** | can't decide? fate picks from what's on screen. Bangers weighted 3×. |

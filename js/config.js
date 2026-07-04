@@ -133,12 +133,16 @@ export function labelPoint(pts) {
 // two-tap confirm for destructive buttons (house rule: no browser dialogs).
 // First tap arms the button (it turns red and asks); second tap within the
 // window means yes. Returns true when the action should actually run.
-// Works on icon buttons too — the whole innerHTML is parked and restored.
+// Icon buttons with a flyout .tool-label keep their icon — the ask goes in the
+// label (forced visible while armed); everything else swaps its text.
 function disarm(el) {
   el.classList.remove("armed");
-  if (el.dataset.armedHtml != null) el.innerHTML = el.dataset.armedHtml;
+  const lbl = el.querySelector(".tool-label");
+  if (lbl && el.dataset.armedLabel != null) lbl.textContent = el.dataset.armedLabel;
+  else if (el.dataset.armedHtml != null) el.innerHTML = el.dataset.armedHtml;
   delete el.dataset.armed;
   delete el.dataset.armedHtml;
+  delete el.dataset.armedLabel;
 }
 export function armCheck(el, ask = "sure?") {
   if (el.dataset.armed && Date.now() - +el.dataset.armed < 2600) {
@@ -146,9 +150,15 @@ export function armCheck(el, ask = "sure?") {
     return true;
   }
   el.dataset.armed = Date.now();
-  el.dataset.armedHtml = el.innerHTML;
   el.classList.add("armed");
-  el.textContent = ask;
+  const lbl = el.querySelector(".tool-label");
+  if (lbl) {
+    el.dataset.armedLabel = lbl.textContent;
+    lbl.textContent = ask;
+  } else {
+    el.dataset.armedHtml = el.innerHTML;
+    el.textContent = ask;
+  }
   const stamp = el.dataset.armed;
   setTimeout(() => {
     if (el.isConnected && el.dataset.armed === stamp) disarm(el);

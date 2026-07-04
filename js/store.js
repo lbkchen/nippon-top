@@ -146,6 +146,19 @@ export function addDoodle(d) {
   doodles.push(d);
   persistDoodles();
 }
+// "yours" = removeDoodle would succeed — pack ink you're not editing isn't
+export function ownsDoodle(d) {
+  const t = packTarget("extraDoodles");
+  if (t && t.includes(d)) return true;
+  return doodles.includes(d);
+}
+// in-place patch (move / resize / reword a sticker); returns false when not yours
+export function updateDoodle(d, patch) {
+  if (!ownsDoodle(d)) return false;
+  Object.assign(d, patch);
+  if (doodles.includes(d)) persistDoodles(); // pack extras persist on save
+  return true;
+}
 // returns whether anything was removed — a friend's undo must skip pack ink they don't own
 export function removeDoodle(d) {
   const t = packTarget("extraDoodles");

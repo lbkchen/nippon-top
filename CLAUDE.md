@@ -79,14 +79,20 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 - **Zones** = ski-map area annotations (draw via zones menu or lasso→save; solid/dots/hatch
   fills). Editable after creation ("retouch" via popup or the ZONE CONTROL drawer, which also
   does per-zone hide + jump). Zones scope the sidebar ("N recs inside — show them",
-  `state.zoneFilter`, roulette follows). Base-zone edits = copy-on-write shadows by id;
-  deletes = tombstones (`nippon_dead_zones`) so exports/reloads don't resurrect them.
+  `state.zoneFilter`, roulette follows). While the naming modal is open (docked right / bottom
+  sheet, `modal-side`) a marching-ants preview shows the pending polygon and restyles with the
+  pickers; a retouched zone hides behind its preview. Base-zone edits = copy-on-write shadows
+  by id; deletes = tombstones (`nippon_dead_zones`) so exports/reloads don't resurrect them.
 - **Doodles** = typed entries in one store array, all pack-routable: ink strokes
   ({color, w, z, pts} — simplified on save, Chaikin-smoothed on render, weight scales
-  2^(zoom-z)), text stickers and hanko stamps ({type, at:[lat,lng], z} — stamps are
-  hand-drawn SVGs in js/stamps.js, NEVER emojis). Same tombstone trick
-  (`nippon_dead_doodles`). Pen tray = brushes/highlighter/eraser/text/stamp pickup tools
-  (mutually exclusive) + session undo/redo. **Chains** = pinless everywhere-recs in a drawer.
+  2^(zoom-z)), text stickers and hanko stamps ({type, at:[lat,lng], z, s?} — stamps are
+  hand-drawn SVGs in js/stamps.js, NEVER emojis). Stickers you own are grabbable in pen mode:
+  drag moves them, a tap opens the mini menu (bigger/smaller/reword/peel off, all undo-able —
+  `s` = user scale on top of zoom scale). Same tombstone trick (`nippon_dead_doodles`).
+  Pen tray = brushes/highlighter/eraser/text/stamp tools, strictly one in hand at a time
+  (disarmTools), + session undo/redo (add/remove/update ops). Tray buttons carry flyout
+  labels; armCheck puts its ask in the label (never nukes icon SVGs).
+  **Chains** = pinless everywhere-recs in a drawer.
 - `state.userLoc` = reference point (GPS or searched address) → distance pills + nearest-first
   sort.
 

@@ -4,9 +4,11 @@
 // rendered at w·2^(zoom-z) so street-level scribbles stay street-sized. Points are
 // simplified on save (Douglas-Peucker) and smoothed on render (Chaikin), which is
 // how raw pointer wobble becomes confident ink AND smaller packs at the same time.
+// Stickers ({ type:"text"|"stamp", at, z, s? }) are grabbable in pen mode: drag
+// to move, tap for the mini menu (resize / reword / peel off).
 import { $, $$, esc, jitter, armCheck, showHint, simplifyPts, chaikin, degPerPx } from "./config.js";
 import { map, doodleLayer, containerLatLng } from "./map.js";
-import { state, allDoodles, addDoodle, removeDoodle, clearDoodles } from "./store.js";
+import { state, allDoodles, addDoodle, removeDoodle, updateDoodle, ownsDoodle, clearDoodles } from "./store.js";
 import { on } from "./bus.js";
 import { registerSketchMode } from "./sketch.js";
 import { STAMPS } from "./stamps.js";
@@ -20,16 +22,19 @@ const inkWeight = (d) => {
   return Math.min(18, Math.max(1.2, base * 2 ** (map.getZoom() - d.z)));
 };
 
-// stickers (text + stamps) scale with zoom like the terrain they're stuck to
-const stickerScale = (d) => Math.min(3, Math.max(0.3, 2 ** (map.getZoom() - (d.z ?? map.getZoom()))));
+// stickers (text + stamps) scale with zoom like the terrain they're stuck to,
+// times whatever size the mini menu dialed in (d.s)
+const stickerScale = (d) =>
+  Math.min(3, Math.max(0.3, 2 ** (map.getZoom() - (d.z ?? map.getZoom())))) * (d.s || 1);
 
 function drawSticker(d) {
+  const mine = ownsDoodle(d) ? " mine" : "";
   const html = d.type === "text"
-    ? `<span class="ink-text" style="--c:${d.color};--r:${jitter(d.id, 4)}deg;--s:${stickerScale(d)}">${esc(d.text)}</span>`
-    : `<span class="ink-stamp" style="--c:${d.color};--r:${jitter(d.id, 9)}deg;--s:${stickerScale(d)}">${STAMPS[d.kind]?.svg || ""}</span>`;
+    ? `<span class="ink-text${mine}" style="--c:${d.color};--r:${jitter(d.id, 4)}deg;--s:${stickerScale(d)}">${esc(d.text)}</span>`
+    : `<span class="ink-stamp${mine}" style="--c:${d.color};--r:${jitter(d.id, 9)}deg;--s:${stickerScale(d)}">${STAMPS[d.kind]?.svg || ""}</span>`;
   const m = L.marker(d.at, {
     icon: L.divIcon({ className: "ink-sticker-wrap", html, iconSize: null }),
-    interactive: false, // stickers never eat map drags — the eraser finds them by distance
+    interactive: false, // the map never sees stickers — grabbing is our own pointer capture
   }).addTo(doodleLayer);
   m._nipponDoodle = d;
 }
@@ -47,6 +52,7 @@ function drawDoodle(d) {
 }
 
 function renderDoodles() {
+  closeStickerMenu(); // layers get rebuilt — any selection would go stale
   doodleLayer.clearLayers();
   allDoodles().forEach(drawDoodle);
 }
@@ -59,11 +65,24 @@ const pushOp = (op) => {
   redoStack = [];
 };
 function applyOp(op, invert) {
+  if (op.act === "update") {
+    if (!updateDoodle(op.d, invert ? op.before : op.after)) return false;
+    renderDoodles();
+    return true;
+  }
   const act = invert ? (op.act === "add" ? "remove" : "add") : op.act;
   let did = false;
   for (const s of op.strokes) did = (act === "add" ? (addDoodle(s), true) : removeDoodle(s)) || did;
   renderDoodles();
   return did;
+}
+
+// ---------- sticker selection (module scope: renderDoodles must reset it) ----------
+let stickerSel = null; // { layer, d, span }
+function closeStickerMenu() {
+  $("#stickerMenu").classList.add("hidden");
+  stickerSel?.span.classList.remove("sel");
+  stickerSel = null;
 }
 
 // ---------- eraser ----------
@@ -113,6 +132,7 @@ export function initDoodle() {
     if (l.setStyle && l.getLatLngs) l.setStyle({ weight: inkWeight(d) });
     else l.getElement()?.firstElementChild?.style.setProperty("--s", stickerScale(d));
   }));
+  map.on("zoomstart movestart", closeStickerMenu); // menu position goes stale with the view
 
   registerSketchMode("pen", {
     active: () => !state.penErase && !state.penText && !state.penStamp,
@@ -144,11 +164,15 @@ export function initDoodle() {
     },
   });
 
-  // ---------- pickup tools (eraser / text / stamp are mutually exclusive) ----------
+  // ---------- tools (one in hand at a time: brush/hl or eraser or text or stamp) ----------
   let textInput = null;
   const killTextInput = () => { textInput?.remove(); textInput = null; };
 
   function disarmTools(except) {
+    if (except !== "hl" && state.penHl) {
+      state.penHl = false;
+      $("#penHl").classList.remove("active");
+    }
     if (except !== "erase" && state.penErase) {
       state.penErase = false;
       $("#penErase").classList.remove("active");
@@ -164,29 +188,26 @@ export function initDoodle() {
       $("#penStampBtn").classList.remove("active");
     }
     $("#stampMenu").classList.add("hidden");
+    closeStickerMenu();
   }
 
-  function openTextInput(e) {
+  function openTextEditor(x, y, initial, onCommit) {
     killTextInput();
-    const ll = containerLatLng(e);
     const input = document.createElement("input");
     input.className = "ink-text-input";
     input.maxLength = 40;
     input.placeholder = "say something…";
-    input.style.left = `${e.clientX}px`;
-    input.style.top = `${e.clientY}px`;
+    input.value = initial || "";
+    input.style.left = `${x}px`;
+    input.style.top = `${y}px`;
     input.style.setProperty("--c", state.penColor);
     document.body.append(input);
     textInput = input;
-    setTimeout(() => input.focus(), 0);
+    setTimeout(() => { input.focus(); input.select(); }, 0);
     const commit = () => {
       const text = input.value.trim();
       killTextInput();
-      if (!text) return;
-      const d = { type: "text", text, color: state.penColor, z: map.getZoom(), at: [+ll.lat.toFixed(6), +ll.lng.toFixed(6)] };
-      addDoodle(d);
-      drawDoodle(d);
-      pushOp({ act: "add", strokes: [d] });
+      if (text) onCommit(text);
     };
     input.addEventListener("keydown", (ev) => {
       ev.stopPropagation();
@@ -201,7 +222,13 @@ export function initDoodle() {
     if (state.mode !== "pen") return;
     if (state.penText) {
       e.preventDefault();
-      openTextInput(e);
+      const ll = containerLatLng(e);
+      openTextEditor(e.clientX, e.clientY, "", (text) => {
+        const d = { type: "text", text, color: state.penColor, z: map.getZoom(), at: [+ll.lat.toFixed(6), +ll.lng.toFixed(6)] };
+        addDoodle(d);
+        drawDoodle(d);
+        pushOp({ act: "add", strokes: [d] });
+      });
     } else if (state.penStamp) {
       e.preventDefault();
       const ll = containerLatLng(e);
@@ -210,6 +237,110 @@ export function initDoodle() {
       drawDoodle(d);
       pushOp({ act: "add", strokes: [d] });
     }
+  });
+
+  // ---------- sticker grab: drag moves it, a clean tap opens the mini menu ----------
+  const stickerMenu = $("#stickerMenu");
+
+  function findStickerLayer(span) {
+    let hit = null;
+    doodleLayer.eachLayer((l) => { if (!hit && !l.getLatLngs && l.getElement()?.contains(span)) hit = l; });
+    return hit;
+  }
+
+  function openStickerMenu(layer, d, span) {
+    closeStickerMenu();
+    stickerSel = { layer, d, span };
+    span.classList.add("sel");
+    $("#stReword").classList.toggle("hidden", d.type !== "text");
+    const pt = map.latLngToContainerPoint(layer.getLatLng());
+    const rect = $("#map").getBoundingClientRect();
+    stickerMenu.classList.remove("hidden");
+    const x = rect.left + pt.x + 30, y = rect.top + pt.y - stickerMenu.offsetHeight / 2;
+    stickerMenu.style.left = `${Math.max(8, Math.min(x, window.innerWidth - stickerMenu.offsetWidth - 8))}px`;
+    stickerMenu.style.top = `${Math.max(8, Math.min(y, window.innerHeight - stickerMenu.offsetHeight - 8))}px`;
+  }
+
+  // capture phase: a grabbed sticker must beat the sketch + placement handlers
+  $("#map").addEventListener("pointerdown", (e) => {
+    if (state.mode !== "pen" || state.penErase) return;
+    const span = e.target.closest?.(".ink-text.mine, .ink-stamp.mine");
+    if (!span) return;
+    const layer = findStickerLayer(span);
+    const d = layer?._nipponDoodle;
+    if (!d || !ownsDoodle(d)) return;
+    e.stopPropagation();
+    e.preventDefault();
+    const id = e.pointerId;
+    const startX = e.clientX, startY = e.clientY;
+    const before = [...d.at];
+    let moved = false;
+    const onMove = (ev) => {
+      if (ev.pointerId !== id) return;
+      if (!moved && Math.hypot(ev.clientX - startX, ev.clientY - startY) > 5) {
+        moved = true;
+        closeStickerMenu();
+        span.classList.add("dragging");
+      }
+      if (moved) layer.setLatLng(containerLatLng(ev));
+    };
+    const onUp = (ev) => {
+      if (ev.pointerId !== id) return;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      span.classList.remove("dragging");
+      if (ev.type === "pointercancel") { layer.setLatLng(before); return; }
+      if (moved) {
+        const ll = layer.getLatLng();
+        const at = [+ll.lat.toFixed(6), +ll.lng.toFixed(6)];
+        updateDoodle(d, { at });
+        pushOp({ act: "update", d, before: { at: before }, after: { at } });
+      } else {
+        openStickerMenu(layer, d, span);
+      }
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+  }, true);
+
+  const reScale = (f) => {
+    if (!stickerSel) return;
+    const { d, span } = stickerSel;
+    const before = d.s || 1;
+    const s = Math.min(4, Math.max(0.4, +(before * f).toFixed(2)));
+    if (s === before) return;
+    updateDoodle(d, { s });
+    span.style.setProperty("--s", stickerScale(d));
+    pushOp({ act: "update", d, before: { s: before }, after: { s } });
+  };
+  $("#stBigger").addEventListener("click", () => reScale(1.3));
+  $("#stSmaller").addEventListener("click", () => reScale(1 / 1.3));
+  $("#stReword").addEventListener("click", () => {
+    if (!stickerSel) return;
+    const { layer, d } = stickerSel;
+    closeStickerMenu();
+    const pt = map.latLngToContainerPoint(layer.getLatLng());
+    const rect = $("#map").getBoundingClientRect();
+    openTextEditor(rect.left + pt.x, rect.top + pt.y, d.text, (text) => {
+      const before = d.text;
+      updateDoodle(d, { text });
+      pushOp({ act: "update", d, before: { text: before }, after: { text } });
+      renderDoodles();
+    });
+  });
+  $("#stPeel").addEventListener("click", () => {
+    if (!stickerSel) return;
+    const { layer, d } = stickerSel;
+    closeStickerMenu();
+    if (removeDoodle(d)) {
+      doodleLayer.removeLayer(layer);
+      pushOp({ act: "remove", strokes: [d] });
+    }
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest("#stickerMenu") && !e.target.closest(".ink-text, .ink-stamp")) closeStickerMenu();
   });
 
   // ---------- tray ----------
@@ -225,17 +356,16 @@ export function initDoodle() {
     const size = e.target.closest(".pen-size");
     if (size) {
       state.penWidth = +size.dataset.w;
-      state.penHl = false;
-      $("#penHl").classList.remove("active");
-      disarmTools();
+      disarmTools(); // picking a size means "back to the plain brush"
       $$(".pen-size").forEach((s) => s.classList.toggle("active", s === size));
     }
   });
 
   $("#penHl").addEventListener("click", () => {
-    state.penHl = !state.penHl;
-    disarmTools();
-    $("#penHl").classList.toggle("active", state.penHl);
+    const arming = !state.penHl;
+    disarmTools(arming ? "hl" : undefined);
+    state.penHl = arming;
+    $("#penHl").classList.toggle("active", arming);
   });
 
   $("#penErase").addEventListener("click", () => {
@@ -267,7 +397,7 @@ export function initDoodle() {
       state.penStamp = kind;
       $("#penStampBtn").classList.add("active");
       stampMenu.classList.add("hidden");
-      showHint(`stamp armed — tap the map to press it (esc puts it down)`, 2600);
+      showHint(`"${s.label}" armed — tap the map to press it (esc puts it down)`, 2600);
     });
     stampMenu.append(b);
   }
@@ -279,7 +409,7 @@ export function initDoodle() {
       stampMenu.style.left = `${r.right + 14}px`;
       stampMenu.style.top = `${Math.max(10, r.top - 60)}px`;
     } else {
-      stampMenu.style.left = `${Math.min(r.left, window.innerWidth - 190)}px`;
+      stampMenu.style.left = `${Math.min(r.left, window.innerWidth - 210)}px`;
       stampMenu.style.top = `${r.bottom + 8}px`;
     }
     stampMenu.classList.remove("hidden");
@@ -321,7 +451,7 @@ export function initDoodle() {
 
   $("#penClear").addEventListener("click", (e) => {
     if (!doodleLayer.getLayers().length) return;
-    if (!armCheck(e.currentTarget, "all?")) return;
+    if (!armCheck(e.currentTarget, "tap again to wipe it ALL")) return;
     const before = allDoodles();
     clearDoodles();
     const gone = before.filter((d) => !allDoodles().includes(d));

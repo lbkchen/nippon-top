@@ -99,7 +99,12 @@ if (existsSync(friendsDir)) {
 }
 
 // ---- doodles (ink strokes + text/stamp stickers share the array) ----
-const STAMP_KINDS = ["itadaki", "banger", "ramen", "torii", "onsen", "go", "heart", "nope"];
+const STAMP_KINDS = [
+  "itadaki", "banger", "heart", "nope",
+  "ramen", "onigiri", "kanpai", "camera",
+  "torii", "onsen", "fuji", "sakura",
+  "go", "densha", "neko", "yen",
+];
 for (const [i, d] of doodles.entries()) {
   const tag = `doodle #${i}${d.type ? ` (${d.type})` : ""}`;
   if (!/^#[0-9a-f]{6}$/i.test(d.color || "")) err(`${tag}: color must be #rrggbb`);
@@ -107,6 +112,7 @@ for (const [i, d] of doodles.entries()) {
     if (!Array.isArray(d.at) || d.at.length !== 2 || typeof d.at[0] !== "number") err(`${tag}: needs at: [lat, lng]`);
     if (d.type === "text" && !(d.text || "").trim()) err(`${tag}: empty text sticker`);
     if (d.type === "stamp" && !STAMP_KINDS.includes(d.kind)) err(`${tag}: unknown stamp kind "${d.kind}"`);
+    if (d.s != null && !(typeof d.s === "number" && d.s >= 0.2 && d.s <= 5)) err(`${tag}: size s must be a number in [0.2, 5]`);
   } else if (!Array.isArray(d.pts) || d.pts.length < 2) {
     err(`${tag}: needs ≥2 points`);
   }

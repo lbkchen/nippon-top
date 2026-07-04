@@ -17,6 +17,8 @@ let pendingPoints = null;
 let editingZone = null; // zone being retouched via the modal (null = staking a new one)
 let pickedColor = ZONE_COLORS[0];
 let pickedFill = "solid";
+let preview = null;        // live polygon shown while the naming modal is open
+let previewSkipId = null;  // the zone being retouched hides so the preview replaces it
 
 function placesInZone(z) {
   let pool = allPlaces().filter((p) => pointInPoly(p.lat, p.lng, z.points));
@@ -41,8 +43,32 @@ function filterToZone(z) {
   emit("refresh-list");
 }
 
+// what you're about to stake, marching ants and all — restyles live with the pickers
+function paintPreview() {
+  preview?.remove();
+  preview = null;
+  if (!pendingPoints) return;
+  const pattern = pickedFill === "dots" ? "zfill-dots" : pickedFill === "hatch" ? "zfill-hatch" : null;
+  preview = L.polygon(chaikin(pendingPoints, 2, true), {
+    color: pickedColor, weight: 3, dashArray: "12 8", fillColor: pickedColor,
+    fillOpacity: pattern ? 0.6 : 0.13, className: "rough-line zone-preview", interactive: false,
+  }).addTo(map);
+  if (pattern && preview._path) {
+    preview._path.classList.add(pattern);
+    preview._path.style.color = pickedColor;
+  }
+}
+
+function clearPreview() {
+  preview?.remove();
+  preview = null;
+  pendingPoints = null;
+  editingZone = null;
+  if (previewSkipId) { previewSkipId = null; renderZones(); }
+}
+
 function drawZone(z) {
-  if (zoneHidden(z.id)) return;
+  if (zoneHidden(z.id) || z.id === previewSkipId) return;
   // outlines render smoothed (closed Chaikin) — saved points stay lean
   const pattern = z.fill === "dots" ? "zfill-dots" : z.fill === "hatch" ? "zfill-hatch" : null;
   const poly = L.polygon(chaikin(z.points, 2, true), {
@@ -106,6 +132,13 @@ export function openZoneModal(points, existing = null) {
   $("#zoneBlurb").value = existing?.blurb || "";
   [...$("#zoneColors").children].forEach((s) => s.classList.toggle("active", s.dataset.color === pickedColor));
   [...$("#zoneFills").children].forEach((b) => b.classList.toggle("active", b.dataset.fill === pickedFill));
+  previewSkipId = existing?.id || null;
+  if (previewSkipId) renderZones(); // the preview stands in for the original
+  paintPreview();
+  // the modal docks right (bottom on mobile) — pan the goods into the open half
+  map.fitBounds(L.latLngBounds(pendingPoints), window.innerWidth > 940
+    ? { paddingTopLeft: [50, 80], paddingBottomRight: [500, 50] }
+    : { paddingTopLeft: [20, 90], paddingBottomRight: [20, Math.round(window.innerHeight * 0.55)] });
   $("#zoneModal").classList.remove("hidden");
   $("#zoneName").focus();
 }
@@ -123,10 +156,9 @@ function saveZone() {
   };
   const wasEdit = !!editingZone;
   if (wasEdit) updateZone(z); else addZone(z);
+  clearPreview(); // also re-renders when a retouch was hiding the original
   renderZones();
   $("#zoneModal").classList.add("hidden");
-  pendingPoints = null;
-  editingZone = null;
   if (state.mode === "zone") setMode(null);
   emit("zone-saved");
   showHint(wasEdit ? `"${name}" — touched up` : `"${name}" is now officially a zone`, 2500);
@@ -231,6 +263,7 @@ export function initZones() {
     b.onclick = () => {
       pickedColor = c;
       [...wrap.children].forEach((s) => s.classList.toggle("active", s === b));
+      paintPreview();
     };
     wrap.append(b);
   }
@@ -241,6 +274,7 @@ export function initZones() {
     if (!b) return;
     pickedFill = b.dataset.fill;
     [...$("#zoneFills").children].forEach((x) => x.classList.toggle("active", x === b));
+    paintPreview();
   });
 
   registerSketchMode("zone", {
@@ -274,9 +308,12 @@ export function initZones() {
   $("#zoneSave").addEventListener("click", saveZone);
   $("#zoneCancel").addEventListener("click", () => {
     $("#zoneModal").classList.add("hidden");
-    pendingPoints = null;
-    editingZone = null;
+    clearPreview();
     if (state.mode === "zone") setMode(null);
+  });
+  // modes.js hides the modal on Escape without asking us — clean up the preview too
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && preview) clearPreview();
   });
   document.addEventListener("pointerdown", (e) => {
     if (!e.target.closest("#zoneMenu") && !e.target.closest('[data-tool="zones"]')) $("#zoneMenu").classList.add("hidden");

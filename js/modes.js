@@ -25,6 +25,7 @@ export function setMode(mode) {
   mapEl.classList.toggle("penning", m === "pen");
   mapEl.classList.toggle("adding", m === "add");
   mapEl.style.touchAction = sketchy ? "none" : "";
+  document.body.dataset.mode = m || "";
   if (sketchy) map.dragging.disable(); else map.dragging.enable();
   $("#penTray").classList.toggle("hidden", m !== "pen");
   if (m) showHint(HINTS[m]); else hideHint();
