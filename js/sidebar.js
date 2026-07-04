@@ -201,6 +201,15 @@ export function initSidebar() {
   tab.addEventListener("click", openSidebar);
   tab.classList.add("hidden");
 
+  // mobile: map-first modes want the whole map — tuck the sheet away
+  // (lasso results / zone filters pop it back up via open-sidebar)
+  on("mode-changed", (m) => {
+    if (window.innerWidth <= 940 && ["lasso", "pen", "zone", "curate"].includes(m)) {
+      sidebar.classList.add("collapsed");
+      tab.classList.remove("hidden");
+    }
+  });
+
   map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter) renderList(); });
 
   on("refresh", renderList);

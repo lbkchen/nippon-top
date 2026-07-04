@@ -1207,32 +1207,39 @@ button.armed {
     top: auto;
     left: 8px;
     right: 8px;
-    bottom: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
     width: auto;
     height: 46vh;
   }
-  .sidebar.collapsed { transform: translateY(calc(100% + 16px)); }
-  .sidebar-tab { top: auto; bottom: 14px; }
+  .sidebar.collapsed { transform: translateY(calc(100% + 40px)); }
+  .sidebar-tab { top: auto; bottom: calc(14px + env(safe-area-inset-bottom)); }
   .toolbar {
     flex-direction: row;
     flex-wrap: wrap;
     left: 10px;
-    right: 64px;
+    right: 10px;
     bottom: auto;
     top: 196px;
   }
   .toolbar button { width: 40px; height: 40px; font-size: 17px; }
+  /* the tray moves to the thumb zone — drawing happens above it, not under it */
   .pen-tray {
     flex-direction: row;
     flex-wrap: wrap;
-    max-width: calc(100vw - 20px);
+    justify-content: center;
+    gap: 8px;
     left: 10px;
-    top: 250px;
-    bottom: auto;
-    padding: 7px 9px;
+    right: 10px;
+    top: auto;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    max-width: none;
+    padding: 8px 10px;
     border-radius: var(--r-lg);
   }
-  .pen-sep { width: 2.5px; height: 20px; margin: auto 1px; }
+  /* comfy touch targets (26px is a mouse size, not a thumb size) */
+  .swatch, .pen-size, .pen-action { width: 36px; height: 36px; }
+  .pen-action svg { width: 24px; height: 24px; }
+  .pen-sep { width: 2.5px; height: 24px; margin: auto 0; }
   /* no hover on touch — but an armed confirm must still say its piece, above the tray */
   .pen-tray button.armed .tool-label {
     display: block;
@@ -1242,10 +1249,24 @@ button.armed {
     bottom: calc(100% + 10px);
     transform: translateX(-50%) rotate(-1.5deg);
   }
+  /* the hint toast dodges the bottom-docked tray in pen mode; the sheet tab
+     would sit buried under the tray, so it bows out until the pen goes down */
+  body[data-mode="pen"] .mode-hint { bottom: calc(160px + env(safe-area-inset-bottom)); }
+  body[data-mode="pen"] .sidebar-tab { display: none; }
+  .mode-hint { bottom: calc(26px + env(safe-area-inset-bottom)); }
+  /* pinch does this job on touch — the buttons just eat map */
+  .leaflet-control-zoom { display: none; }
+  .tool-menu button { padding: 11px 14px; font-size: 14px; }
+  .drawer-close { width: 40px; height: 40px; }
+  .omni-clear { width: 28px; height: 28px; }
   .modal-wrap.modal-side { align-items: flex-end; justify-content: center; }
-  .modal-wrap.modal-side .modal { margin: 0 0 12px; max-height: 54vh; }
+  .modal-wrap.modal-side .modal { margin: 0 0 calc(12px + env(safe-area-inset-bottom)); max-height: 54vh; }
   .drawer-body { grid-template-columns: 1fr; }
-  .mix-bar { width: calc(100vw - 20px); border-radius: var(--r-lg); top: auto; bottom: 8px; }
+  .mix-bar { width: calc(100vw - 20px); border-radius: var(--r-lg); top: auto; bottom: calc(8px + env(safe-area-inset-bottom)); gap: 6px; padding: 7px 10px; }
+  .mix-banner { width: calc(100vw - 20px); max-width: none; top: auto; bottom: calc(8px + env(safe-area-inset-bottom)); }
+  /* curate bar + friend banner hop on top of the open card sheet instead of covering it */
+  body:has(#sidebar:not(.collapsed)) .mix-bar,
+  body:has(#sidebar:not(.collapsed)) .mix-banner { bottom: calc(46vh + 12px); }
   .mix-bar input { flex: 1; min-width: 110px; }
   .splash-stamp { right: 4px; bottom: -40px; }
 }
@@ -1504,6 +1525,8 @@ button.armed {
     top: 88px;
     width: auto;
   }
+  /* sub-16px inputs make iOS Safari zoom the whole page on focus */
+  #omniInput, #addSearch, .modal input[type="text"], .modal textarea, .mix-bar input { font-size: 16px; }
 }
 
 /* ---------- spot detail panel ---------- */

@@ -405,14 +405,16 @@ export function initDoodle() {
     if (state.penStamp) { disarmTools(); return; } // put the stamp down
     if (!stampMenu.classList.contains("hidden")) { stampMenu.classList.add("hidden"); return; }
     const r = $("#penStampBtn").getBoundingClientRect();
+    stampMenu.classList.remove("hidden"); // unhide first so offsetWidth/Height measure
     if (window.innerWidth > 940) {
       stampMenu.style.left = `${r.right + 14}px`;
       stampMenu.style.top = `${Math.max(10, r.top - 60)}px`;
     } else {
-      stampMenu.style.left = `${Math.min(r.left, window.innerWidth - 210)}px`;
-      stampMenu.style.top = `${r.bottom + 8}px`;
+      // the tray docks at the bottom on mobile — the picker opens above the whole tray
+      const trayTop = $("#penTray").getBoundingClientRect().top;
+      stampMenu.style.left = `${Math.max(10, Math.min(r.left, window.innerWidth - stampMenu.offsetWidth - 10))}px`;
+      stampMenu.style.top = `${Math.max(10, trayTop - stampMenu.offsetHeight - 10)}px`;
     }
-    stampMenu.classList.remove("hidden");
   });
   document.addEventListener("pointerdown", (e) => {
     if (!e.target.closest("#stampMenu") && !e.target.closest("#penStampBtn")) stampMenu.classList.add("hidden");
