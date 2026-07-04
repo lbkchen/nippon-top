@@ -61,6 +61,7 @@ for (const z of zones) {
   zoneIds.add(z.id);
   if (!z.name) err(`${tag}: missing name`);
   if (!/^#[0-9a-f]{6}$/i.test(z.color || "")) err(`${tag}: color must be #rrggbb`);
+  if (z.fill != null && !["dots", "hatch"].includes(z.fill)) err(`${tag}: fill must be dots|hatch (or absent for solid)`);
   if (!Array.isArray(z.points) || z.points.length < 3) err(`${tag}: needs ≥3 points`);
   else for (const pt of z.points) {
     if (!Array.isArray(pt) || pt.length !== 2 || typeof pt[0] !== "number") { err(`${tag}: malformed point`); break; }
@@ -97,10 +98,18 @@ if (existsSync(friendsDir)) {
   }
 }
 
-// ---- doodles ----
+// ---- doodles (ink strokes + text/stamp stickers share the array) ----
+const STAMP_KINDS = ["itadaki", "banger", "ramen", "torii", "onsen", "go", "heart", "nope"];
 for (const [i, d] of doodles.entries()) {
-  if (!/^#[0-9a-f]{6}$/i.test(d.color || "")) err(`doodle #${i}: color must be #rrggbb`);
-  if (!Array.isArray(d.pts) || d.pts.length < 2) err(`doodle #${i}: needs ≥2 points`);
+  const tag = `doodle #${i}${d.type ? ` (${d.type})` : ""}`;
+  if (!/^#[0-9a-f]{6}$/i.test(d.color || "")) err(`${tag}: color must be #rrggbb`);
+  if (d.type === "text" || d.type === "stamp") {
+    if (!Array.isArray(d.at) || d.at.length !== 2 || typeof d.at[0] !== "number") err(`${tag}: needs at: [lat, lng]`);
+    if (d.type === "text" && !(d.text || "").trim()) err(`${tag}: empty text sticker`);
+    if (d.type === "stamp" && !STAMP_KINDS.includes(d.kind)) err(`${tag}: unknown stamp kind "${d.kind}"`);
+  } else if (!Array.isArray(d.pts) || d.pts.length < 2) {
+    err(`${tag}: needs ≥2 points`);
+  }
 }
 
 // ---- verdict ----

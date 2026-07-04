@@ -76,8 +76,17 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   a fetched pack imports it for editing = Ken's cross-browser recovery path.
   localStorage is staging/cache only: anything durable must be reconstructible from
   repo artifacts + a link. Legacy `#for=<slug>` and `#mix=` links still parse.
-- **Zones** = ski-map area annotations (draw via zones menu or lasso→save); **chains** =
-  pinless everywhere-recs in a drawer; **doodles** = freehand ink in map coords.
+- **Zones** = ski-map area annotations (draw via zones menu or lasso→save; solid/dots/hatch
+  fills). Editable after creation ("retouch" via popup or the ZONE CONTROL drawer, which also
+  does per-zone hide + jump). Zones scope the sidebar ("N recs inside — show them",
+  `state.zoneFilter`, roulette follows). Base-zone edits = copy-on-write shadows by id;
+  deletes = tombstones (`nippon_dead_zones`) so exports/reloads don't resurrect them.
+- **Doodles** = typed entries in one store array, all pack-routable: ink strokes
+  ({color, w, z, pts} — simplified on save, Chaikin-smoothed on render, weight scales
+  2^(zoom-z)), text stickers and hanko stamps ({type, at:[lat,lng], z} — stamps are
+  hand-drawn SVGs in js/stamps.js, NEVER emojis). Same tombstone trick
+  (`nippon_dead_doodles`). Pen tray = brushes/highlighter/eraser/text/stamp pickup tools
+  (mutually exclusive) + session undo/redo. **Chains** = pinless everywhere-recs in a drawer.
 - `state.userLoc` = reference point (GPS or searched address) → distance pills + nearest-first
   sort.
 
@@ -91,8 +100,8 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   (buttons, pills, hints, headers, toasts) is text-only.
 - Icon buttons: inline SVG line icons (stroke 2.2, round caps, slightly wobbly paths) with
   explicit width/height attrs + flyout labels on hover/focus + aria-labels.
-- Never `prompt()`/`alert()` — styled modals or inline editors. Copy is lowercase, playful,
-  a little unhinged.
+- Never `prompt()`/`alert()`/`confirm()` — styled modals, inline editors, or two-tap armed
+  buttons (`armCheck` in config.js). Copy is lowercase, playful, a little unhinged.
 
 ## Shipping
 
