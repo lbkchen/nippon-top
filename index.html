@@ -188,6 +188,12 @@
     <button class="pen-action" id="penErase" title="eraser — scrub ink away" aria-label="eraser">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 15.2 L12.6 6.9 C13.4 6.1 14.7 6.1 15.5 6.9 L18.9 10.3 C19.7 11.1 19.7 12.4 18.9 13.2 L12.4 19.8" /><path d="M8.8 10.8 L15.1 17.1" /><path d="M6.5 19.8 h11" /></svg>
     </button>
+    <button class="pen-action" id="penText" title="text sticker — write on the map" aria-label="text sticker">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6.5 C9.5 5.6 14.5 5.6 19 6.5" /><path d="M12 6.2 C12.2 10.5 12.1 15 11.8 19.3" /><path d="M9 19.5 C11 19.1 13 19.1 15 19.5" /></svg>
+    </button>
+    <button class="pen-action" id="penStampBtn" title="hanko stamps — press one onto the map" aria-label="hanko stamps">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9.5 C9 6 10 4.5 12 4.5 C14 4.5 15 6 15 9.5 C15 11.5 14.2 12.5 14.2 13.5 h-4.4 C9.8 12.5 9 11.5 9 9.5 Z" /><path d="M6.5 16.5 C6.5 14.8 7.8 13.5 9.5 13.5 h5 C16.2 13.5 17.5 14.8 17.5 16.5 v0.8 h-11 Z" /><path d="M5.5 20 h13" /></svg>
+    </button>
     <span class="pen-sep" aria-hidden="true"></span>
     <button class="pen-action" id="penUndo" title="undo" aria-label="undo">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 5 L4 9.5 L8.5 14" /><path d="M4 9.5 h10 a5.5 5.5 0 0 1 0 11 h-4" /></svg>
@@ -202,6 +208,9 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 h16" /><path d="M7 20 L15.5 4.8 C16 3.9 17.3 3.7 18.1 4.4 L20.2 6.2 C21 6.9 21 8.2 20.3 9 L10.5 20" /></svg>
     </button>
   </div>
+
+  <!-- stamp picker (filled from js/stamps.js) -->
+  <div class="tool-menu stamp-menu hidden" id="stampMenu"></div>
 
   <!-- mode hint toast -->
   <div class="mode-hint hidden" id="modeHint"></div>

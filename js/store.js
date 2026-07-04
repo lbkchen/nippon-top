@@ -51,6 +51,8 @@ export const state = {
   penWidth: 4,                // brush base weight at draw zoom
   penHl: false,               // highlighter brush
   penErase: false,            // eraser picked up (pen mode stops drawing)
+  penText: false,             // text sticker tool armed
+  penStamp: null,             // stamp kind armed (see stamps.js), or null
   userLoc: null,              // [lat, lng] once located
 };
 
