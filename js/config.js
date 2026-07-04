@@ -48,6 +48,57 @@ export function pointInPoly(lat, lng, pts) {
   return inside;
 }
 
+// Douglas-Peucker line simplification, pts = [[lat,lng],...], tol in degrees.
+// Strokes come in at pointer-move resolution; most of those points add bytes, not shape.
+export function simplifyPts(pts, tol) {
+  if (pts.length < 3) return pts;
+  const sqTol = tol * tol;
+  const sqSegDist = (p, a, b) => {
+    let [y, x] = a, dy = b[0] - y, dx = b[1] - x;
+    if (dy || dx) {
+      const t = ((p[0] - y) * dy + (p[1] - x) * dx) / (dy * dy + dx * dx);
+      if (t > 1) { y = b[0]; x = b[1]; } else if (t > 0) { y += dy * t; x += dx * t; }
+    }
+    return (p[0] - y) ** 2 + (p[1] - x) ** 2;
+  };
+  const keep = new Array(pts.length).fill(false);
+  keep[0] = keep[pts.length - 1] = true;
+  const stack = [[0, pts.length - 1]];
+  while (stack.length) {
+    const [a, b] = stack.pop();
+    let maxD = 0, idx = 0;
+    for (let i = a + 1; i < b; i++) {
+      const d = sqSegDist(pts[i], pts[a], pts[b]);
+      if (d > maxD) { maxD = d; idx = i; }
+    }
+    if (maxD > sqTol) { keep[idx] = true; stack.push([a, idx], [idx, b]); }
+  }
+  return pts.filter((_, i) => keep[i]);
+}
+
+// Chaikin corner-cutting — render-time smoothing so simplified strokes read as
+// confident ink, not connect-the-dots. closed=true wraps (zone outlines).
+export function chaikin(pts, iterations = 2, closed = false) {
+  let out = pts;
+  for (let it = 0; it < iterations; it++) {
+    const next = [];
+    const n = out.length;
+    if (n < 3) return out;
+    if (!closed) next.push(out[0]);
+    for (let i = 0; i < (closed ? n : n - 1); i++) {
+      const a = out[i], b = out[(i + 1) % n];
+      next.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25]);
+      next.push([a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]);
+    }
+    if (!closed) next.push(out[n - 1]);
+    out = next;
+  }
+  return out;
+}
+
+// degrees-per-screen-pixel at a given zoom (Web Mercator, longitude)
+export const degPerPx = (zoom) => 360 / (256 * 2 ** zoom);
+
 // where a polygon's label belongs: the interior point farthest from any edge
 // (poor man's pole of inaccessibility — a grid search is plenty at zone scale;
 // the vertex average lands OUTSIDE banana/C-shaped zones, which hand-drawn zones love to be)

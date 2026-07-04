@@ -23,7 +23,7 @@ function abortSketch() {
 export function initSketch() {
   $("#map").addEventListener("pointerdown", (e) => {
     const h = handlers[state.mode];
-    if (!h) return;
+    if (!h || (h.active && !h.active())) return; // e.g. pen mode with the eraser picked up
     if (sketch) {
       if (sketch.pointerType === "touch" && e.pointerType === "touch") abortSketch(); // pinch wins
       return; // pen keeps drawing through palm touches

@@ -1,7 +1,7 @@
 // Ski-map style vibe zones: colored areas with label stickers.
 // Draw one via the zones menu (freehand) or save a lasso as a zone —
 // both land in the same naming modal.
-import { $, esc, showHint, labelPoint, ZONE_COLORS } from "./config.js";
+import { $, esc, showHint, labelPoint, simplifyPts, chaikin, degPerPx, ZONE_COLORS } from "./config.js";
 import { map, zoneLayer } from "./map.js";
 import { state, allZones, addZone, removeZone, zoneCount } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -12,7 +12,8 @@ let pendingPoints = null;
 let pickedColor = ZONE_COLORS[0];
 
 function drawZone(z) {
-  const poly = L.polygon(z.points, {
+  // outlines render smoothed (closed Chaikin) — saved points stay lean
+  const poly = L.polygon(chaikin(z.points, 2, true), {
     color: z.color, weight: 3, dashArray: "12 8", fillColor: z.color, fillOpacity: 0.13, className: "rough-line",
   }).addTo(zoneLayer);
   const c = labelPoint(z.points); // interior point, not vertex average — labels stay inside banana zones
@@ -36,7 +37,9 @@ function drawZone(z) {
 
 // ---------- naming modal (shared by draw-a-zone and lasso→zone) ----------
 export function openZoneModal(points) {
-  pendingPoints = points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]);
+  const tol = 1.8 * degPerPx(map.getZoom());
+  pendingPoints = simplifyPts(points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]), tol);
+  if (pendingPoints.length < 4) pendingPoints = points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]);
   pickedColor = ZONE_COLORS[zoneCount() % ZONE_COLORS.length];
   $("#zoneName").value = "";
   $("#zoneBlurb").value = "";

@@ -172,13 +172,30 @@
 
   <!-- pen tray -->
   <div class="pen-tray hidden" id="penTray">
-    <button class="swatch active" data-color="#e03131" style="--c:#e03131"></button>
-    <button class="swatch" data-color="#4263eb" style="--c:#4263eb"></button>
-    <button class="swatch" data-color="#2f9e44" style="--c:#2f9e44"></button>
-    <button class="swatch" data-color="#f5b301" style="--c:#f5b301"></button>
-    <button class="swatch" data-color="#2b2b33" style="--c:#2b2b33"></button>
-    <button class="pen-action" id="penUndo" title="undo last stroke" aria-label="undo last stroke">
+    <button class="swatch active" data-color="#e03131" style="--c:#e03131" aria-label="red ink"></button>
+    <button class="swatch" data-color="#4263eb" style="--c:#4263eb" aria-label="indigo ink"></button>
+    <button class="swatch" data-color="#2f9e44" style="--c:#2f9e44" aria-label="matcha ink"></button>
+    <button class="swatch" data-color="#f5b301" style="--c:#f5b301" aria-label="gold ink"></button>
+    <button class="swatch" data-color="#2b2b33" style="--c:#2b2b33" aria-label="sumi ink"></button>
+    <span class="pen-sep" aria-hidden="true"></span>
+    <button class="pen-size" data-w="2.5" title="fine brush" aria-label="fine brush"><span class="size-dot" style="--d:5px"></span></button>
+    <button class="pen-size active" data-w="4" title="regular brush" aria-label="regular brush"><span class="size-dot" style="--d:9px"></span></button>
+    <button class="pen-size" data-w="7" title="chunky brush" aria-label="chunky brush"><span class="size-dot" style="--d:14px"></span></button>
+    <button class="pen-action" id="penHl" title="highlighter — wide + see-through" aria-label="highlighter">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 15 L4.8 19.3" /><path d="M10.5 6.5 L17.6 13.5 L11.2 17.2 C10.4 17.7 9.4 17.6 8.8 17 L7.1 15.3 C6.5 14.7 6.4 13.6 6.9 12.9 L10.5 6.5 Z" /><path d="M13 4 L20 11" /></svg>
+    </button>
+    <button class="pen-action" id="penErase" title="eraser — scrub ink away" aria-label="eraser">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 15.2 L12.6 6.9 C13.4 6.1 14.7 6.1 15.5 6.9 L18.9 10.3 C19.7 11.1 19.7 12.4 18.9 13.2 L12.4 19.8" /><path d="M8.8 10.8 L15.1 17.1" /><path d="M6.5 19.8 h11" /></svg>
+    </button>
+    <span class="pen-sep" aria-hidden="true"></span>
+    <button class="pen-action" id="penUndo" title="undo" aria-label="undo">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 5 L4 9.5 L8.5 14" /><path d="M4 9.5 h10 a5.5 5.5 0 0 1 0 11 h-4" /></svg>
+    </button>
+    <button class="pen-action" id="penRedo" title="redo" aria-label="redo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 5 L20 9.5 L15.5 14" /><path d="M20 9.5 h-10 a5.5 5.5 0 0 0 0 11 h4" /></svg>
+    </button>
+    <button class="pen-action" id="penInk" title="hide/show all ink" aria-label="hide or show all ink">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.2 C5.8 8 8.8 6 12 6 C15.2 6 18.2 8 20.5 12.2 C18.2 16.4 15.2 18.4 12 18.4 C8.8 18.4 5.8 16.4 3.5 12.2 Z" /><circle cx="12" cy="12.2" r="2.6" /></svg>
     </button>
     <button class="pen-action" id="penClear" title="erase all doodles" aria-label="erase all doodles">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 h16" /><path d="M7 20 L15.5 4.8 C16 3.9 17.3 3.7 18.1 4.4 L20.2 6.2 C21 6.9 21 8.2 20.3 9 L10.5 20" /></svg>

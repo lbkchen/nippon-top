@@ -42,7 +42,11 @@ export const state = {
   curationView: null,         // curation being viewed via #for= link
   editingCuration: null,      // curation object being edited in curate mode
   zonesOn: true,
+  inkOn: true,
   penColor: "#e03131",
+  penWidth: 4,                // brush base weight at draw zoom
+  penHl: false,               // highlighter brush
+  penErase: false,            // eraser picked up (pen mode stops drawing)
   userLoc: null,              // [lat, lng] once located
 };
 
@@ -128,6 +132,7 @@ const tombstone = (d) => {
 export const allDoodles = () => [...doodles, ...(activePack()?.extraDoodles || [])];
 export function addDoodle(d) {
   d.id = d.id || "d-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  if (deadDoodles.delete(d.id)) lsSet(LS.deadDoodles, [...deadDoodles]); // undo of a base-ink delete
   const t = packTarget("extraDoodles");
   if (t) { t.push(d); return; }
   doodles.push(d);
