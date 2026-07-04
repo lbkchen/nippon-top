@@ -1,7 +1,7 @@
 // Ski-map style vibe zones: colored areas with label stickers.
 // Draw one via the zones menu (freehand) or save a lasso as a zone —
 // both land in the same naming modal.
-import { $, esc, showHint, ZONE_COLORS } from "./config.js";
+import { $, esc, showHint, labelPoint, ZONE_COLORS } from "./config.js";
 import { map, zoneLayer } from "./map.js";
 import { state, allZones, addZone, removeZone, zoneCount } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -15,7 +15,7 @@ function drawZone(z) {
   const poly = L.polygon(z.points, {
     color: z.color, weight: 3, dashArray: "12 8", fillColor: z.color, fillOpacity: 0.13, className: "rough-line",
   }).addTo(zoneLayer);
-  const c = z.points.reduce((a, p) => [a[0] + p[0] / z.points.length, a[1] + p[1] / z.points.length], [0, 0]);
+  const c = labelPoint(z.points); // interior point, not vertex average — labels stay inside banana zones
   const label = L.marker(c, {
     icon: L.divIcon({ className: "zone-label-wrap", html: `<span class="zone-label" style="--z:${z.color}">${esc(z.name)}</span>`, iconSize: null }),
     interactive: true,

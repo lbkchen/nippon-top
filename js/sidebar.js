@@ -1,5 +1,5 @@
 // The high-context list: cards, filters, search, region hops, context bar.
-import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl } from "./config.js";
+import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl, armCheck } from "./config.js";
 import { map, PAD } from "./map.js";
 import { state, allPlaces, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -99,7 +99,7 @@ function cardEl(p) {
       return;
     }
     if (e.target.classList.contains("card-del")) {
-      if (confirm(`delete "${p.name}"? it never happened.`)) {
+      if (armCheck(e.target, "it never happened?")) {
         deletePlace(p.id);
         emit("place-removed", { id: p.id });
         emit("refresh");

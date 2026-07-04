@@ -16,7 +16,13 @@ const baseIds = new Set(BASE.places.map((p) => p.id));
 let customPlaces = lsGet(LS.places).filter((p) => !baseIds.has(p.id));
 let customZones = lsGet(LS.zones);
 let customCurations = lsGet(LS.curations).filter((c) => !BASE.curations.some((b) => b.slug === c.slug || b.slug === c.baseSlug));
-export let doodles = [...BASE.doodles, ...lsGet(LS.doodles)];
+
+// deleting exported ink needs a tombstone — otherwise data.js resurrects it on
+// reload. Tombstones for ids no longer in data.js have done their job; prune them.
+let deadDoodles = new Set(lsGet(LS.deadDoodles).filter((id) => BASE.doodles.some((d) => d.id === id)));
+lsSet(LS.deadDoodles, [...deadDoodles]);
+const localDoodles = lsGet(LS.doodles).filter((d) => !BASE.doodles.some((b) => b.id && b.id === d.id));
+export let doodles = [...BASE.doodles.filter((d) => !deadDoodles.has(d.id)), ...localDoodles];
 
 // photos dropped in dev mode overlay any place until they're baked in by an
 // export; entries already matching data.js get pruned (same idea as customs)
@@ -114,8 +120,14 @@ export function groupBounds(group) {
 
 // ---------- doodles ----------
 const persistDoodles = () => lsSet(LS.doodles, doodles.filter((d) => !BASE.doodles.includes(d)));
+const tombstone = (d) => {
+  if (!BASE.doodles.includes(d) || !d.id) return;
+  deadDoodles.add(d.id);
+  lsSet(LS.deadDoodles, [...deadDoodles]);
+};
 export const allDoodles = () => [...doodles, ...(activePack()?.extraDoodles || [])];
 export function addDoodle(d) {
+  d.id = d.id || "d-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
   const t = packTarget("extraDoodles");
   if (t) { t.push(d); return; }
   doodles.push(d);
@@ -129,6 +141,7 @@ export function removeDoodle(d) {
     return true;
   }
   if (!doodles.includes(d)) return false;
+  tombstone(d);
   doodles = doodles.filter((x) => x !== d);
   persistDoodles();
   return true;
@@ -136,6 +149,7 @@ export function removeDoodle(d) {
 export function clearDoodles() {
   const t = packTarget("extraDoodles");
   if (t) { state.editingCuration.extraDoodles = []; return; }
+  doodles.forEach(tombstone);
   doodles = [];
   lsSet(LS.doodles, []);
 }

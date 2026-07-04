@@ -8,7 +8,7 @@
 // Shared via #for=<file>.<key>: the pack ships encrypted at friends/<file>.enc and the
 // key never leaves the link. Works for friends once the pack is exported & pushed.
 // Legacy #for=<slug> and #mix= links still parse.
-import { $, esc, showHint } from "./config.js";
+import { $, esc, showHint, armCheck } from "./config.js";
 import { map, PAD } from "./map.js";
 import {
   state, allPlaces, placeById, allCurations, curationBySlug, curationVisibleIds,
@@ -188,8 +188,8 @@ function managerRow(cur, published) {
     upsertCuration(copy);
     openManager();
   };
-  row.querySelector('[data-act="del"]').onclick = () => {
-    if (!confirm(`delete ${cur.name}'s map?${isPublished ? ` (local copy only — friends/${cur.file}.enc keeps their link alive until you delete it from the repo)` : " their link will stop working."}`)) return;
+  row.querySelector('[data-act="del"]').onclick = (e) => {
+    if (!armCheck(e.target, isPublished ? "local copy only?" : "their link dies?")) return;
     deleteCuration(cur.slug);
     openManager();
   };

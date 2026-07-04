@@ -833,6 +833,20 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   font-size: 12px;
 }
 .cur-row.ghost { opacity: 0.6; border-style: dashed; box-shadow: none; }
+
+/* two-tap confirm: armed = one more tap and it's gone */
+button.armed {
+  background: var(--red) !important;
+  color: var(--cream) !important;
+  border-color: var(--ink) !important;
+  animation: armed-nudge 0.25s ease;
+}
+@keyframes armed-nudge {
+  0% { transform: rotate(0deg) scale(1); }
+  35% { transform: rotate(-2.5deg) scale(1.08); }
+  70% { transform: rotate(2deg) scale(1.04); }
+  100% { transform: rotate(0deg) scale(1); }
+}
 .drawer-body {
   overflow-y: auto;
   padding: 14px 18px 18px;

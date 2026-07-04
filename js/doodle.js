@@ -1,5 +1,5 @@
 // Freehand ink that sticks to the terrain.
-import { $, $$ } from "./config.js";
+import { $, $$, armCheck } from "./config.js";
 import { doodleLayer } from "./map.js";
 import { state, allDoodles, addDoodle, removeDoodle, clearDoodles } from "./store.js";
 import { on } from "./bus.js";
@@ -49,8 +49,9 @@ export function initDoodle() {
     }
   });
 
-  $("#penClear").addEventListener("click", () => {
-    if (!doodleLayer.getLayers().length || !confirm("erase ALL the ink? no take-backs.")) return;
+  $("#penClear").addEventListener("click", (e) => {
+    if (!doodleLayer.getLayers().length) return;
+    if (!armCheck(e.currentTarget, "all?")) return;
     clearDoodles();
     renderDoodles(); // clear only wipes ink you own — redraw what survives
   });

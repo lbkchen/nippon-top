@@ -1,6 +1,6 @@
 // Spot detail: the sidebar drills into one place — photo, the whole rant,
 // which zone it's in, and the nearest other recs to chain onto.
-import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint } from "./config.js";
+import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck } from "./config.js";
 import { map } from "./map.js";
 import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, placePassesFilters } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -124,7 +124,7 @@ function render(id) {
   panel.querySelector(".detail-back").addEventListener("click", close);
   const del = panel.querySelector(".detail-del");
   if (del) del.addEventListener("click", () => {
-    if (!confirm(`delete "${p.name}"? it never happened.`)) return;
+    if (!armCheck(del, "it never happened?")) return;
     deletePlace(p.id);
     emit("place-removed", { id: p.id });
     emit("refresh");
