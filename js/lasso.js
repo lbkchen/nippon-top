@@ -20,6 +20,7 @@ export function initLasso() {
       if (pts.length < 5) { showHint("that was barely a squiggle — try a bigger loop", 2200); return; }
       const poly = pts.map((ll) => [ll.lat, ll.lng]);
       clearLasso(true);
+      state.zoneFilter = null; // a fresh lasso outranks a zone filter
       const ids = allPlaces().filter((p) => placePassesFilters(p) && pointInPoly(p.lat, p.lng, poly)).map((p) => p.id);
       const layer = L.polygon(poly, { color: "#2b2b33", weight: 3, dashArray: "10 8", fillColor: "#f5b301", fillOpacity: 0.12, className: "rough-line" }).addTo(map);
       state.lasso = { ids, layer, points: poly };

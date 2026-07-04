@@ -22,6 +22,8 @@ export const LS = {
   doodles: "nippon_doodles",
   deadDoodles: "nippon_dead_doodles", // ids of exported ink deleted in-app (tombstones)
   zones: "nippon_custom_zones",
+  deadZones: "nippon_dead_zones",     // same tombstone trick for exported zones
+  hiddenZones: "nippon_hidden_zones", // per-zone visibility, survives reloads
   curations: "nippon_custom_curations",
   photos: "nippon_custom_photos", // { placeId: filename } — dev photo drops
 };

@@ -167,6 +167,7 @@
   <!-- zones flyout menu -->
   <div class="tool-menu hidden" id="zoneMenu">
     <button id="zoneDraw">draw a new zone</button>
+    <button id="zoneManage">manage zones…</button>
     <button id="zoneToggle">hide zones</button>
   </div>
 
@@ -267,11 +268,28 @@
       </label>
       <label>flag color</label>
       <div class="zone-colors" id="zoneColors"></div>
+      <label>fill style</label>
+      <div class="zone-fills" id="zoneFills">
+        <button type="button" data-fill="solid" class="active" title="flat wash">solid</button>
+        <button type="button" data-fill="dots" title="halftone dots">dots</button>
+        <button type="button" data-fill="hatch" title="scribble hatching">hatch</button>
+      </div>
       <div class="modal-actions">
         <button class="btn-ghost" id="zoneCancel">nah</button>
         <button class="btn-solid" id="zoneSave">stake the claim</button>
       </div>
     </div>
+  </div>
+
+  <!-- zones drawer -->
+  <div class="drawer hidden" id="zonesDrawer">
+    <div class="drawer-head">
+      <h2>ZONE CONTROL</h2>
+      <p>every staked claim on the map — jump to it, retouch it, or un-stake it.</p>
+      <button class="drawer-close" id="zonesClose" aria-label="close">✕</button>
+      <button class="btn-solid drawer-new" id="zonesNew">+ stake one</button>
+    </div>
+    <div class="drawer-body drawer-list" id="zonesBody"></div>
   </div>
 
   <!-- rough-ink filters for map scribbles & zones -->
@@ -281,6 +299,14 @@
         <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="n" seed="7" />
         <feDisplacementMap in="SourceGraphic" in2="n" scale="5" />
       </filter>
+      <!-- zone fill patterns: currentColor comes from the zone's flag color -->
+      <pattern id="zdots" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
+        <circle cx="3" cy="3" r="1.7" fill="currentColor" />
+        <circle cx="8.5" cy="8.5" r="1.1" fill="currentColor" />
+      </pattern>
+      <pattern id="zhatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-24)">
+        <path d="M0 1.5 H9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+      </pattern>
     </defs>
   </svg>
 

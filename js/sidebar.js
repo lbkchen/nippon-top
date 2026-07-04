@@ -15,9 +15,17 @@ function renderContextBar() {
   bar.innerHTML = "";
   const n = currentList().length;
   const label = document.createElement("span");
-  if (state.curationView) {
+  if (state.curationView && !state.zoneFilter) {
     const c = state.curationView;
     label.textContent = `${c.emoji ? c.emoji + " " : ""}${c.name}'s map — ${n} spots`;
+  } else if (state.zoneFilter) {
+    label.textContent = `inside ${state.zoneFilter.name} — ${n} spot${n === 1 ? "" : "s"}`;
+    const clear = document.createElement("button");
+    clear.className = "ctx-btn";
+    clear.textContent = "clear";
+    clear.onclick = () => emit("zone-filter-clear");
+    bar.append(label, clear);
+    return;
   } else if (state.lasso) {
     label.textContent = `lassoed ${n} spot${n === 1 ? "" : "s"}`;
     const clear = document.createElement("button");
@@ -193,7 +201,7 @@ export function initSidebar() {
   tab.addEventListener("click", openSidebar);
   tab.classList.add("hidden");
 
-  map.on("moveend", () => { if (!state.lasso && !state.curationView) renderList(); });
+  map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter) renderList(); });
 
   on("refresh", renderList);
   on("refresh-list", renderList);

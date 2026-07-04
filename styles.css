@@ -49,6 +49,8 @@ html, body {
 
 /* hand-drawn wobble for zones / lasso / doodles */
 .leaflet-overlay-pane path.rough-line { filter: url(#roughen); }
+.leaflet-overlay-pane path.zfill-dots { fill: url(#zdots); }
+.leaflet-overlay-pane path.zfill-hatch { fill: url(#zhatch); }
 
 button {
   font-family: var(--font-head);
@@ -627,6 +629,8 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 
 /* ---------- zone labels ---------- */
 .zone-label-wrap { background: none; border: none; }
+body[data-zoom="mid"] .zone-label { font-size: 12px; padding: 2px 9px; letter-spacing: 1px; }
+body[data-zoom="far"] .zone-label { display: none; }
 .zone-label {
   display: inline-block;
   transform: rotate(-2.5deg);
@@ -1337,6 +1341,18 @@ button.armed {
 }
 
 .zone-colors { display: flex; gap: 8px; margin-top: 6px; }
+.zone-fills { display: flex; gap: 8px; margin-top: 6px; }
+.zone-fills button {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 5px 12px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  background: var(--paper);
+}
+.zone-fills button.active { background: var(--gold); box-shadow: 2px 2px 0 var(--ink); }
+.zone-row .cur-row-head { align-items: center; }
 
 .sidebar-tab svg { width: 22px; height: 22px; }
 .pen-action svg { width: 18px; height: 18px; display: block; }

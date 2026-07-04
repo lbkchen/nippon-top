@@ -16,4 +16,5 @@ export const on = (type, fn) => bus.addEventListener(type, (e) => fn(e.detail));
  *   pack-changed       — the active friend pack (view or edit) appeared/changed/left;
  *                        zones + doodles re-render their layers off this
  *   export-pack        — {slug} seal one friend map into friends/<file>.enc (+ manifest)
+ *   zone-filter-clear  — drop the "inside <zone>" sidebar scope (set via zone popup/drawer)
  */

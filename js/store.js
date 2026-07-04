@@ -17,10 +17,13 @@ let customPlaces = lsGet(LS.places).filter((p) => !baseIds.has(p.id));
 let customZones = lsGet(LS.zones);
 let customCurations = lsGet(LS.curations).filter((c) => !BASE.curations.some((b) => b.slug === c.slug || b.slug === c.baseSlug));
 
-// deleting exported ink needs a tombstone — otherwise data.js resurrects it on
-// reload. Tombstones for ids no longer in data.js have done their job; prune them.
+// deleting exported ink/zones needs a tombstone — otherwise data.js resurrects
+// them on reload. Tombstones for ids no longer in data.js have done their job; prune.
 let deadDoodles = new Set(lsGet(LS.deadDoodles).filter((id) => BASE.doodles.some((d) => d.id === id)));
 lsSet(LS.deadDoodles, [...deadDoodles]);
+let deadZones = new Set(lsGet(LS.deadZones).filter((id) => BASE.zones.some((z) => z.id === id)));
+lsSet(LS.deadZones, [...deadZones]);
+let hiddenZones = new Set(lsGet(LS.hiddenZones));
 const localDoodles = lsGet(LS.doodles).filter((d) => !BASE.doodles.some((b) => b.id && b.id === d.id));
 export let doodles = [...BASE.doodles.filter((d) => !deadDoodles.has(d.id)), ...localDoodles];
 
@@ -37,6 +40,7 @@ export const state = {
   starOnly: false,
   q: "",
   lasso: null,                // { ids:[], layer, points }
+  zoneFilter: null,           // { id, name, ids } — sidebar scoped to one zone
   selectedId: null,           // place highlighted in the list
   detailId: null,             // place open in the detail panel
   curationView: null,         // curation being viewed via #for= link
@@ -110,9 +114,11 @@ export function currentList() {
   let list = allPlaces().filter(placePassesFilters);
   if (state.curationView) {
     const vis = curationVisibleIds(state.curationView);
-    return list.filter((p) => vis.has(p.id));
+    list = list.filter((p) => vis.has(p.id));
   }
+  if (state.zoneFilter) return list.filter((p) => state.zoneFilter.ids.includes(p.id));
   if (state.lasso) return list.filter((p) => state.lasso.ids.includes(p.id));
+  if (state.curationView) return list;
   const b = map.getBounds().pad(0.02);
   return list.filter((p) => b.contains([p.lat, p.lng]));
 }
@@ -160,16 +166,30 @@ export function clearDoodles() {
 }
 
 // ---------- zones ----------
-// pack zones are only removable while editing the pack — a friend viewing can't nuke them
-export const allZones = () => [
-  ...BASE.zones.map((z) => ({ ...z, custom: false })),
-  ...customZones.map((z) => ({ ...z, custom: true })),
-  ...(activePack()?.extraZones || []).map((z) => ({ ...z, custom: !!state.editingCuration })),
-];
+// customZones shadow BASE zones by id (copy-on-write edits); deleting a base
+// zone tombstones it. Pack zones are only editable while editing the pack.
+export const allZones = () => {
+  const shadowed = new Set(customZones.map((z) => z.id));
+  return [
+    ...BASE.zones.filter((z) => !shadowed.has(z.id) && !deadZones.has(z.id)).map((z) => ({ ...z, custom: true })),
+    ...customZones.map((z) => ({ ...z, custom: true })),
+    ...(activePack()?.extraZones || []).map((z) => ({ ...z, custom: !!state.editingCuration, pack: true })),
+  ];
+};
 export function addZone(z) {
   const t = packTarget("extraZones");
   if (t) { t.push(z); return; }
   customZones.push(z);
+  lsSet(LS.zones, customZones);
+}
+// covers create + edit: pack zones update in the pack, base zones become shadows
+export function updateZone(z) {
+  const t = packTarget("extraZones");
+  if (t && t.some((x) => x.id === z.id)) {
+    state.editingCuration.extraZones = t.map((x) => (x.id === z.id ? z : x));
+    return;
+  }
+  customZones = [...customZones.filter((x) => x.id !== z.id), z];
   lsSet(LS.zones, customZones);
 }
 export function removeZone(id) {
@@ -178,10 +198,19 @@ export function removeZone(id) {
     state.editingCuration.extraZones = t.filter((z) => z.id !== id);
     return;
   }
+  if (BASE.zones.some((z) => z.id === id)) {
+    deadZones.add(id);
+    lsSet(LS.deadZones, [...deadZones]);
+  }
   customZones = customZones.filter((z) => z.id !== id);
   lsSet(LS.zones, customZones);
 }
-export const zoneCount = () => BASE.zones.length + customZones.length;
+export const zoneCount = () => allZones().length;
+export const zoneHidden = (id) => hiddenZones.has(id);
+export function toggleZoneHidden(id) {
+  if (!hiddenZones.delete(id)) hiddenZones.add(id);
+  lsSet(LS.hiddenZones, [...hiddenZones]);
+}
 
 // ---------- curations (friend-map forks) ----------
 // { slug, name, emoji, message, mode: "exclude"|"include", ids: [], notes: {placeId: text},
@@ -244,7 +273,8 @@ export function mergedData() {
   return {
     places: [...BASE.places, ...customPlaces],
     chains: BASE.chains,
-    zones: [...BASE.zones, ...customZones],
+    // shadow edits win over their base zone; tombstoned zones stay gone
+    zones: [...BASE.zones.filter((z) => !customZones.some((c) => c.id === z.id) && !deadZones.has(z.id)), ...customZones],
     doodles,
   };
 }
