@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=10" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body>
   <!-- splash title card -->
@@ -31,7 +31,6 @@
   <!-- logo sticker -->
   <div class="logo-card">
     <h1>NIPPON <span class="top">TOP</span> <span class="stamp" title="itadaki — the top">頂</span></h1>
-    <p class="tagline">ken's extremely correct japan recs<span class="tm">™</span></p>
   </div>
 
   <!-- the primary search: recs + places/addresses (Photon, free + keyless) in one bar -->
@@ -78,7 +77,9 @@
 
   <!-- sidebar: the high-context zone -->
   <aside class="sidebar" id="sidebar">
+    <div class="sheet-grab" id="sheetGrab" aria-hidden="true"><span></span></div>
     <div class="sidebar-head">
+      <button class="filters-toggle" id="filtersToggle" aria-expanded="false">filters ▾</button>
       <div class="filter-row">
         <button class="star-toggle" id="starToggle" title="only the certified bangers">★ bangers only</button>
         <div class="cat-chips" id="catChips"></div>
@@ -337,7 +338,7 @@
   </svg>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data.js?v=10"></script>
-  <script type="module" src="js/main.js?v=10"></script>
+  <script src="data.js?v=11"></script>
+  <script type="module" src="js/main.js?v=11"></script>
 </body>
 </html>

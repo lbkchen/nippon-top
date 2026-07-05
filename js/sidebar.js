@@ -210,6 +210,62 @@ export function initSidebar() {
     }
   });
 
+  // --- mobile drag-sheet: grab the pill, snap to half / full / away ---
+  // (--sheet-h keeps the curate bar riding on top of whatever height sticks)
+  const grab = $("#sheetGrab");
+  const setSheetH = (px) => {
+    sidebar.style.height = `${px}px`;
+    document.documentElement.style.setProperty("--sheet-h", `${px}px`);
+  };
+  grab.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    try { grab.setPointerCapture(e.pointerId); } catch { /* synthetic/stale pointer — listeners below still work */ }
+    const startY = e.clientY;
+    const startH = sidebar.getBoundingClientRect().height;
+    let h = startH;
+    sidebar.style.transition = "none";
+    const move = (ev) => {
+      if (ev.pointerId !== e.pointerId) return;
+      h = Math.min(window.innerHeight * 0.9, Math.max(70, startH + (startY - ev.clientY)));
+      sidebar.style.height = `${h}px`;
+    };
+    const done = (ev) => {
+      if (ev.pointerId !== e.pointerId) return;
+      grab.removeEventListener("pointermove", move);
+      grab.removeEventListener("pointerup", done);
+      grab.removeEventListener("pointercancel", done);
+      const half = Math.round(window.innerHeight * 0.46);
+      // full stops short of the toolbar stack — sheets shouldn't eat the controls
+      const full = Math.min(Math.round(window.innerHeight * 0.85), window.innerHeight - 214);
+      sidebar.style.transition = "height 0.22s ease, transform 0.25s ease";
+      if (h < half * 0.55) {
+        setSheetH(half); // next open comes back at the normal half height
+        sidebar.classList.add("collapsed");
+        tab.classList.remove("hidden");
+      } else {
+        setSheetH(Math.abs(h - half) <= Math.abs(h - full) ? half : full);
+      }
+    };
+    grab.addEventListener("pointermove", move);
+    grab.addEventListener("pointerup", done);
+    grab.addEventListener("pointercancel", done);
+  });
+  // crossing back to desktop hands sizing back to the stylesheet
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 940) {
+      sidebar.style.height = "";
+      document.documentElement.style.removeProperty("--sheet-h");
+    }
+  });
+
+  // --- mobile filters disclosure (the chips eat two rows otherwise) ---
+  const filtersToggle = $("#filtersToggle");
+  filtersToggle.addEventListener("click", () => {
+    const open = $(".filter-row").classList.toggle("open");
+    filtersToggle.textContent = open ? "filters ▴" : "filters ▾";
+    filtersToggle.setAttribute("aria-expanded", open);
+  });
+
   map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter) renderList(); });
 
   on("refresh", renderList);
