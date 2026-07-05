@@ -4,8 +4,17 @@
 //   node tools/build-data.mjs --geocode  -> refreshes coords via Nominatim (1 req/sec, cached)
 //
 // Every place has a `fallback` [lat, lng] (hand-placed, at least neighborhood-accurate).
-// Geocoded hits are only accepted when within 50km of the fallback, so a bad match
-// can never yeet a ramen shop into the ocean.
+// Coordinate sources, best first:
+//   1. `gmaps` — a Google Maps share link. Resolving the shortlink (a plain HTTP
+//      redirect, no API/key) yields a URL carrying the exact marker as !3d/!4d.
+//      Cached in gmaps-cache.json so rebuilds stay offline.
+//   2. `pin: true` — the fallback IS the answer; skip geocoding. For big areas
+//      (parks, districts, mountain shrines) Nominatim returns the polygon
+//      centroid, which lands up the mountain / in the empty half of the park.
+//   3. Nominatim geocode, gated: per-category max drift from the fallback
+//      (a restaurant "match" two districts over is a different restaurant) and
+//      big-polygon hits are rejected in favor of the hand pin.
+//   4. fallback + `approx: true` -> "~ish location" pill in the app.
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -22,7 +31,8 @@ const PLACES = [
     q: "Kichijoji Station, Musashino, Japan", fallback: [35.7032, 139.5797],
     notes: "Trendy neighborhood with lots of shops, largest UNIQLO, amazing restaurants, overall a very desirable place to live for the locals. Prominently featured in Persona 5R lol, it legit looks so similar once you walk out the station and see the open-air shopping street. For food I recommend Tsukemen Enji and Kooriya Peace (dessert)." },
   { id: "inokashira-park", name: "Inokashira Park", star: true, region: "West Tokyo", group: "tokyo", cat: "park",
-    q: "Inokashira Park, Musashino, Japan", fallback: [35.7003, 139.5731],
+    // geocode matched the west-garden annex, stacking this pin on the Ghibli museum
+    q: "Inokashira Park, Musashino, Japan", fallback: [35.7003, 139.5731], pin: true,
     notes: "Big park next to Kichijoji and Ghibli museum, really nice to walk around and likely much less crowded/touristy, one of the nicest parks near tokyo IMO" },
   { id: "higashi-koganei", name: "Higashi Koganei", star: false, region: "West Tokyo", group: "tokyo", cat: "hood",
     q: "Higashi-Koganei Station, Koganei, Japan", fallback: [35.7014, 139.5261],
@@ -158,13 +168,15 @@ const PLACES = [
     q: "Kiyomizu-dera, Kyoto, Japan", fallback: [34.9949, 135.7850],
     notes: "One of the most famous views in Kyoto (hopefully it's not still under renovation), and obv incredibly touristy. Still incredibly worth it, go early in the morning at like 6am and beat the crowds, get a goshuin (temple stamp), then come down after walking through the temple to explore the shopping district right at the foot of the temple complex, lots of good food and snacks, also famous for ceramic/stoneware so a good place to buy a souvenir since it used to be a district of potters." },
   { id: "fushimi-inari", name: "Fushimi Inari Shrine", star: false, region: "Kyoto", group: "kyoto", cat: "temple", emoji: "🦊",
-    q: "Fushimi Inari Taisha, Kyoto, Japan", fallback: [34.9671, 135.7727],
+    // geocode = centroid of the whole shrine grounds, 640m up Mount Inari; fallback = the entrance
+    q: "Fushimi Inari Taisha, Kyoto, Japan", fallback: [34.9671, 135.7727], pin: true,
     notes: "The classic thousand-rows of orange torii gates -- extremely touristy and probably the most crowded shrine during peak travel season but a must see at least once, go early in the morning for the best experience and make sure to hike to the top." },
   { id: "arashiyama", name: "Arashiyama", star: true, region: "Kyoto", group: "kyoto", cat: "park", emoji: "🎋",
     q: "Arashiyama Bamboo Grove, Kyoto, Japan", fallback: [35.0170, 135.6710],
     notes: "Famous for the bamboo forest but boy is it crowded there. I would go very early like 6am if you care about avoiding crowds, but in general the surrounding area is super worth walking or biking around too. There are beautiful mountain landscapes and traditional looking streets here, and plenty of temples and shrines. If you only care about the bamboo forest there is an equally good, lesser known one at Adashino Nenbutsuji (15 min away by rental bike)" },
   { id: "monkey-park", name: "Arashiyama Monkey Park", star: true, region: "Kyoto", group: "kyoto", cat: "fun", emoji: "🐒",
-    q: "Iwatayama Monkey Park, Kyoto, Japan", fallback: [35.0128, 135.6778],
+    // geocode = mid-mountain centroid; fallback = the ticket gate by the river where you actually start
+    q: "Iwatayama Monkey Park, Kyoto, Japan", fallback: [35.0128, 135.6778], pin: true,
     notes: "MONKEYS ROAMING FREE, on top of a mountain, roughly 20 min hike but worth it. Don't give up, you can do it!!!" },
   { id: "nisonin-gioji", name: "Nisonin temple / Gioji", star: false, region: "Kyoto", group: "kyoto", cat: "temple",
     q: "Nison-in, Kyoto, Japan", fallback: [35.0230, 135.6672],
@@ -188,10 +200,12 @@ const PLACES = [
     q: "Nishiki Market, Kyoto, Japan", fallback: [35.0050, 135.7649],
     notes: "Shopping arcade adjacent(?) to Gion, mostly for seafood and food stands but also a ton of clothing shops and other smaller souvenir shops. Pretty touristy. Better to go earlier in the day bc it closes at 6pm." },
   { id: "gion-shijo", name: "Gion / Shijo", star: false, region: "Central Kyoto", group: "kyoto", cat: "hood",
-    q: "Gion, Kyoto, Japan", fallback: [35.0037, 135.7752],
+    // district centroid drifts east into Higashiyama; fallback = Hanamikoji where you'd start
+    q: "Gion, Kyoto, Japan", fallback: [35.0037, 135.7752], pin: true,
     notes: "Famous shopping arcade popular with tourists. Near the center of it in the north-south canals is Pontocho which is known as the red light district in Kyoto, where you can find izakaya and night life. Unclear if we faced subtle racism here 🙃" },
   { id: "nara", name: "Nara", star: true, region: "Near Kyoto", group: "kyoto", cat: "trip", emoji: "🦌",
-    q: "Nara Park, Nara, Japan", fallback: [34.6851, 135.8430],
+    // park centroid is 1.1km east in the empty grass; fallback = Todaiji/deer central
+    q: "Nara Park, Nara, Japan", fallback: [34.6851, 135.8430], pin: true,
     notes: "Famous for the DEER, but also the big buddha probably the biggest I've ever seen. One of the former capitals so lots of history. Maybe the YT famous mochi pounding guy is still there too check him out (Nakatanidou)." },
   { id: "uji", name: "Uji", star: false, region: "Near Kyoto/Osaka", group: "kyoto", cat: "trip", emoji: "🍵",
     q: "Byodo-in, Uji, Japan", fallback: [34.8894, 135.8074],
@@ -218,9 +232,11 @@ const PLACES = [
     notes: "Impressive castle worth checking out, idr much else lol." },
   { id: "onigiri-gorichan", name: "Onigiri Gorichan", star: false, region: "Osaka", group: "osaka", cat: "food", emoji: "🍙",
     q: "おにぎり ゴリちゃん 大阪", fallback: [34.6960, 135.4740], approx: true,
+    gmaps: "https://maps.app.goo.gl/5Dns7DF72VFs3bBh7",
     notes: "We waited 30m for this but was worth it - massive onigiri with whatever toppings you want. The unagi egg yolk one was so bomb. Staff were over the top friendly. https://maps.app.goo.gl/5Dns7DF72VFs3bBh7" },
   { id: "kadoya-shokudo", name: "Kadoya Shokudo (ramen)", star: false, region: "Osaka", group: "osaka", cat: "food",
     q: "カドヤ食堂 総本店 大阪", fallback: [34.6746, 135.4900], approx: true,
+    gmaps: "https://maps.app.goo.gl/9kqMv22NRTNuiWrG8",
     notes: "Top rated ramen on tabelog in Osaka/Kyoto. Lots of locals, shoyu base, on the salty side but super flavorful. I would recommend the tsukemen which I saw all the locals getting: https://maps.app.goo.gl/9kqMv22NRTNuiWrG8" },
   { id: "omoroi-sports", name: "Omoroi Sports", star: false, region: "Osaka", group: "osaka", cat: "fun", emoji: "🏐",
     q: null, fallback: [34.6690, 135.5000], approx: true,
@@ -294,10 +310,20 @@ const distKm = (a, b) => {
   return 2 * R * Math.asin(Math.sqrt(h));
 };
 
+// max drift (km) from the hand pin before a geocode hit is called a mismatch —
+// tight for point-POIs, loose only where the pin itself is fuzzy
+const GATE_KM = {
+  food: 2, cafe: 2, night: 3, shop: 3, view: 3, museum: 3,
+  temple: 5, park: 5, hood: 5, fun: 5, onsen: 10, trip: 50,
+};
+// a hit whose bounding box spans more than this is a district/park/mountain —
+// its centroid is nowhere useful, the hand pin knows better
+const MAX_BBOX_KM = 0.7;
+
 async function geocodeAll() {
   const cache = existsSync(CACHE_PATH) ? JSON.parse(readFileSync(CACHE_PATH, "utf8")) : {};
   for (const p of PLACES) {
-    if (!p.q || cache[p.id]) continue;
+    if (!p.q || p.pin || p.gmaps || cache[p.id]) continue; // pinned/linked places don't need Nominatim
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(p.q)}&format=json&limit=1&countrycodes=jp`;
     try {
       const res = await fetch(url, { headers: { "User-Agent": "nippon-top-geocoder/1.0 (lbkchen@gmail.com)" } });
@@ -305,12 +331,18 @@ async function geocodeAll() {
       if (hits.length) {
         const coords = [parseFloat(hits[0].lat), parseFloat(hits[0].lon)];
         const d = distKm(coords, p.fallback);
-        if (d < 50) {
+        const bb = (hits[0].boundingbox || []).map(Number); // [south, north, west, east]
+        const bboxKm = bb.length === 4 ? distKm([bb[0], bb[2]], [bb[1], bb[3]]) : 0;
+        const gate = GATE_KM[p.cat] || 5;
+        if (bboxKm > MAX_BBOX_KM) {
+          cache[p.id] = { bigArea: hits[0].display_name, bbox_km: Math.round(bboxKm * 10) / 10 };
+          console.log(`✗ ${p.id}: matched a ${bboxKm.toFixed(1)}km-wide area — keeping the hand pin`);
+        } else if (d < gate) {
           cache[p.id] = { coords, matched: hits[0].display_name, km_from_fallback: Math.round(d * 10) / 10 };
           console.log(`✓ ${p.id} (${d.toFixed(1)}km from fallback)`);
         } else {
-          cache[p.id] = { rejected: hits[0].display_name, km_from_fallback: Math.round(d) };
-          console.log(`✗ ${p.id} rejected: ${d.toFixed(0)}km away — ${hits[0].display_name}`);
+          cache[p.id] = { rejected: hits[0].display_name, km_from_fallback: Math.round(d * 10) / 10 };
+          console.log(`✗ ${p.id} rejected: ${d.toFixed(1)}km away (gate ${gate}km) — ${hits[0].display_name}`);
         }
       } else {
         cache[p.id] = { miss: true };
@@ -321,6 +353,45 @@ async function geocodeAll() {
     }
     writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
     await sleep(1100);
+  }
+  return cache;
+}
+
+// ---- google share links: the ground-truth coordinate source ----
+// A maps.app.goo.gl shortlink is a plain redirect; the resolved URL carries the
+// exact marker as !3d<lat>!4d<lng> (the @lat,lng is just the viewport). No API.
+const GMAPS_CACHE_PATH = join(__dirname, "gmaps-cache.json");
+
+function parseGmapsCoords(url) {
+  let u = url;
+  try { u = decodeURIComponent(url); } catch { /* keep raw */ }
+  const pin = [...u.matchAll(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/g)].pop();
+  const at = u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  const m = pin || at;
+  if (!m) return null;
+  const coords = [parseFloat(m[1]), parseFloat(m[2])];
+  // garbage guard: must be in Japan
+  return coords[0] > 24 && coords[0] < 46 && coords[1] > 122 && coords[1] < 154 ? coords : null;
+}
+
+async function resolveGmapsLinks() {
+  const cache = existsSync(GMAPS_CACHE_PATH) ? JSON.parse(readFileSync(GMAPS_CACHE_PATH, "utf8")) : {};
+  for (const p of PLACES) {
+    if (!p.gmaps || cache[p.gmaps]) continue;
+    try {
+      const res = await fetch(p.gmaps, { headers: { "User-Agent": "Mozilla/5.0 (nippon-top build)" } });
+      const coords = parseGmapsCoords(res.url);
+      cache[p.gmaps] = coords ? { coords } : { noCoords: true };
+      if (coords) {
+        const d = distKm(coords, p.fallback);
+        console.log(`✓ gmaps ${p.id} → [${coords[0].toFixed(5)}, ${coords[1].toFixed(5)}]${d > 5 ? ` — heads up: ${d.toFixed(0)}km from the hand pin, double-check the link` : ""}`);
+      } else {
+        console.log(`- gmaps ${p.id}: link resolved but no coords in it (kgs/search links don't carry any)`);
+      }
+    } catch (e) {
+      console.log(`! gmaps ${p.id}: ${e.message} — will retry next build`);
+    }
+    writeFileSync(GMAPS_CACHE_PATH, JSON.stringify(cache, null, 2));
   }
   return cache;
 }
@@ -344,22 +415,34 @@ async function main() {
   const cache = existsSync(CACHE_PATH) ? JSON.parse(readFileSync(CACHE_PATH, "utf8")) : {};
   if (process.argv.includes("--geocode")) await geocodeAll();
   const finalCache = existsSync(CACHE_PATH) ? JSON.parse(readFileSync(CACHE_PATH, "utf8")) : cache;
+  const gmapsCache = await resolveGmapsLinks();
   const existing = readExisting();
-  // photos attached in-app (dev drag-and-drop) live only in data.js after an
-  // export — carry them over unless the master list names one explicitly
+  // photos + gmaps pin-fixes made in-app live only in data.js after an export —
+  // carry them over unless the master list says otherwise
   const existingPhotos = new Map(existing.places.filter((p) => p.photo).map((p) => [p.id, p.photo]));
+  const existingById = new Map(existing.places.map((p) => [p.id, p]));
 
+  const stats = { link: 0, pin: 0, geo: 0, fb: 0 };
   const places = PLACES.map((p) => {
+    const prev = existingById.get(p.id);
+    const gmaps = p.gmaps || prev?.gmaps || null;
+    const link = gmaps && gmapsCache[gmaps];
     const hit = finalCache[p.id];
-    const geocoded = hit && hit.coords;
+    let coords, approx = false;
+    if (link?.coords) { coords = link.coords; stats.link++; }               // share link = ground truth
+    else if (gmaps && prev?.gmaps === gmaps && prev.lat != null) { coords = [prev.lat, prev.lng]; stats.link++; } // resolved in-app, baked by export
+    else if (p.pin) { coords = p.fallback; stats.pin++; }                   // hand pin beats a polygon centroid
+    else if (hit?.coords) { coords = hit.coords; stats.geo++; }
+    else { coords = p.fallback; approx = !!p.approx; stats.fb++; }
     return {
       id: p.id, name: p.name, star: p.star, region: p.region, group: p.group,
       cat: p.cat, emoji: p.emoji || null,
-      lat: geocoded ? hit.coords[0] : p.fallback[0],
-      lng: geocoded ? hit.coords[1] : p.fallback[1],
-      approx: p.approx && !geocoded ? true : false,
+      lat: coords[0],
+      lng: coords[1],
+      approx,
       notes: p.notes,
       photo: p.photo || existingPhotos.get(p.id) || null, // filename in img/
+      gmaps, // share link — exact pin + where "open in google maps" goes
     };
   });
   // in-app additions survive rebuilds
@@ -378,7 +461,7 @@ window.NIPPON = ${JSON.stringify(data, null, 2)};
 `;
   writeFileSync(OUT_PATH, out);
   console.log(`\nWrote ${OUT_PATH}: ${places.length} places, ${CHAINS.length} chains, ${zones.length} zones, ${existing.doodles.length} doodles`);
-  console.log(`Geocoded: ${PLACES.filter((p) => finalCache[p.id]?.coords).length}, fallback: ${PLACES.filter((p) => !finalCache[p.id]?.coords).length}, approx-flagged: ${places.filter((p) => p.approx).length}`);
+  console.log(`Coords: ${stats.link} from gmaps links, ${stats.pin} hand-pinned, ${stats.geo} geocoded, ${stats.fb} on fallbacks (${places.filter((p) => p.approx).length} ~ish — paste a gmaps link in-app or add gmaps: here to fix)`);
 }
 
 main();

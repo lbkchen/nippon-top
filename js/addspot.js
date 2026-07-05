@@ -1,5 +1,5 @@
-// Add a new rec: search for the place, or click the map.
-import { $, CATS, showHint } from "./config.js";
+// Add a new rec: search for the place, paste a gmaps link, or click the map.
+import { $, CATS, DEV, showHint, resolveGmapsLink, isGmapsLink } from "./config.js";
 import { map } from "./map.js";
 import { state, BASE, addPlace } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -7,6 +7,7 @@ import { setMode } from "./modes.js";
 import { photonSearch, debounce, renderResults } from "./photon.js";
 
 let pendingLatLng = null;
+let gmapsLink = null; // share link riding along with the save — exact pin + button target
 let addCat = "food";
 
 function buildCatPick() {
@@ -28,7 +29,7 @@ function pinStatus() {
   const el = $("#addPinStatus");
   el.innerHTML = "";
   if (pendingLatLng) {
-    el.textContent = `pinned at ${pendingLatLng.lat.toFixed(5)}, ${pendingLatLng.lng.toFixed(5)} ✓`;
+    el.textContent = `pinned at ${pendingLatLng.lat.toFixed(5)}, ${pendingLatLng.lng.toFixed(5)} ✓${gmapsLink ? " — straight from your gmaps link" : ""}`;
     el.classList.add("ok");
   } else {
     el.classList.remove("ok");
@@ -47,6 +48,7 @@ function pinStatus() {
 
 function openModal({ latlng = null, name = "" } = {}) {
   pendingLatLng = latlng;
+  if (latlng) { gmapsLink = null; $("#addGmaps").value = ""; } // a map click outranks an earlier paste
   if (name || !$("#addName").value) $("#addName").value = name;
   $("#addSearchResults").classList.add("hidden");
   pinStatus();
@@ -56,9 +58,11 @@ function openModal({ latlng = null, name = "" } = {}) {
 
 function resetModal() {
   pendingLatLng = null;
+  gmapsLink = null;
   $("#addName").value = "";
   $("#addNotes").value = "";
   $("#addSearch").value = "";
+  $("#addGmaps").value = "";
   $("#addStar").checked = false;
   $("#addSearchResults").classList.add("hidden");
 }
@@ -81,6 +85,8 @@ export function initAddSpot() {
       renderResults(results, found, (r) => {
         results.classList.add("hidden");
         pendingLatLng = L.latLng(r.lat, r.lng);
+        gmapsLink = null; // picking a search result outranks an earlier paste
+        $("#addGmaps").value = "";
         if (!$("#addName").value.trim()) $("#addName").value = r.name;
         searchInput.value = `${r.name}${r.where ? " — " + r.where : ""}`;
         pinStatus();
@@ -88,6 +94,30 @@ export function initAddSpot() {
     } catch { /* photon napping — the map-click path still works */ }
   }, 350);
   searchInput.addEventListener("input", search);
+
+  // pasted gmaps link: full URLs parse right here; shortlinks get expanded by
+  // the dev server. Coords from the link beat search + map click.
+  const gmapsInput = $("#addGmaps");
+  const useLink = debounce(async () => {
+    const raw = gmapsInput.value.trim();
+    if (!raw) return;
+    if (!isGmapsLink(raw)) {
+      if (raw.startsWith("http")) showHint("that's not a google maps link — grab one via share → copy link", 3200);
+      return;
+    }
+    const got = await resolveGmapsLink(raw);
+    if (got) {
+      pendingLatLng = L.latLng(got.lat, got.lng);
+      gmapsLink = got.url;
+      pinStatus();
+    } else {
+      gmapsLink = raw; // still a fine button target — just no coords in it
+      showHint(DEV
+        ? "no coords in that link — open it and paste the big URL from the address bar"
+        : "short links only unpack on the dev server — open it and paste the big URL from the address bar", 4200);
+    }
+  }, 350);
+  gmapsInput.addEventListener("input", useLink);
 
   // entry points: toolbar (modal first), map click while in add mode, geosearch handoff
   on("mode-changed", (m) => {
@@ -130,6 +160,7 @@ export function initAddSpot() {
       lng: +pendingLatLng.lng.toFixed(6),
       approx: false,
       notes: $("#addNotes").value.trim(),
+      gmaps: gmapsLink,
     };
     addPlace(place);
     $("#addModal").classList.add("hidden");

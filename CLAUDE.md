@@ -44,9 +44,15 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   the repo via serve.mjs PUT; prod: downloads). Pack content sanity checks live in the
   exporter because CI can't see inside ciphertext; check-data only cross-checks
   manifest ↔ blobs.
-- Geocoding: build-time only, via Nominatim (`--geocode`, 1 req/s, cached in
-  tools/geocode-cache.json; hits >50 km from the hand-placed fallback are auto-rejected).
-  Places the geocoder missed carry `approx: true` and show "~ish location". Runtime geocoding
+- Coords, best source first: `gmaps` share link (resolved to the exact !3d/!4d marker —
+  build-time via tools/gmaps-cache.json, in-app via config.js parseGmapsLink + serve.mjs
+  /gmaps shortlink resolver, dev-only) > `pin: true` (hand pin authoritative; Nominatim
+  returns polygon centroids for big areas, which land up the mountain) > Nominatim
+  (`--geocode`, 1 req/s, cached in tools/geocode-cache.json; per-category distance gates,
+  big-bbox hits rejected in favor of the hand pin) > fallback + `approx: true`
+  ("~ish location"). The gmaps link doubles as the "open in google maps" target (otherwise:
+  name search anchored @lat,lng). In-app pin fixes ride the `nippon_custom_geo` overlay
+  until export; rebuilds carry over data.js gmaps/coords like photos. Runtime geocoding
   is Photon (photon.komoot.io) — free, keyless, typeahead OK; keep the 350 ms debounce,
   result dedupe, and attribution.
 

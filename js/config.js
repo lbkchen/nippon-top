@@ -26,6 +26,7 @@ export const LS = {
   hiddenZones: "nippon_hidden_zones", // per-zone visibility, survives reloads
   curations: "nippon_custom_curations",
   photos: "nippon_custom_photos", // { placeId: filename } — dev photo drops
+  geo: "nippon_custom_geo",       // { placeId: {lat, lng, gmaps} } — pin fixes from pasted gmaps links
 };
 
 // dev = the app can save dropped photos through tools/serve.mjs
@@ -173,7 +174,45 @@ export function distKm(a, b) {
 }
 export const fmtDist = (km) => (km < 1 ? `${Math.round(km * 1000)}m` : km < 20 ? `${km.toFixed(1)}km` : `${Math.round(km)}km`);
 
-export const gmapsUrl = (p) => `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+// where "open in google maps" goes: Ken's saved share link (lands on the real
+// place card — reviews, hours, photos) or a name search anchored at our pin so
+// google snaps to the right listing instead of a nameless dropped pin
+export const gmapsUrl = (p) =>
+  p.gmaps ||
+  `https://www.google.com/maps/search/${encodeURIComponent(p.name.split("/")[0].trim())}/@${p.lat},${p.lng},17z`;
+
+// ---- gmaps link parsing (pin fixes + add-spot) ----
+// In a full google maps URL, !3d<lat>!4d<lng> is the place marker itself;
+// @lat,lng is only the viewport (still close enough on a place link).
+export const isGmapsLink = (u) =>
+  /^https:\/\/((www\.)?google\.[a-z.]+\/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl\/|goo\.gl\/maps|g\.co\/)/i.test(String(u || "").trim());
+export const isGmapsShort = (u) =>
+  /^https:\/\/(maps\.app\.goo\.gl|goo\.gl|g\.co)\//i.test(String(u || "").trim());
+
+export function parseGmapsLink(url) {
+  let u = String(url || "");
+  try { u = decodeURIComponent(u); } catch { /* keep raw */ }
+  const pin = [...u.matchAll(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/g)].pop();
+  const m = pin || u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || u.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (!m) return null;
+  const lat = +m[1], lng = +m[2];
+  return lat > 24 && lat < 46 && lng > 122 && lng < 154 ? { lat, lng } : null; // Japan or it didn't happen
+}
+
+// full URLs parse locally; shortlinks need one redirect peek via the dev server
+export async function resolveGmapsLink(url) {
+  url = String(url || "").trim();
+  if (!isGmapsLink(url)) return null;
+  const got = parseGmapsLink(url);
+  if (got) return { ...got, url };
+  if (isGmapsShort(url) && DEV) {
+    try {
+      const r = await (await fetch(`gmaps?url=${encodeURIComponent(url)}`)).json();
+      if (typeof r.lat === "number") return { lat: r.lat, lng: r.lng, url };
+    } catch { /* server napping — caller shows the paste-the-full-url hint */ }
+  }
+  return null;
+}
 
 // deterministic tiny rotation per id, for the sticker-bomb look
 export function jitter(id, range = 5) {

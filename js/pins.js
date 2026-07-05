@@ -58,6 +58,9 @@ export function refreshMarkers() {
   for (const p of allPlaces()) {
     live.add(p.id);
     const m = markers[p.id] || makeMarker(p);
+    // pin fixes move coords under an existing marker — keep it in sync
+    const at = m.getLatLng();
+    if (at.lat !== p.lat || at.lng !== p.lng) m.setLatLng([p.lat, p.lng]);
     // in a friend's view, spots outside their map are gone, not dimmed —
     // no half-visible ghosts of what they weren't sent
     const show = placePassesFilters(p) && (!viewIds || viewIds.has(p.id));

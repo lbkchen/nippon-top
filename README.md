@@ -76,11 +76,19 @@ Two ways, and they can't clobber each other:
    export separately from the 💌 drawer as packs.
 2. **At the source** — edit the master list in `tools/build-data.mjs`, then
    `node tools/build-data.mjs`. The rebuild carries over everything that only exists in
-   `data.js` (custom spots, custom zones, doodles); packs are untouched. Add `--geocode` to
-   resolve new places via Nominatim (free OSM geocoder, 1 req/sec, cached; hits >50 km from
-   the hand-placed fallback are rejected so a bad geocode can't yeet a ramen shop into the sea).
+   `data.js` (custom spots, custom zones, doodles, pin fixes); packs are untouched. Add
+   `--geocode` to resolve new places via Nominatim (free OSM geocoder, 1 req/sec, cached;
+   hits that drift too far from the hand-placed fallback — per-category gates — or match a
+   huge polygon get rejected in favor of the hand pin).
 
-Places the geocoder couldn't find use hand-placed coordinates and wear an `~ish location` tag.
+The best coordinate source is a **Google Maps share link** (`gmaps:` in the master list, or
+paste one in-app when adding a spot / via "fix it with a gmaps link" on the detail panel).
+Resolving the shortlink is a plain redirect — no API, no key — and the resolved URL carries
+the exact marker. The link doubles as the "open in google maps" target, landing friends on
+the real place card instead of a nameless dropped pin.
+
+Places with no link the geocoder couldn't find use hand-placed coordinates and wear an
+`~ish location` tag (click it to fix).
 
 `node tools/check-data.mjs` validates everything (unique ids, real categories, coords actually
 in Japan, pack manifest ↔ blobs). CI runs it before every deploy.
@@ -120,9 +128,10 @@ js/
   lasso.js zones.js doodle.js addspot.js curations.js
   chains.js exporter.js roulette.js splash.js
 tools/
-  build-data.mjs    master place list → data.js (merge-safe, optional --geocode)
+  build-data.mjs    master place list → data.js (merge-safe, optional --geocode,
+                    resolves gmaps share links into exact coords)
   check-data.mjs    validator (CI gate)
-  serve.mjs         no-cache dev server (also saves photo drops + pack exports)
+  serve.mjs         no-cache dev server (photo drops, pack exports, gmaps shortlink resolver)
 ```
 
 Adding a feature = one new module listening on the bus + one `init()` call in `main.js`.

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=14" />
 </head>
 <body>
   <!-- splash title card -->
@@ -266,6 +266,9 @@
         <input id="addSearch" type="search" placeholder="e.g. Kagari Ginza, or a hotel address" autocomplete="off" spellcheck="false" />
       </label>
       <div class="geo-results in-modal hidden" id="addSearchResults"></div>
+      <label>got a google maps link? paste it — nails the exact spot
+        <input id="addGmaps" type="url" placeholder="https://maps.app.goo.gl/…" autocomplete="off" spellcheck="false" />
+      </label>
       <div class="add-pin-status" id="addPinStatus"></div>
       <label>what's it called?
         <input id="addName" type="text" placeholder="Secret Ramen Basement" maxlength="60" />
@@ -341,7 +344,7 @@
   </svg>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data.js?v=13"></script>
-  <script type="module" src="js/main.js?v=13"></script>
+  <script src="data.js?v=14"></script>
+  <script type="module" src="js/main.js?v=14"></script>
 </body>
 </html>
