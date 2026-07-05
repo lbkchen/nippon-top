@@ -8,8 +8,13 @@ import { createServer } from "node:http";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname, normalize, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+
+const run = promisify(execFile);
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
+const TOOLS = join(fileURLToPath(import.meta.url), "..");
 const PORT = Number(process.argv[2] || process.env.PORT || 4173);
 
 const MIME = {
@@ -25,6 +30,74 @@ const MIME = {
   ".webmanifest": "application/manifest+json",
   ".enc": "application/octet-stream",
 };
+
+// ---- one-click publish ----
+// POST /publish { data, summary, dry } — write data.js, bump its ?v in
+// index.html, validate with check-data, commit (data.js + index.html + img/ +
+// friends/ only — never unrelated dirty files), push. Any failure before the
+// commit restores both files. `dry` runs everything but commit+push (and skips
+// the on-main check) so the flow is testable without shipping.
+let publishing = false;
+
+const git = (...args) => run("git", args, { cwd: ROOT, timeout: 60_000 });
+
+async function publish(body) {
+  const { data, summary = "", dry = false } = JSON.parse(body.toString("utf8"));
+  if (typeof data !== "string" || !data.startsWith("// NIPPON TOP data")) return { status: 400, error: "that doesn't look like data.js" };
+
+  const branch = (await git("rev-parse", "--abbrev-ref", "HEAD")).stdout.trim();
+  if (branch !== "main" && !dry) return { status: 409, error: `repo is on "${branch}" — publish only ships from main` };
+
+  // refuse if the files we're about to rewrite already have uncommitted edits
+  // (a previous failed publish, or someone mid-tinker) — we can't restore those
+  const dirty = (await git("status", "--porcelain", "--", "data.js", "index.html")).stdout.trim();
+  if (dirty) return { status: 409, error: "data.js / index.html have uncommitted changes — commit or discard them first" };
+
+  if (!dry) {
+    const before = await readFile(join(ROOT, "data.js"), "utf8");
+    try { await git("pull", "--ff-only"); }
+    catch (e) { return { status: 409, error: `couldn't fast-forward main: ${(e.stderr || e.message).trim().slice(0, 200)}` }; }
+    // the pull may have brought a newer map than the one the app booted from —
+    // overwriting it would silently revert those changes
+    if (await readFile(join(ROOT, "data.js"), "utf8") !== before) {
+      return { status: 409, error: "just pulled a newer data.js from github — reload the app (your edits re-apply) and publish again" };
+    }
+  }
+
+  const indexPath = join(ROOT, "index.html");
+  const indexBefore = await readFile(indexPath, "utf8");
+  const bumped = indexBefore.replace(/data\.js\?v=(\d+)/, (_, n) => `data.js?v=${+n + 1}`);
+  await writeFile(join(ROOT, "data.js"), data);
+  await writeFile(indexPath, bumped);
+
+  try {
+    await run(process.execPath, [join(TOOLS, "check-data.mjs")], { cwd: ROOT });
+  } catch (e) {
+    await git("checkout", "--", "data.js", "index.html");
+    return { status: 422, error: `check-data said no:\n${(e.stdout || e.message).trim().slice(0, 600)}` };
+  }
+
+  const scope = ["data.js", "index.html", "img", "friends"];
+  if (dry) {
+    const would = (await git("status", "--porcelain", "--", ...scope)).stdout.trim();
+    await git("checkout", "--", "data.js", "index.html");
+    return { status: 200, ok: true, dry: true, wouldCommit: would.split("\n").filter(Boolean) };
+  }
+
+  await git("add", "--", ...scope);
+  const staged = (await git("diff", "--cached", "--name-only")).stdout.trim();
+  if (!staged) return { status: 200, ok: true, nothing: true };
+
+  const msg = `map update from the app${summary ? ` — ${String(summary).replace(/[\r\n]+/g, " ").slice(0, 120)}` : ""}`;
+  await git("commit", "-m", msg);
+  try { await git("push"); }
+  catch (e) {
+    return { status: 502, error: `committed but push failed: ${(e.stderr || e.message).trim().slice(0, 200)} — run git push yourself` };
+  }
+  const sha = (await git("rev-parse", "--short", "HEAD")).stdout.trim();
+  console.log(`  🚀 published ${sha}: ${msg}`);
+  return { status: 200, ok: true, commit: sha, files: staged.split("\n") };
+}
 
 async function readBody(req, res, cap) {
   const chunks = [];
@@ -61,6 +134,23 @@ createServer(async (req, res) => {
       console.log(`  ✉︎ saved friends/${name} (${Math.round(body.length / 1024) || 1} kB)`);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ ok: true, file: name }));
+      return;
+    }
+    if (req.method === "POST" && path === "/publish") {
+      if (publishing) { res.writeHead(409, { "Content-Type": "application/json" }).end(JSON.stringify({ error: "a publish is already running" })); return; }
+      publishing = true;
+      try {
+        const body = await readBody(req, res, 20e6);
+        if (!body) return;
+        const { status, ...out } = await publish(body);
+        res.writeHead(status, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(out));
+      } catch (e) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: String(e.message || e).slice(0, 300) }));
+      } finally {
+        publishing = false;
+      }
       return;
     }
     // GET /gmaps?url=<shortlink> — expand a google maps shortlink and pull the

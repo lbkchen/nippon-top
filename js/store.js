@@ -3,9 +3,12 @@
 import { LS, CATS } from "./config.js";
 import { map } from "./map.js";
 import { generateKey, randomSuffix } from "./pack.js";
+import { emit } from "./bus.js";
 
 const lsGet = (k, fb = []) => { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } };
-const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+// every persistent edit funnels through here — "dirty" drives the unpublished-edits badge
+const lsSet = (k, v) => { localStorage.setItem(k, JSON.stringify(v)); if (booted) emit("dirty"); };
+let booted = false;
 
 export const BASE = window.NIPPON || { places: [], chains: [], zones: [], doodles: [], curations: [] };
 BASE.doodles = BASE.doodles || [];
@@ -309,6 +312,20 @@ export function deleteCuration(slug) {
   lsSet(LS.curations, customCurations);
 }
 
+// how many edits are sitting in localStorage waiting for a publish/export —
+// friend-map (curation) edits don't count, they ship separately as packs
+export function pendingCount() {
+  return (
+    customPlaces.length +
+    customZones.length +
+    deadZones.size +
+    Object.keys(photoOverlay).length +
+    Object.keys(geoOverlay).length +
+    doodles.filter((d) => !BASE.doodles.includes(d)).length +
+    deadDoodles.size
+  );
+}
+
 // ---------- export ----------
 // raw arrays only: pack extras and curations never ride into data.js —
 // friend maps ship separately as encrypted packs (js/pack.js)
@@ -321,3 +338,5 @@ export function mergedData() {
     doodles,
   };
 }
+
+booted = true; // boot-time overlay pruning above shouldn't ring the dirty bell
