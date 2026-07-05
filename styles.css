@@ -188,8 +188,8 @@ button {
 /* ---------- region chips ---------- */
 .region-chips {
   position: fixed;
-  top: 18px;
-  left: 285px;
+  top: 16px;
+  left: 214px;
   right: 420px;
   z-index: 850;
   display: flex;
@@ -1332,7 +1332,7 @@ button.armed {
 /* ---------- omnisearch (the primary bar) ---------- */
 .omnibar {
   position: fixed;
-  top: 94px;
+  top: 58px; /* tucked under the slim wordmark (the old card was twice as tall) */
   left: 14px;
   z-index: 890;
   width: 360px;
