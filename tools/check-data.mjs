@@ -45,6 +45,8 @@ for (const p of places) {
     if (typeof p.photo !== "string" || !/\.(jpe?g|png|webp|avif)$/i.test(p.photo)) err(`${tag}: photo must be an image filename in img/`);
     else if (!existsSync(join(ROOT, "img", p.photo))) err(`${tag}: img/${p.photo} does not exist`);
   }
+  if (p.gmaps != null && !/^https:\/\/(maps\.app\.goo\.gl|goo\.gl|g\.co|(www\.)?google\.[a-z.]+|maps\.google\.[a-z.]+)\//i.test(p.gmaps))
+    err(`${tag}: gmaps must be a https google maps link (got "${String(p.gmaps).slice(0, 40)}…")`);
 }
 
 // ---- chains ----

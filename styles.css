@@ -1169,7 +1169,7 @@ button.armed {
   font-size: 13px;
   margin: 12px 0 4px;
 }
-.modal input[type="text"], .modal textarea {
+.modal input[type="text"], .modal input[type="url"], .modal textarea {
   width: 100%;
   font-family: var(--font-body);
   font-weight: 600;
@@ -1578,7 +1578,7 @@ button.armed {
     width: auto;
   }
   /* sub-16px inputs make iOS Safari zoom the whole page on focus */
-  #omniInput, #addSearch, .modal input[type="text"], .modal textarea, .mix-bar input { font-size: 16px; }
+  #omniInput, #addSearch, .modal input[type="text"], .modal input[type="url"], .modal textarea, .mix-bar input, .fix-loc-input { font-size: 16px; }
 }
 
 /* ---------- spot detail panel ---------- */
@@ -1649,6 +1649,19 @@ button.armed {
 .detail-ribbon { position: static; align-self: flex-start; transform: rotate(-1deg) skewX(-6deg); }
 .detail-notes { font-size: 13.5px; line-height: 1.55; }
 .detail-gmaps { text-decoration: none; }
+.fix-loc { margin-top: 8px; }
+.fix-loc-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  padding: 7px 10px;
+  outline: none;
+}
+.pill.approx { cursor: pointer; }
 .detail-zone {
   display: flex;
   align-items: center;

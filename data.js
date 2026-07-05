@@ -13,7 +13,8 @@ window.NIPPON = {
       "lng": 139.5797771,
       "approx": false,
       "notes": "Trendy neighborhood with lots of shops, largest UNIQLO, amazing restaurants, overall a very desirable place to live for the locals. Prominently featured in Persona 5R lol, it legit looks so similar once you walk out the station and see the open-air shopping street. For food I recommend Tsukemen Enji and Kooriya Peace (dessert).",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "inokashira-park",
@@ -23,11 +24,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "park",
       "emoji": null,
-      "lat": 35.6962563,
-      "lng": 139.5714873,
+      "lat": 35.7003,
+      "lng": 139.5731,
       "approx": false,
       "notes": "Big park next to Kichijoji and Ghibli museum, really nice to walk around and likely much less crowded/touristy, one of the nicest parks near tokyo IMO",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "higashi-koganei",
@@ -41,7 +43,8 @@ window.NIPPON = {
       "lng": 139.5240561,
       "approx": false,
       "notes": "Nothing crazy but it's a nice residential neighborhood if you want to experience some of that suburb life. Go to Kujira Shokudo for an amazing tsukemen - it's shoyu instead of fish based. Then explore the back alleys near the station for more food, izakaya (torikizoku), karaoke, etc.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "ghibli-museum",
@@ -55,7 +58,8 @@ window.NIPPON = {
       "lng": 139.5706324,
       "approx": false,
       "notes": "Famous museum showcasing the Ghibli filmmaking process, amazing experience but hard to get tickets.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "ramenya-shima",
@@ -69,7 +73,8 @@ window.NIPPON = {
       "lng": 139.5993,
       "approx": true,
       "notes": "Best shoyu ramen I've had. Super annoying to get in tho - 60 bowls a day, you must sign up at 8-9am at the door, then return at the predetermined time slot - see Goog reviews lol. Only for the real fans.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "tonkatsu-narikura",
@@ -83,7 +88,8 @@ window.NIPPON = {
       "lng": 139.6357,
       "approx": true,
       "notes": "One of the highest rated tonkatsu (fried pork cutlet) on Tabelog the Japanese yelp. Usually everything is literally 3 stars or less, but this one has over 4 stars and tastes incredible -- you need to book a resy beforehand here: https://omakase.in/en/r/qw473765.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "takaosan",
@@ -97,7 +103,8 @@ window.NIPPON = {
       "lng": 139.2431553,
       "approx": false,
       "notes": "Great place to do a day trip and hike near Tokyo, a bit farther out as you take Chuo line to the end.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "koenji",
@@ -111,7 +118,8 @@ window.NIPPON = {
       "lng": 139.6499648,
       "approx": false,
       "notes": "Recommended by GPT3 itself when I asked for cool vibes and not too many crowds. Apparently popular with the locals for shopping (esp vintage, bohemian...), good eats, and late nite activities. We ended up visiting and were shook by the sheer amount of vintage stores - Brooklyn ish vibes, full of small shops. Def one of the best places for thrifting with actually good prices. It's on the CHUO line, so if going here you can hit up all the spots on there (Kichijoji, Koenji, Asagaya)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "asagaya",
@@ -125,7 +133,8 @@ window.NIPPON = {
       "lng": 139.6354724,
       "approx": false,
       "notes": "Similar to Koenji but even less well-known, also a long ass shopping street, definitely not touristy at all, good for a chill vibes, shopping day.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "omoide-yokocho",
@@ -139,7 +148,8 @@ window.NIPPON = {
       "lng": 139.6995502,
       "approx": false,
       "notes": "Also affectionately known as \"piss alley\", collection of narrow streets containing tiny counter-style bars / izakaya, etc. Good for bar hopping, fun to also just browse. Very touristy.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "golden-gai",
@@ -153,7 +163,8 @@ window.NIPPON = {
       "lng": 139.7047001,
       "approx": false,
       "notes": "Similar to Omoide Yokocho, maybe a little more touristy? Tiny streets and fun to walk around. It's a vibe. Very touristy, look at the japanese menu prices to not get scammed.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "shinjuku-gyoen",
@@ -167,7 +178,8 @@ window.NIPPON = {
       "lng": 139.7095466,
       "approx": false,
       "notes": "Huge park in central shinjuku. Some say it's overrated. It's the first place I went to with tons of cherry blossoms blooming in full force and it's such a sight esp being right next to the busy city. Really worth checking out.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "shin-okubo",
@@ -181,7 +193,8 @@ window.NIPPON = {
       "lng": 139.7007067,
       "approx": false,
       "notes": "AKA Koreatown in Tokyo. Late night korean desserts like bingsoo and what not.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kabukicho",
@@ -195,7 +208,8 @@ window.NIPPON = {
       "lng": 139.7027105,
       "approx": false,
       "notes": "Tokyo's red light district, worth a walk around night it's pretty wild just try to avoid eye contact with all the solicitors.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "harajuku-cat-street",
@@ -209,7 +223,8 @@ window.NIPPON = {
       "lng": 139.7049553,
       "approx": false,
       "notes": "Harajuku's main Takeshita street is EXTREMELY overrated IMO, but what's not overrated is dodging this hot mess and strolling through the side streets - I think the main one that goes to Shibuya is called Cat street. There are a lot of boutiques here and better small shops, as well as designer brands and consignment stores.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "meiji-jingu",
@@ -223,7 +238,8 @@ window.NIPPON = {
       "lng": 139.6996266,
       "approx": false,
       "notes": "Famous shrine off of Harajuku. It's nothing too crazy but worth checking out if you plan to be here. Yoyogi park is a nice and very huge park in the area.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "roastery-nozy",
@@ -237,7 +253,8 @@ window.NIPPON = {
       "lng": 139.7048132,
       "approx": false,
       "notes": "Idk if I was just very new to coffee then but I had the single origin latte here and it was prob the best coffee I ever had at the time. Still think about it sometimes. Quite crowded but cute spot to sit down, walk the sidestreets around here too.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "meguro-river",
@@ -251,7 +268,8 @@ window.NIPPON = {
       "lng": 139.6988317,
       "approx": false,
       "notes": "Trendy and cute neighborhood to check out the cherry blossoms and walk along the river. Tsutakya books Daikanyama is also near by and worth checking out.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "shibuya-crossing",
@@ -265,7 +283,8 @@ window.NIPPON = {
       "lng": 139.7004982,
       "approx": false,
       "notes": "Just a classic place but worth checking out and doing the scramble, the classic 109 buldling (not worth visiting, only viewing from afar) and many malls in the area.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "shimokitazawa",
@@ -279,7 +298,8 @@ window.NIPPON = {
       "lng": 139.6670604,
       "approx": false,
       "notes": "Very trendy, hipster area. Similar to Koenji. Lots of nice thrift shops, bookstores, good vibes. Recommend just walking around and spending some time here chilling with a book or something!",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "asakusa-sensoji",
@@ -293,7 +313,8 @@ window.NIPPON = {
       "lng": 139.7955265,
       "approx": false,
       "notes": "Traditional temple with a nice shopping street and more old-town vibes, although it be really touristy now. Most accesssible kyoto-like part of town I guess.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "ueno-ameyoko",
@@ -307,7 +328,8 @@ window.NIPPON = {
       "lng": 139.7745428,
       "approx": false,
       "notes": "Cool, popular open air shopping district selling foods, fruits, vintage clothes and goods, etc. Fun to walk around and get some food in the area. Unlike Asakusa's shopping street, which is more targeted towards tourism, this one feels more catered to locals. Nearby Ueno park is also nice in Spring/Autumn for a quick stroll.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kamo-to-negi",
@@ -321,7 +343,8 @@ window.NIPPON = {
       "lng": 139.7751032,
       "approx": false,
       "notes": "God ramen, the duck confit topping was so crazy good. Broth is very fragrant, and you get to choose 2 types of seasonal negis to pair it with. This is like fine dining at 1500 yen. One of our favs in Tokyo and we keep going back.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nezu-shrine",
@@ -335,7 +358,8 @@ window.NIPPON = {
       "lng": 139.7606625,
       "approx": false,
       "notes": "Close to the north part of Ueno park IIRC, very peaceful fairly small shrine with a bunch of Torii gates, like a mini-Fushimi Inari.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kappabashi",
@@ -349,7 +373,8 @@ window.NIPPON = {
       "lng": 139.7886,
       "approx": false,
       "notes": "Every home cook's dream district - It's the restaurant supply district so this is where you can go to get your fancy Japanese knives and 1:1 plastic models of foods. I think the knife stores are super touristy now and not really that cheap, but still love shopping for all the other random stuff they have in this district.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "skytree-solamachi",
@@ -363,7 +388,8 @@ window.NIPPON = {
       "lng": 139.8107141,
       "approx": false,
       "notes": "One of the most famous places out in East Tokyo and a bit out of the way but honestly a beautiful area next to the canals. Idt it's super worth to go up the Skytree itself but it is one of the most shocking views of Tokyo that you can get out there. Solamachi is a giant mall connected to the skytree that's actually quite nice and has a great mix of everything - food, clothing, souvenirs, etc.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "yakitori-omino",
@@ -377,7 +403,8 @@ window.NIPPON = {
       "lng": 139.81,
       "approx": true,
       "notes": "Delicious yakitori (chicken skewer) omakase place near Skytree. They serve you until you say stop so come v hungry and experience the great joy of binchotan charcoal grilled chicken parts. The catch is you gotta book like 2+ months in advance on Omakase (as of Mar '24)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "takesue",
@@ -391,7 +418,8 @@ window.NIPPON = {
       "lng": 139.8172,
       "approx": true,
       "notes": "Awesome local shop, highly recommend the chicken scallop base, and it has the most delicious toppings.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "tomita",
@@ -405,7 +433,8 @@ window.NIPPON = {
       "lng": 139.9006,
       "approx": true,
       "notes": "GOAT ramen rated #1 in japan for several years. I booked relatively easily online thru Omakase. Was a wild experience you can feel the attention to every small detail. And you will also leave stuffed.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "rokurinsha",
@@ -419,7 +448,8 @@ window.NIPPON = {
       "lng": 139.7688,
       "approx": true,
       "notes": "Famous ramen restaurant right in Tokyo station, known for seafood-forward tsukemen with thicc noods.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kagari",
@@ -433,7 +463,8 @@ window.NIPPON = {
       "lng": 139.7635,
       "approx": true,
       "notes": "Main branch is in Ginza I think -- exists elsewhere. Otemachi has a larger one with 4 people seating, rest are mostly counter seats. BEST tori paitan I've ever had, strongly recommend.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "uniqlo-ginza",
@@ -447,7 +478,8 @@ window.NIPPON = {
       "lng": 139.7634253,
       "approx": false,
       "notes": "There are 2 giant Uniqlo's in Ginza and both are pretty interesting - one is the 12 floor HQ which is the one everyone goes to but the other one is also huge and has 3-4 very wide stories of a ton of goods which made it a much more enjoyable shopping experience.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "tokyo-tower",
@@ -461,7 +493,8 @@ window.NIPPON = {
       "lng": 139.745536,
       "approx": false,
       "notes": "Overrated - would not recommend this or Skytree. I think you can go to some tall buildings in Roppongi for a similar experience with the Tokyo tower in your view...",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "garden-lounge",
@@ -475,7 +508,8 @@ window.NIPPON = {
       "lng": 139.734,
       "approx": true,
       "notes": "AYCE dessert place with a sick view of the garden (Shinjuku Gyoen?). Have not been, it looks amazing.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "akihabara",
@@ -489,7 +523,8 @@ window.NIPPON = {
       "lng": 139.7736805,
       "approx": false,
       "notes": "Anime district, prepare to be overwhelmed. Themed/maid/cat/crazy cafes, electronics stores, collectible stores, this place has it all.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nakiryu",
@@ -503,7 +538,8 @@ window.NIPPON = {
       "lng": 139.7286,
       "approx": true,
       "notes": "Michelin star ramen (it's famous for tantanmen style), worth the 1 hr wait.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "teamlab-planets",
@@ -517,7 +553,8 @@ window.NIPPON = {
       "lng": 139.789728,
       "approx": false,
       "notes": "I only went to teamLab Borderless but it's closed now :( I think this place is similar. Cool interactive museum with a lot of lights and trippy experiences.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kamakura",
@@ -531,7 +568,8 @@ window.NIPPON = {
       "lng": 139.5506805,
       "approx": false,
       "notes": "1 hr away from Tokyo, really nice for a full day trip. Most Kyoto-like vibe near Tokyo with lots of traditional looking streets, temples, the Big Buddha statue, beaches, Enoshima island, etc.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nikko",
@@ -545,7 +583,8 @@ window.NIPPON = {
       "lng": 139.6003825,
       "approx": false,
       "notes": "2 hrs away from Tokyo, great full day trip or even better stay the night. Has the coolest most lavish looking shrine (Toshogu) and the mausoleum of Tokugawa, lot's of history in this city. Onsen and also some small ski areas are possible nearby during winter.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "hakone",
@@ -559,7 +598,8 @@ window.NIPPON = {
       "lng": 139.1034651,
       "approx": false,
       "notes": "1 hr away from Tokyo. Very famous for ryokan (traditional hotels), onsen, great natural scenery. Good place to splurge on a nice ryokan with kaiseki ryori (multi-course dinner and breakfast included with stay).",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "mt-fuji",
@@ -573,7 +613,8 @@ window.NIPPON = {
       "lng": 138.7307677,
       "approx": false,
       "notes": "1-2hr away from Tokyo. Everyone knows what it looks like but it's worth doing the hike during the summer when hiking season is open. Pretty surreal sights on top.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "yokohama",
@@ -587,7 +628,8 @@ window.NIPPON = {
       "lng": 139.6323669,
       "approx": false,
       "notes": "1 hr away from Tokyo, famous Cup noodle museum and big Chinatown.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kiyomizudera",
@@ -601,7 +643,8 @@ window.NIPPON = {
       "lng": 135.7844389,
       "approx": false,
       "notes": "One of the most famous views in Kyoto (hopefully it's not still under renovation), and obv incredibly touristy. Still incredibly worth it, go early in the morning at like 6am and beat the crowds, get a goshuin (temple stamp), then come down after walking through the temple to explore the shopping district right at the foot of the temple complex, lots of good food and snacks, also famous for ceramic/stoneware so a good place to buy a souvenir since it used to be a district of potters.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "fushimi-inari",
@@ -611,11 +654,12 @@ window.NIPPON = {
       "group": "kyoto",
       "cat": "temple",
       "emoji": "🦊",
-      "lat": 34.9675192,
-      "lng": 135.7797101,
+      "lat": 34.9671,
+      "lng": 135.7727,
       "approx": false,
       "notes": "The classic thousand-rows of orange torii gates -- extremely touristy and probably the most crowded shrine during peak travel season but a must see at least once, go early in the morning for the best experience and make sure to hike to the top.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "arashiyama",
@@ -629,7 +673,8 @@ window.NIPPON = {
       "lng": 135.6711482,
       "approx": false,
       "notes": "Famous for the bamboo forest but boy is it crowded there. I would go very early like 6am if you care about avoiding crowds, but in general the surrounding area is super worth walking or biking around too. There are beautiful mountain landscapes and traditional looking streets here, and plenty of temples and shrines. If you only care about the bamboo forest there is an equally good, lesser known one at Adashino Nenbutsuji (15 min away by rental bike)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "monkey-park",
@@ -639,11 +684,12 @@ window.NIPPON = {
       "group": "kyoto",
       "cat": "fun",
       "emoji": "🐒",
-      "lat": 35.0090864,
-      "lng": 135.6749673,
+      "lat": 35.0128,
+      "lng": 135.6778,
       "approx": false,
       "notes": "MONKEYS ROAMING FREE, on top of a mountain, roughly 20 min hike but worth it. Don't give up, you can do it!!!",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nisonin-gioji",
@@ -657,7 +703,8 @@ window.NIPPON = {
       "lng": 135.6678367,
       "approx": false,
       "notes": "Famous temples near Arashiyama, all worth visiting and if you like collecting, start a book of goshuin (handwritten temple stamps)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "adashino-otagi",
@@ -671,7 +718,8 @@ window.NIPPON = {
       "lng": 135.6612344,
       "approx": false,
       "notes": "From Arashiyama, a bit of a walk. But if you're bummed by all the crowds there go here to see another bamboo forest away from all the hubbub. The latter is prob my favorite lesser-known temple in Japan for the unique mini stone statues and the cool history. Best way to explore is to rent a bike from Arashiyama - super relaxing way to spend the day.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "ginkakuji",
@@ -685,7 +733,8 @@ window.NIPPON = {
       "lng": 135.7983714,
       "approx": false,
       "notes": "Famous temples but the golden temple is a bit overrated, silver temple was more memorable for me. The Philosophers Path near Ginkakuji (silver temple) is a famous cherry blossoms viewing spot.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "ikazuchi-udon",
@@ -699,7 +748,8 @@ window.NIPPON = {
       "lng": 135.7938,
       "approx": true,
       "notes": "Near Ginkakuji (silver temple) nice for a quick stop. I don't usually like udon much but this is the best udon I've had. Rec getting the one with kitsune (big fried tofu), beef, and kujo negis (local specialty) https://g.co/kgs/AkyD6ZR",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kifune",
@@ -713,7 +763,8 @@ window.NIPPON = {
       "lng": 135.7629362,
       "approx": false,
       "notes": "Day trip from Kyoto, another place famous for ryokan and kaiseki ryori, and you can also try nagashi somen (noodles that flow down a bamboo stalk and you catch it with your chopsticks lol). Beautiful shrine to visit here.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "murin-an",
@@ -727,7 +778,8 @@ window.NIPPON = {
       "lng": 135.7872657,
       "approx": false,
       "notes": "Beautiful Japanese style garden, not a popular or touristy place but really nice place to relax.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nishiki-market",
@@ -741,7 +793,8 @@ window.NIPPON = {
       "lng": 135.7655699,
       "approx": false,
       "notes": "Shopping arcade adjacent(?) to Gion, mostly for seafood and food stands but also a ton of clothing shops and other smaller souvenir shops. Pretty touristy. Better to go earlier in the day bc it closes at 6pm.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "gion-shijo",
@@ -751,11 +804,12 @@ window.NIPPON = {
       "group": "kyoto",
       "cat": "hood",
       "emoji": null,
-      "lat": 35.0046897,
-      "lng": 135.778403,
+      "lat": 35.0037,
+      "lng": 135.7752,
       "approx": false,
       "notes": "Famous shopping arcade popular with tourists. Near the center of it in the north-south canals is Pontocho which is known as the red light district in Kyoto, where you can find izakaya and night life. Unclear if we faced subtle racism here 🙃",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "nara",
@@ -765,11 +819,12 @@ window.NIPPON = {
       "group": "kyoto",
       "cat": "trip",
       "emoji": "🦌",
-      "lat": 34.6829008,
-      "lng": 135.8545975,
+      "lat": 34.6851,
+      "lng": 135.843,
       "approx": false,
       "notes": "Famous for the DEER, but also the big buddha probably the biggest I've ever seen. One of the former capitals so lots of history. Maybe the YT famous mochi pounding guy is still there too check him out (Nakatanidou).",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "uji",
@@ -783,7 +838,8 @@ window.NIPPON = {
       "lng": 135.8074525,
       "approx": false,
       "notes": "The home of MATCHA and hojicha, must go if you're into this stuff, and on the way to Nara from Kyoto. Theres matcha everything, from drinks to soft serve to soba to gyoza to everything you can think of. There are tourist traps as well as actually good tea shops, defintiely try to buy some good quality tea from here.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "kobe",
@@ -797,7 +853,8 @@ window.NIPPON = {
       "lng": 135.1955442,
       "approx": false,
       "notes": "Great daytrip from Kyoto, also if you love beef.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "miyama",
@@ -811,7 +868,8 @@ window.NIPPON = {
       "lng": 135.6039,
       "approx": false,
       "notes": "Historic idyllic rural location with thatched roof homes. If you want to check out the rural life, you should stay a night here in one of them and eat a meal prepared from local ingredients. A bit harder to do without a Japanese speaker.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "amanohashidate",
@@ -825,7 +883,8 @@ window.NIPPON = {
       "lng": 135.1906382,
       "approx": false,
       "notes": "One of the four great views of Japan or something like that, I didn't actually go but it was high on my bucket list, as is Ine the quaint fishing town north of it. Worth checking out together.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "dotonbori",
@@ -839,7 +898,8 @@ window.NIPPON = {
       "lng": 135.5015715,
       "approx": false,
       "notes": "I honestly don't remember too much specific stuff about Osaka but generally the people there are friendly and way more talkative than ppl in Tokyo. Dotonbori is like the Kabukicho of Osaka, really lively night scene, tons of great food like kushikatsu, okonomiyaki, etc.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "okonomiyaki-chitose",
@@ -853,7 +913,8 @@ window.NIPPON = {
       "lng": 135.5064,
       "approx": true,
       "notes": "Really great okonomiyaki, osaka style. There are tons of other places too just make sure to try it once in Osaka and Hiroshima if you go there too the styles are different.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "osaka-castle",
@@ -867,7 +928,8 @@ window.NIPPON = {
       "lng": 135.5258555,
       "approx": false,
       "notes": "Impressive castle worth checking out, idr much else lol.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "onigiri-gorichan",
@@ -877,11 +939,12 @@ window.NIPPON = {
       "group": "osaka",
       "cat": "food",
       "emoji": "🍙",
-      "lat": 34.696,
-      "lng": 135.474,
-      "approx": true,
+      "lat": 34.7071179,
+      "lng": 135.5058786,
+      "approx": false,
       "notes": "We waited 30m for this but was worth it - massive onigiri with whatever toppings you want. The unagi egg yolk one was so bomb. Staff were over the top friendly. https://maps.app.goo.gl/5Dns7DF72VFs3bBh7",
-      "photo": null
+      "photo": null,
+      "gmaps": "https://maps.app.goo.gl/5Dns7DF72VFs3bBh7"
     },
     {
       "id": "kadoya-shokudo",
@@ -891,11 +954,12 @@ window.NIPPON = {
       "group": "osaka",
       "cat": "food",
       "emoji": null,
-      "lat": 34.6746,
-      "lng": 135.49,
-      "approx": true,
+      "lat": 34.6760951,
+      "lng": 135.4838409,
+      "approx": false,
       "notes": "Top rated ramen on tabelog in Osaka/Kyoto. Lots of locals, shoyu base, on the salty side but super flavorful. I would recommend the tsukemen which I saw all the locals getting: https://maps.app.goo.gl/9kqMv22NRTNuiWrG8",
-      "photo": null
+      "photo": null,
+      "gmaps": "https://maps.app.goo.gl/9kqMv22NRTNuiWrG8"
     },
     {
       "id": "omoroi-sports",
@@ -909,7 +973,8 @@ window.NIPPON = {
       "lng": 135.5,
       "approx": true,
       "notes": "IF you want to play volleyball or any other sports while in Osaka lol, highly recommend booking a spot here! Most sessions are open to all levels, mostly international so English speaking, mix of locals and foreigners, and everyone is super friendly. Sometimes we went to izakaya together after playing. https://omoroi-life.com/ (Sessions happen at gyms around the city - pin is symbolic.)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "mount-koya",
@@ -923,7 +988,8 @@ window.NIPPON = {
       "lng": 135.6053745,
       "approx": false,
       "notes": "An hour or so away from Osaka, it's a temple complex in the mountains worth spending a day visiting. You can check out the mausoleum and there are even overnight temple stays you can do here. From one of the temples here you can get a sacred cedar wood goshuincho which is the book you use to collect temple stamps and it's one of the coolest souvenirs you can take from Japan.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "shimanami-kaido",
@@ -937,7 +1003,8 @@ window.NIPPON = {
       "lng": 133.1937736,
       "approx": false,
       "notes": "Must do if you're ever near Hiroshima, a 70km perfectly paved biking trail across 7 islands in Shikoku. You can experience something different on every island so I recommend taking it slow and spending a night on one of the islands in between, but you can finish it in a day if you're fast. Try Onomichi ramen at the starting point, and once you reach Imabari (I think it's known for towels?? lol), you can take a bus ride back to the beginning :)",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "itsukushima",
@@ -951,7 +1018,8 @@ window.NIPPON = {
       "lng": 132.3190077,
       "approx": false,
       "notes": "Probably the most famous shrine in Hiroshima area because it looks like it's floating on the water. Hopefully it's no longer under renovation. Worth also getting all the maple-flavored snacks and doing the hike up the mountain here.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "hiroshima-peace-museum",
@@ -965,7 +1033,8 @@ window.NIPPON = {
       "lng": 132.4530979,
       "approx": false,
       "notes": "Incrediblly curated museum on the history of the event, 100% worth visiting if you're here.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "lake-toya",
@@ -979,7 +1048,8 @@ window.NIPPON = {
       "lng": 140.817795,
       "approx": false,
       "notes": "Beautiful lake and a very popular stop on the way from Sapporo. Great place to stay in a ryokan - would recommend the Lake Suite Ko No Sumika.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "soup-curry-mogmog",
@@ -993,7 +1063,8 @@ window.NIPPON = {
       "lng": 140.757,
       "approx": true,
       "notes": "Legendary soup curry place (Hokkaido speciality I think), must go if you're around Lake Toya.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "noboribetsu",
@@ -1007,7 +1078,8 @@ window.NIPPON = {
       "lng": 141.1452929,
       "approx": false,
       "notes": "",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "onuma-park",
@@ -1021,7 +1093,8 @@ window.NIPPON = {
       "lng": 140.6570209,
       "approx": false,
       "notes": "Love that this is a \"quasi-national\" park - went here instead of Lake Toya. Very peaceful, spent like 2-3 hours here.",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     },
     {
       "id": "mt-hakodate",
@@ -1035,7 +1108,8 @@ window.NIPPON = {
       "lng": 140.7047,
       "approx": false,
       "notes": "It's a famous view but overrated - the view of Hakodate is pretty cool but honestly is it as cool as Tokyo? Nawwww",
-      "photo": null
+      "photo": null,
+      "gmaps": null
     }
   ],
   "chains": [
@@ -1200,6 +1274,5 @@ window.NIPPON = {
       ]
     }
   ],
-  "curations": [],
   "doodles": []
 };

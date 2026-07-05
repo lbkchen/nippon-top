@@ -34,6 +34,19 @@ for (const p of BASE.places) if (photoOverlay[p.id] === p.photo) delete photoOve
 for (const p of [...BASE.places, ...customPlaces]) if (photoOverlay[p.id]) p.photo = photoOverlay[p.id];
 lsSet(LS.photos, photoOverlay);
 
+// pin fixes (pasted gmaps links) overlay coords the same way; entries data.js
+// already agrees with were baked in by an export+rebuild — prune them
+const geoOverlay = lsGet(LS.geo, {});
+for (const p of BASE.places) {
+  const g = geoOverlay[p.id];
+  if (g && g.lat === p.lat && g.lng === p.lng && (g.gmaps || null) === (p.gmaps || null)) delete geoOverlay[p.id];
+}
+for (const p of [...BASE.places, ...customPlaces]) {
+  const g = geoOverlay[p.id];
+  if (g) Object.assign(p, { lat: g.lat, lng: g.lng, gmaps: g.gmaps || p.gmaps || null, approx: false });
+}
+lsSet(LS.geo, geoOverlay);
+
 export const state = {
   mode: null,                 // null | lasso | pen | add | curate
   cats: new Set(Object.keys(CATS)),
@@ -91,6 +104,21 @@ export function deletePlace(id) {
   lsSet(LS.places, customPlaces);
   delete photoOverlay[id];
   lsSet(LS.photos, photoOverlay);
+  delete geoOverlay[id];
+  lsSet(LS.geo, geoOverlay);
+}
+
+// a pasted gmaps link nails a pin: move it, drop the ~ish flag, and keep the
+// link so "open in google maps" lands on the real place card. Pack extras
+// live in the pack object and persist on pack save instead of the overlay.
+export function setGeo(id, { lat, lng, gmaps = null }) {
+  const p = placeById(id);
+  if (!p) return;
+  Object.assign(p, { lat, lng, approx: false });
+  if (gmaps) p.gmaps = gmaps;
+  if (isPackExtra(id)) return;
+  geoOverlay[id] = { lat, lng, gmaps: p.gmaps || null };
+  lsSet(LS.geo, geoOverlay);
 }
 
 export function setPhoto(id, file) {

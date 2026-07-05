@@ -1,8 +1,8 @@
 // Spot detail: the sidebar drills into one place — photo, the whole rant,
 // which zone it's in, and the nearest other recs to chain onto.
-import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck } from "./config.js";
+import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck, resolveGmapsLink } from "./config.js";
 import { map } from "./map.js";
-import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, placePassesFilters } from "./store.js";
+import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, setGeo, placePassesFilters } from "./store.js";
 import { emit, on } from "./bus.js";
 
 // ---- dev-only photo drop: web-size in the browser, save via serve.mjs ----
@@ -77,13 +77,17 @@ function render(id) {
     <div class="card-pills">
       <span class="pill cat-pill" style="--pin:${cat.color}">${cat.label}</span>
       <span class="pill">${esc(p.region)}</span>
-      ${p.approx ? '<span class="pill approx" title="pin placed from memory">~ish location</span>' : ""}
+      ${p.approx ? `<span class="pill approx" title="pin placed from memory${state.curationView ? "" : " — click to fix it with a gmaps link"}">~ish location</span>` : ""}
       ${isCustom(p.id) ? '<span class="pill custom">hand-added</span>' : ""}
       ${state.userLoc ? `<span class="pill dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))} from you</span>` : ""}
     </div>
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="detail-notes">${linkify(esc(p.notes)) || '<i>no notes yet — a rec so good it speaks for itself (or ken got lazy)</i>'}</div>
     <a class="btn-solid detail-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener">open in google maps ↗</a>
+    ${!state.curationView ? `<div class="fix-loc">
+      <button type="button" class="linkish fix-loc-btn">${p.approx ? "~ish pin bugging you?" : "pin in the wrong spot?"} fix it with a gmaps link</button>
+      <input class="fix-loc-input hidden" type="url" placeholder="paste a google maps link…" spellcheck="false" />
+    </div>` : ""}
     ${zone ? `<div class="detail-zone"><span class="zone-dot" style="--z:${zone.color}"></span>inside ${esc(zone.name)}</div>` : ""}
     <div class="omni-section detail-section">pairs well with</div>
     <div class="detail-pairs"></div>
@@ -119,6 +123,37 @@ function render(id) {
       <span class="pair-d">${fmtDist(d)} away</span>`;
     b.addEventListener("click", () => open({ id: o.id, fly: true }));
     pairs.append(b);
+  }
+
+  // pin fix: paste a gmaps link, the pin jumps to the real spot
+  const fixBtn = panel.querySelector(".fix-loc-btn");
+  if (fixBtn) {
+    const fixInput = panel.querySelector(".fix-loc-input");
+    fixBtn.addEventListener("click", () => {
+      fixBtn.classList.add("hidden");
+      fixInput.classList.remove("hidden");
+      fixInput.focus();
+    });
+    // the ~ish pill is the same invitation
+    const approxPill = panel.querySelector(".pill.approx");
+    if (approxPill) approxPill.addEventListener("click", () => fixBtn.click());
+    let busy = false;
+    fixInput.addEventListener("input", async () => {
+      const raw = fixInput.value.trim();
+      if (!raw.startsWith("http") || busy) return;
+      busy = true;
+      const got = await resolveGmapsLink(raw);
+      busy = false;
+      if (!got) {
+        showHint("no coords in that — open the link and paste the big URL from the address bar", 4200);
+        return;
+      }
+      setGeo(p.id, { lat: got.lat, lng: got.lng, gmaps: got.url });
+      emit("refresh");
+      map.flyTo([got.lat, got.lng], Math.max(map.getZoom(), 16), { duration: 0.8 });
+      render(p.id);
+      showHint("pin moved to the real spot — export to make it permanent", 3500);
+    });
   }
 
   panel.querySelector(".detail-back").addEventListener("click", close);
