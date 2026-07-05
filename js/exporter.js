@@ -1,10 +1,11 @@
 // Bake in-browser edits back into files you can commit.
-//   export       — data.js (places/zones/doodles; friend maps ship separately)
+//   export       — dev: one-click publish (serve.mjs commits + pushes = live for
+//                  everyone in ~a minute); prod: downloads data.js for a manual drop.
 //   export-pack  — one friend map sealed into friends/<file>.enc + updated manifest.
 //                  In dev both save straight into the repo via serve.mjs PUT;
 //                  otherwise they download for a manual drop into friends/.
-import { showHint, DEV } from "./config.js";
-import { mergedData, allCurations, BASE } from "./store.js";
+import { $, showHint, DEV, armCheck } from "./config.js";
+import { mergedData, allCurations, BASE, pendingCount } from "./store.js";
 import { packEncode } from "./pack.js";
 import { on } from "./bus.js";
 
@@ -16,10 +17,91 @@ function download(name, blob) {
   URL.revokeObjectURL(a.href);
 }
 
+const dataFileText = () =>
+  `// NIPPON TOP data — exported ${new Date().toISOString().slice(0, 10)} from the app itself.\nwindow.NIPPON = ${JSON.stringify(mergedData(), null, 2)};\n`;
+
 function exportData() {
-  const out = `// NIPPON TOP data — exported ${new Date().toISOString().slice(0, 10)} from the app itself.\nwindow.NIPPON = ${JSON.stringify(mergedData(), null, 2)};\n`;
-  download("data.js", new Blob([out], { type: "text/javascript" }));
+  if (DEV) return publish();
+  download("data.js", new Blob([dataFileText()], { type: "text/javascript" }));
   showHint("drop that data.js into the repo — your edits are now canon", 3500);
+}
+
+// ---- one-click publish (dev) ----
+// serve.mjs validates, commits, pushes; pushing main IS the deploy.
+const hash = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return h; };
+let bootHash = null; // data.js as it was when this page loaded
+let publishing = false;
+
+async function publish() {
+  if (publishing) return;
+  const btn = $('#toolbar [data-tool="export"]');
+  if (btn && !armCheck(btn, "ship it to everyone?")) return;
+  // stale-page guard: if the repo's data.js moved since this page loaded,
+  // publishing would overwrite it with an older base
+  try {
+    const now = hash(await (await fetch("data.js", { cache: "no-store" })).text());
+    if (bootHash != null && now !== bootHash) {
+      return showHint("the map changed under you — reload (your edits re-apply) and publish again", 5200);
+    }
+  } catch { /* if we can't even fetch data.js, let the server be the judge */ }
+
+  publishing = true;
+  showHint("publishing…");
+  try {
+    const res = await fetch("publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: dataFileText(), summary: editSummary() }),
+    });
+    const r = await res.json();
+    if (r.ok && r.nothing) showHint("nothing new to ship — the map is already canon", 3200);
+    else if (r.ok) {
+      showHint(`pushed ${r.commit} — live for everyone in ~a minute. freshening up…`, 3200);
+      setTimeout(() => location.reload(), 1600); // reload prunes the overlays against the new base
+    } else {
+      showHint(`publish hiccup: ${r.error}`, 6000);
+    }
+  } catch {
+    showHint("couldn't reach the dev server — falling back to a plain download", 3600);
+    download("data.js", new Blob([dataFileText()], { type: "text/javascript" }));
+  } finally {
+    publishing = false;
+  }
+}
+
+// "2 spots, 1 pin fix" — rides into the commit message
+function editSummary() {
+  const d = mergedData();
+  const custom = d.places.filter((p) => String(p.id).startsWith("custom-")).length;
+  const parts = [];
+  if (custom) parts.push(`${custom} new spot${custom === 1 ? "" : "s"}`);
+  const rest = pendingCount() - custom;
+  if (rest > 0) parts.push(`${rest} edit${rest === 1 ? "" : "s"}`);
+  return parts.join(", ");
+}
+
+// ---- unpublished-edits badge on the export tool ----
+function refreshBadge() {
+  const btn = $('#toolbar [data-tool="export"]');
+  if (!btn) return;
+  const n = pendingCount();
+  let badge = btn.querySelector(".tool-badge");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.className = "tool-badge";
+    btn.append(badge);
+  }
+  badge.textContent = n > 99 ? "99+" : String(n);
+  badge.classList.toggle("hidden", n === 0);
+  const label = btn.querySelector(".tool-label");
+  if (label && !btn.dataset.armed) {
+    label.textContent = DEV
+      ? (n ? `publish ${n} edit${n === 1 ? "" : "s"}` : "publish")
+      : (n ? `export ${n} edit${n === 1 ? "" : "s"}` : "export");
+  }
+  btn.setAttribute("aria-label", DEV
+    ? "publish — commit + push your edits, live for everyone"
+    : (n ? `export — ${n} edit${n === 1 ? "" : "s"} only you can see until you export + push` : "export — download data.js with your edits baked in"));
 }
 
 // the pack rides encrypted, so CI can't inspect it — sanity checks live here instead
@@ -80,4 +162,9 @@ async function exportPack({ slug }) {
 export const initExporter = () => {
   on("export", exportData);
   on("export-pack", exportPack);
+  on("dirty", refreshBadge);
+  on("refresh", refreshBadge); // deletes/undo change the count without an lsSet in this tab
+  refreshBadge();
+  // remember what the map looked like at boot, for the stale-page guard
+  if (DEV) fetch("data.js", { cache: "no-store" }).then((r) => r.text()).then((t) => { bootHash = hash(t); }).catch(() => {});
 };
