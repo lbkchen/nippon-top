@@ -72,8 +72,11 @@ download** with every key. On a fresh browser, opening any friend link and hitti
 
 Two ways, and they can't clobber each other:
 
-1. **In the app** — add spots, zones, doodles → 💾 export → replace `data.js`. Friend maps
-   export separately from the 💌 drawer as packs.
+1. **In the app** — add spots, zones, doodles; the export tool wears a badge counting
+   unpublished edits. On the dev server it's a one-click **publish**: validates
+   (check-data), commits `data.js` (+ any dropped photos / sealed packs), pushes —
+   live for everyone in about a minute. On the live site it downloads `data.js` for a
+   manual drop instead. Friend maps export separately from the 💌 drawer as packs.
 2. **At the source** — edit the master list in `tools/build-data.mjs`, then
    `node tools/build-data.mjs`. The rebuild carries over everything that only exists in
    `data.js` (custom spots, custom zones, doodles, pin fixes); packs are untouched. Add
