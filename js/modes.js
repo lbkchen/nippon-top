@@ -2,7 +2,7 @@
 import { $, $$, showHint, hideHint } from "./config.js";
 import { map } from "./map.js";
 import { state } from "./store.js";
-import { emit } from "./bus.js";
+import { emit, on } from "./bus.js";
 
 const MODE_TOOLS = ["lasso", "pen", "add"];
 const HINTS = {
@@ -55,6 +55,28 @@ export function initModes() {
       else if (t === "roulette") emit("roulette");
       else if (t === "locate") emit("locate");
       else if (t === "export") emit("export");
+      if (window.innerWidth <= 940 && t !== "zones") closeTools(); // zones needs its flyout anchored
     });
+  });
+
+  // mobile: the whole toolbar lives behind one toolbox button
+  const toolsToggle = $("#toolsToggle");
+  function closeTools() {
+    $("#toolbar").classList.remove("open");
+    toolsToggle.classList.remove("open");
+    toolsToggle.setAttribute("aria-expanded", "false");
+  }
+  toolsToggle.addEventListener("click", () => {
+    const open = $("#toolbar").classList.toggle("open");
+    toolsToggle.classList.toggle("open", open);
+    toolsToggle.setAttribute("aria-expanded", open);
+  });
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest("#toolbar") && !e.target.closest("#toolsToggle") && !e.target.closest("#zoneMenu")) closeTools();
+  });
+  // a live mode shows on the toggle so the exit is never hidden away
+  on("mode-changed", (m) => {
+    toolsToggle.classList.toggle("active", !!m && MODE_TOOLS.includes(m));
+    if (window.innerWidth <= 940 && !m) closeTools();
   });
 }
