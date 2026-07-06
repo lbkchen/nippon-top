@@ -42,10 +42,11 @@ async function publish() {
   publishing = true;
   showHint("publishing…");
   try {
+    const sent = dataFileText();
     const res = await fetch("publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: dataFileText(), summary: editSummary(), baseHash: bootHash }),
+      body: JSON.stringify({ data: sent, summary: editSummary(), baseHash: bootHash }),
     });
     const r = await res.json();
     if (r.ok && r.nothing) showHint("nothing new to ship — the map is already canon", 3200);
@@ -54,7 +55,10 @@ async function publish() {
       setTimeout(() => location.reload(), 1600); // reload prunes the overlays against the new base
     } else if (r.ok) {
       // shipped, but the local checkout (feature branch / mid-something) didn't
-      // get the commit — the badge stays until the repo catches up, on purpose
+      // get the commit — the badge stays until the repo catches up, on purpose.
+      // origin/main is now byte-for-byte what we sent, so adopt it as our base:
+      // publishing again says "nothing new" instead of tripping the stale guard
+      bootHash = hash(sent);
       showHint(`pushed ${r.commit} — live in ~a minute. local repo is on "${r.branch}", so the badge sticks around till you git pull on main`, 6500);
     } else {
       showHint(`publish hiccup: ${r.error}`, 6500);
