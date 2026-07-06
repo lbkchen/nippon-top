@@ -27,23 +27,17 @@ function exportData() {
 }
 
 // ---- one-click publish (dev) ----
-// serve.mjs validates, commits, pushes; pushing main IS the deploy.
+// serve.mjs builds the commit in a throwaway worktree from origin/main and
+// pushes — works no matter what branch/mess the local checkout is in.
+// keep djb2 in sync with serve.mjs
 const hash = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return h; };
-let bootHash = null; // data.js as it was when this page loaded
+let bootHash = null; // data.js as this page booted from — server compares it to origin/main's
 let publishing = false;
 
 async function publish() {
   if (publishing) return;
   const btn = $('#toolbar [data-tool="export"]');
   if (btn && !armCheck(btn, "ship it to everyone?")) return;
-  // stale-page guard: if the repo's data.js moved since this page loaded,
-  // publishing would overwrite it with an older base
-  try {
-    const now = hash(await (await fetch("data.js", { cache: "no-store" })).text());
-    if (bootHash != null && now !== bootHash) {
-      return showHint("the map changed under you — reload (your edits re-apply) and publish again", 5200);
-    }
-  } catch { /* if we can't even fetch data.js, let the server be the judge */ }
 
   publishing = true;
   showHint("publishing…");
@@ -51,15 +45,19 @@ async function publish() {
     const res = await fetch("publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: dataFileText(), summary: editSummary() }),
+      body: JSON.stringify({ data: dataFileText(), summary: editSummary(), baseHash: bootHash }),
     });
     const r = await res.json();
     if (r.ok && r.nothing) showHint("nothing new to ship — the map is already canon", 3200);
-    else if (r.ok) {
+    else if (r.ok && r.synced) {
       showHint(`pushed ${r.commit} — live for everyone in ~a minute. freshening up…`, 3200);
       setTimeout(() => location.reload(), 1600); // reload prunes the overlays against the new base
+    } else if (r.ok) {
+      // shipped, but the local checkout (feature branch / mid-something) didn't
+      // get the commit — the badge stays until the repo catches up, on purpose
+      showHint(`pushed ${r.commit} — live in ~a minute. local repo is on "${r.branch}", so the badge sticks around till you git pull on main`, 6500);
     } else {
-      showHint(`publish hiccup: ${r.error}`, 6000);
+      showHint(`publish hiccup: ${r.error}`, 6500);
     }
   } catch {
     showHint("couldn't reach the dev server — falling back to a plain download", 3600);

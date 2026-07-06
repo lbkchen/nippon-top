@@ -8,11 +8,15 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
 - Serve: `node tools/serve.mjs` on :4173 (no-cache headers — plain `python3 -m http.server`
   serves stale ES modules; never recommend it). `.claude/launch.json` works with preview_start.
   It also accepts `PUT /img/<file>` (dev-only photo drop), `PUT /friends/<file>`
-  (friend-pack export), and `POST /publish` (one-click publish: validates via check-data,
-  bumps data.js ?v, commits scoped files, pushes main = deploys; refuses off-main/dirty/
-  non-ff, dry-run mode for tests) — binds 127.0.0.1 only. In dev the export tool IS the
-  publish button (two-tap armed); localStorage is a draft buffer and the tool badge counts
-  unpublished edits (`pendingCount()` in store.js, "dirty" bus event from lsSet).
+  (friend-pack export), and `POST /publish` (one-click publish: builds the commit in a
+  throwaway worktree from origin/main — local checkout state is irrelevant — validates via
+  the worktree's check-data, bumps data.js ?v only when content changed, sweeps new
+  img/friends files, pushes origin HEAD:main = deploys; stale-base guard vs origin/main,
+  dry-run mode for tests, worktree cleanup in finally) — binds 127.0.0.1 only. In dev the
+  export tool IS the publish button (two-tap armed); localStorage is a draft buffer and the
+  tool badge counts unpublished edits (`pendingCount()` in store.js, "dirty" bus event from
+  lsSet). After a publish the local repo only fast-forwards if cleanly on main; otherwise
+  the badge sticks until a manual pull — that's intentional.
 - Debug/test in browser: `window.__nippon` = `{ map, state, store, markers, emit, setMode }`.
   Module scope isn't global; always go through this in preview_eval. Simulate lasso/doodle with
   synthetic PointerEvents on `#map` (screenshots downscale ~55% — get coords from

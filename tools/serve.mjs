@@ -5,16 +5,16 @@
 // (localhost only — the server never binds beyond 127.0.0.1).
 //   node tools/serve.mjs [port]
 import { createServer } from "node:http";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, mkdtemp, rm, readdir, copyFile } from "node:fs/promises";
 import { join, extname, normalize, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { tmpdir } from "node:os";
 
 const run = promisify(execFile);
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
-const TOOLS = join(fileURLToPath(import.meta.url), "..");
 const PORT = Number(process.argv[2] || process.env.PORT || 4173);
 
 const MIME = {
@@ -31,72 +31,115 @@ const MIME = {
   ".enc": "application/octet-stream",
 };
 
-// ---- one-click publish ----
-// POST /publish { data, summary, dry } — write data.js, bump its ?v in
-// index.html, validate with check-data, commit (data.js + index.html + img/ +
-// friends/ only — never unrelated dirty files), push. Any failure before the
-// commit restores both files. `dry` runs everything but commit+push (and skips
-// the on-main check) so the flow is testable without shipping.
+// ---- one-click publish (worktree edition) ----
+// POST /publish { data, summary, baseHash, dry } — builds the publish commit in
+// a throwaway git worktree checked out from origin/main, so the real checkout
+// (whatever branch / mess it's in) is never touched or consulted. In the
+// worktree: write data.js, bump its ?v in index.html, copy new photos/packs
+// over, gate on check-data, commit, push origin HEAD:main. `dry` stops short
+// of commit+push. Afterwards, best-effort `pull --ff-only` syncs the local
+// checkout when it's sitting cleanly on main.
 let publishing = false;
 
-const git = (...args) => run("git", args, { cwd: ROOT, timeout: 60_000 });
+const git = (...args) => run("git", args, { cwd: ROOT, timeout: 120_000 });
+
+// same djb2 the app uses on its boot-time data.js — keep in sync with exporter.js
+const djb2 = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return h; };
+
+// what the app may sweep into a publish — same allowlists as the PUT endpoints
+const SWEEP = [
+  { dir: "img", ok: /^[\w.-]+\.(jpe?g|png|webp|avif)$/i },
+  { dir: "friends", ok: /^([\w-]+\.enc|index\.json)$/ },
+];
 
 async function publish(body) {
-  const { data, summary = "", dry = false } = JSON.parse(body.toString("utf8"));
+  const { data, summary = "", baseHash = null, dry = false } = JSON.parse(body.toString("utf8"));
   if (typeof data !== "string" || !data.startsWith("// NIPPON TOP data")) return { status: 400, error: "that doesn't look like data.js" };
 
-  const branch = (await git("rev-parse", "--abbrev-ref", "HEAD")).stdout.trim();
-  if (branch !== "main" && !dry) return { status: 409, error: `repo is on "${branch}" — publish only ships from main` };
+  try { await git("fetch", "origin", "main"); }
+  catch (e) { return { status: 502, error: `couldn't reach github: ${(e.stderr || e.message).trim().slice(0, 200)}` }; }
 
-  // refuse if the files we're about to rewrite already have uncommitted edits
-  // (a previous failed publish, or someone mid-tinker) — we can't restore those
-  const dirty = (await git("status", "--porcelain", "--", "data.js", "index.html")).stdout.trim();
-  if (dirty) return { status: 409, error: "data.js / index.html have uncommitted changes — commit or discard them first" };
-
-  if (!dry) {
-    const before = await readFile(join(ROOT, "data.js"), "utf8");
-    try { await git("pull", "--ff-only"); }
-    catch (e) { return { status: 409, error: `couldn't fast-forward main: ${(e.stderr || e.message).trim().slice(0, 200)}` }; }
-    // the pull may have brought a newer map than the one the app booted from —
-    // overwriting it would silently revert those changes
-    if (await readFile(join(ROOT, "data.js"), "utf8") !== before) {
-      return { status: 409, error: "just pulled a newer data.js from github — reload the app (your edits re-apply) and publish again" };
+  // stale-base guard, now against what's actually published: if the app booted
+  // from a data.js that isn't origin/main's, publishing would overwrite newer
+  // edits (other machine, direct commit, an older local repo…)
+  if (baseHash != null) {
+    const published = (await git("show", "origin/main:data.js")).stdout;
+    if (djb2(published) !== baseHash) {
+      return { status: 409, error: "github has a different map than this page started from — sync the repo (git pull on main), reload, and publish again" };
     }
   }
 
-  const indexPath = join(ROOT, "index.html");
-  const indexBefore = await readFile(indexPath, "utf8");
-  const bumped = indexBefore.replace(/data\.js\?v=(\d+)/, (_, n) => `data.js?v=${+n + 1}`);
-  await writeFile(join(ROOT, "data.js"), data);
-  await writeFile(indexPath, bumped);
-
+  await git("worktree", "prune"); // sweep leftovers from any crashed publish
+  const wt = await mkdtemp(join(tmpdir(), "nippon-publish-"));
   try {
-    await run(process.execPath, [join(TOOLS, "check-data.mjs")], { cwd: ROOT });
-  } catch (e) {
-    await git("checkout", "--", "data.js", "index.html");
-    return { status: 422, error: `check-data said no:\n${(e.stdout || e.message).trim().slice(0, 600)}` };
-  }
+    await git("worktree", "add", "--detach", wt, "origin/main");
+    const wgit = (...args) => run("git", args, { cwd: wt, timeout: 120_000 });
 
-  const scope = ["data.js", "index.html", "img", "friends"];
-  if (dry) {
-    const would = (await git("status", "--porcelain", "--", ...scope)).stdout.trim();
-    await git("checkout", "--", "data.js", "index.html");
-    return { status: 200, ok: true, dry: true, wouldCommit: would.split("\n").filter(Boolean) };
-  }
+    // only rewrite data.js when its CONTENT changed — the exported text never
+    // byte-matches the build-generated one (different header), and a header-only
+    // commit + ?v bump would bust everyone's cache for nothing
+    const parseData = (txt) => { const w = {}; new Function("window", txt)(w); return JSON.stringify(w.NIPPON); };
+    let dataChanged = true;
+    try { dataChanged = parseData(await readFile(join(wt, "data.js"), "utf8")) !== parseData(data); }
+    catch { /* unparseable candidate — let check-data produce the real error */ }
+    if (dataChanged) {
+      await writeFile(join(wt, "data.js"), data);
+      const idx = await readFile(join(wt, "index.html"), "utf8");
+      await writeFile(join(wt, "index.html"), idx.replace(/data\.js\?v=(\d+)/, (_, n) => `data.js?v=${+n + 1}`));
+    }
+    // photo drops + sealed packs land in the real working tree — bring over
+    // anything new or changed (additive only; nothing in-app deletes these).
+    // scope only names paths that exist: `git add` fatals on empty pathspecs
+    const scope = ["data.js", "index.html"];
+    for (const { dir, ok } of SWEEP) {
+      const src = join(ROOT, dir);
+      let names = [];
+      try { names = (await readdir(src)).filter((n) => ok.test(n)); } catch { /* dir absent */ }
+      if (names.length) {
+        await mkdir(join(wt, dir), { recursive: true });
+        for (const n of names) {
+          const a = await readFile(join(src, n)).catch(() => null);
+          const b = await readFile(join(wt, dir, n)).catch(() => null);
+          if (a && (!b || !a.equals(b))) await copyFile(join(src, n), join(wt, dir, n));
+        }
+      }
+      try { await readdir(join(wt, dir)); scope.push(dir); } catch { /* nothing there to add */ }
+    }
 
-  await git("add", "--", ...scope);
-  const staged = (await git("diff", "--cached", "--name-only")).stdout.trim();
-  if (!staged) return { status: 200, ok: true, nothing: true };
+    try {
+      // the worktree's own copy — check-data locates data.js relative to itself
+      await run(process.execPath, [join(wt, "tools", "check-data.mjs")], { cwd: wt });
+    } catch (e) {
+      return { status: 422, error: `check-data said no:\n${(e.stdout || e.message).trim().slice(0, 600)}` };
+    }
 
-  const msg = `map update from the app${summary ? ` — ${String(summary).replace(/[\r\n]+/g, " ").slice(0, 120)}` : ""}`;
-  await git("commit", "-m", msg);
-  try { await git("push"); }
-  catch (e) {
-    return { status: 502, error: `committed but push failed: ${(e.stderr || e.message).trim().slice(0, 200)} — run git push yourself` };
+    await wgit("add", "-A", "--", ...scope);
+    const staged = (await wgit("diff", "--cached", "--name-only")).stdout.trim();
+    if (!staged) return { status: 200, ok: true, nothing: true };
+    if (dry) return { status: 200, ok: true, dry: true, wouldCommit: staged.split("\n") };
+
+    const msg = `map update from the app${summary ? ` — ${String(summary).replace(/[\r\n]+/g, " ").slice(0, 120)}` : ""}`;
+    await wgit("commit", "-m", msg);
+    try { await wgit("push", "origin", "HEAD:main"); }
+    catch (e) {
+      return { status: 409, error: `push rejected (github moved mid-publish?): ${(e.stderr || e.message).trim().slice(0, 200)} — just publish again` };
+    }
+    const sha = (await wgit("rev-parse", "--short", "HEAD")).stdout.trim();
+
+    // best-effort: bring the local checkout along so the badge zeroes out on
+    // reload — only when it's cleanly on main, never force anything
+    let synced = false;
+    const branch = (await git("rev-parse", "--abbrev-ref", "HEAD")).stdout.trim();
+    if (branch === "main") {
+      const dirty = (await git("status", "--porcelain", "--", "data.js", "index.html")).stdout.trim();
+      if (!dirty) synced = await git("pull", "--ff-only").then(() => true, () => false);
+    }
+    console.log(`  🚀 published ${sha}${synced ? "" : ` (local checkout on "${branch}" left alone)`}: ${msg}`);
+    return { status: 200, ok: true, commit: sha, files: staged.split("\n"), synced, branch };
+  } finally {
+    await rm(wt, { recursive: true, force: true }).catch(() => {});
+    await git("worktree", "prune").catch(() => {});
   }
-  const sha = (await git("rev-parse", "--short", "HEAD")).stdout.trim();
-  console.log(`  🚀 published ${sha}: ${msg}`);
-  return { status: 200, ok: true, commit: sha, files: staged.split("\n") };
 }
 
 async function readBody(req, res, cap) {
