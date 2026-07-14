@@ -192,6 +192,12 @@ export function initDetail() {
   on("open-detail", open);
   on("close-detail", close);
   on("mode-changed", (m) => { if (m) close(); }); // picking up a tool returns you to the list
+  // the sidebar tracks the viewport — pan the spot out of frame and the list takes back over
+  map.on("moveend", () => {
+    if (state.detailId === null) return;
+    const p = placeById(state.detailId);
+    if (p && !map.getBounds().contains([p.lat, p.lng])) close();
+  });
   if (DEV) {
     // a drag that misses the drop target shouldn't navigate the tab away
     window.addEventListener("dragover", (e) => e.preventDefault());
