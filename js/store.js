@@ -57,6 +57,7 @@ export const state = {
   q: "",
   lasso: null,                // { ids:[], layer, points }
   zoneFilter: null,           // { id, name, ids } — sidebar scoped to one zone
+  newFilter: null,            // { ids, since } — sidebar scoped to spots added since last visit
   selectedId: null,           // place highlighted in the list
   detailId: null,             // place open in the detail panel
   curationView: null,         // curation being viewed via #for= link
@@ -151,6 +152,7 @@ export function currentList() {
   }
   if (state.zoneFilter) return list.filter((p) => state.zoneFilter.ids.includes(p.id));
   if (state.lasso) return list.filter((p) => state.lasso.ids.includes(p.id));
+  if (state.newFilter) return list.filter((p) => state.newFilter.ids.includes(p.id));
   if (state.curationView) return list;
   const b = map.getBounds().pad(0.02);
   return list.filter((p) => b.contains([p.lat, p.lng]));

@@ -2,7 +2,7 @@
 // which zone it's in, and the nearest other recs to chain onto.
 import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck, resolveGmapsLink } from "./config.js";
 import { map } from "./map.js";
-import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, setGeo, placePassesFilters } from "./store.js";
+import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, setGeo, placePassesFilters, curationVisibleIds } from "./store.js";
 import { emit, on } from "./bus.js";
 
 // ---- dev-only photo drop: web-size in the browser, save via serve.mjs ----
@@ -84,6 +84,7 @@ function render(id) {
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="detail-notes">${linkify(esc(p.notes)) || '<i>no notes yet — a rec so good it speaks for itself (or ken got lazy)</i>'}</div>
     <a class="btn-solid detail-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener">open in google maps ↗</a>
+    <button type="button" class="linkish detail-share">copy a link to this spot</button>
     ${!state.curationView ? `<div class="fix-loc">
       <button type="button" class="linkish fix-loc-btn">${p.approx ? "~ish pin bugging you?" : "pin in the wrong spot?"} fix it with a gmaps link</button>
       <input class="fix-loc-input hidden" type="url" placeholder="paste a google maps link…" spellcheck="false" />
@@ -156,6 +157,18 @@ function render(id) {
     });
   }
 
+  const share = panel.querySelector(".detail-share");
+  share.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(spotLink(p.id));
+      share.textContent = "copied! go send it to someone";
+      setTimeout(() => { share.textContent = "copy a link to this spot"; }, 1800);
+    } catch {
+      console.log("spot link:", spotLink(p.id));
+      showHint("clipboard said no, the link is in the console", 3000);
+    }
+  });
+
   panel.querySelector(".detail-back").addEventListener("click", close);
   const del = panel.querySelector(".detail-del");
   if (del) del.addEventListener("click", () => {
@@ -184,14 +197,37 @@ function close() {
   state.detailId = null;
   $("#detailPanel").classList.add("hidden");
   $("#cards").classList.remove("hidden");
+  // a #spot link brought us here; leaving the detail shouldn't leave it stuck in the url
+  if (/(^#|&)spot=/.test(location.hash)) {
+    const h = location.hash.replace(/&?spot=[\w-]+/, "");
+    history.replaceState(null, "", location.pathname + location.search + (h.length > 1 ? h : ""));
+  }
   emit("refresh-list");
   emit("place-selected", { id: last, fly: false });
+}
+
+// ---- spot deep links: #spot=<id>, or #for=<file>.<key>&spot=<id> on a friend map ----
+
+function spotLink(id) {
+  const cv = state.curationView;
+  const forPart = cv?.file && cv?.key ? `#for=${cv.file}.${cv.key}&` : "#";
+  return `${location.href.split("#")[0]}${forPart}spot=${id}`;
+}
+
+export function openHashSpot() {
+  const id = (location.hash.match(/(?:#|&)spot=([\w-]+)/) || [])[1];
+  if (!id) return;
+  const p = placeById(id);
+  if (!p) return showHint("that link points at a spot that isn't on the map anymore", 3600);
+  if (state.curationView && !curationVisibleIds(state.curationView).has(id)) return; // not on this friend's map
+  open({ id, fly: true });
 }
 
 export function initDetail() {
   on("open-detail", open);
   on("close-detail", close);
   on("mode-changed", (m) => { if (m) close(); }); // picking up a tool returns you to the list
+  window.addEventListener("hashchange", openHashSpot); // pasted a #spot link into a live tab
   // the sidebar tracks the viewport — pan the spot out of frame and the list takes back over
   map.on("moveend", () => {
     if (state.detailId === null) return;

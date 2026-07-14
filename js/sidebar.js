@@ -15,7 +15,7 @@ function renderContextBar() {
   bar.innerHTML = "";
   const n = currentList().length;
   const label = document.createElement("span");
-  if (state.curationView && !state.zoneFilter) {
+  if (state.curationView && !state.zoneFilter && !state.newFilter) {
     const c = state.curationView;
     label.textContent = `${c.emoji ? c.emoji + " " : ""}${c.name}'s map — ${n} spots`;
   } else if (state.zoneFilter) {
@@ -37,6 +37,14 @@ function renderContextBar() {
     save.textContent = "save as zone";
     save.onclick = () => emit("lasso-save-zone");
     bar.append(label, clear, save);
+    return;
+  } else if (state.newFilter) {
+    label.textContent = `${n} new since ${state.newFilter.since}`;
+    const clear = document.createElement("button");
+    clear.className = "ctx-btn";
+    clear.textContent = "clear";
+    clear.onclick = () => emit("newfilter-clear");
+    bar.append(label, clear);
     return;
   } else {
     label.textContent = `${n} in view`;
@@ -266,7 +274,7 @@ export function initSidebar() {
     filtersToggle.setAttribute("aria-expanded", open);
   });
 
-  map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter) renderList(); });
+  map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter && !state.newFilter) renderList(); });
 
   on("refresh", renderList);
   on("refresh-list", renderList);

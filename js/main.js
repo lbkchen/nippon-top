@@ -19,7 +19,8 @@ import { initExporter } from "./exporter.js";
 import { initRoulette } from "./roulette.js";
 import { initLocate } from "./locate.js";
 import { initOmnisearch } from "./omnisearch.js";
-import { initDetail } from "./detail.js";
+import { initDetail, openHashSpot } from "./detail.js";
+import { initWhatsNew, checkWhatsNew } from "./whatsnew.js";
 
 initSplash();
 initPins();
@@ -37,10 +38,12 @@ initRoulette();
 initLocate();
 initOmnisearch();
 initDetail();
+initWhatsNew();
 
 map.fitBounds(groupBounds("tokyo"), PAD());
 emit("refresh");
-enterHashView();
+// hash view first (a friend pack may hide spots), then the spot link + new-recs check
+enterHashView().then(() => { openHashSpot(); checkWhatsNew(); });
 
 // debug/test handle — also handy in devtools
 window.__nippon = { map, state, store, markers, emit, setMode };

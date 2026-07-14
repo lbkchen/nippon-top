@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=15" />
+  <link rel="stylesheet" href="styles.css?v=16" />
 </head>
 <body>
   <!-- splash title card -->
@@ -236,6 +236,13 @@
   <!-- mode hint toast -->
   <div class="mode-hint hidden" id="modeHint"></div>
 
+  <!-- returning-visitor toast: "ken added N new spots since ..." -->
+  <div class="whatsnew hidden" id="whatsNew">
+    <span id="whatsNewText"></span>
+    <button type="button" class="gold" id="whatsNewGo">see what's new</button>
+    <button type="button" id="whatsNewNah">nah</button>
+  </div>
+
   <!-- chains drawer -->
   <div class="drawer hidden" id="chainsDrawer">
     <div class="drawer-head">
@@ -345,6 +352,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="data.js?v=15"></script>
-  <script type="module" src="js/main.js?v=17"></script>
+  <script type="module" src="js/main.js?v=18"></script>
 </body>
 </html>

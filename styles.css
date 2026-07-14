@@ -943,6 +943,54 @@ body[data-mode="pen"] .ink-stamp.mine { pointer-events: auto; cursor: grab; }
   text-align: center;
 }
 
+/* returning-visitor toast — mode-hint's chattier cousin, with buttons */
+.whatsnew {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  z-index: 940;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 10px 14px 10px 20px;
+  border-radius: var(--r-cut);
+  border: 2.5px solid var(--cream);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: min(92vw, 760px);
+  text-align: center;
+}
+.whatsnew button {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 13px;
+  border: 2px solid var(--cream);
+  border-radius: var(--r-sm);
+  padding: 4px 12px;
+  background: none;
+  color: var(--cream);
+  cursor: pointer;
+}
+.whatsnew button:hover { background: rgba(255, 255, 255, 0.14); }
+.whatsnew button.gold {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.whatsnew button.gold:hover { background: var(--cream); }
+@media (max-width: 940px) {
+  /* hop above the card sheet instead of hiding behind it */
+  body:has(#sidebar:not(.collapsed)) .whatsnew { bottom: calc(var(--sheet-h, 46vh) + 12px); }
+  .whatsnew { bottom: calc(26px + env(safe-area-inset-bottom)); }
+}
+
 /* ---------- drawers ---------- */
 .drawer {
   position: fixed;

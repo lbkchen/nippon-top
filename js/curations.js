@@ -238,11 +238,12 @@ function downloadKeyring() {
 
 // ---------- viewer (#for=<file>.<key>, legacy #for=<slug> and #mix=) ----------
 function parseHash() {
-  let m = location.hash.match(/^#for=([\w-]+)\.([A-Za-z0-9_-]{16,})$/);
+  const hash = location.hash.replace(/&?spot=[\w-]+/, ""); // spot deep links ride along, detail.js handles them
+  let m = hash.match(/^#for=([\w-]+)\.([A-Za-z0-9_-]{16,})$/);
   if (m) return { file: m[1], key: m[2] };
-  m = location.hash.match(/^#for=([\w-]+)$/); // legacy plain-slug links (pre-pack)
+  m = hash.match(/^#for=([\w-]+)$/); // legacy plain-slug links (pre-pack)
   if (m) return { cur: curationBySlug(decodeURIComponent(m[1])) || null };
-  m = location.hash.match(/^#mix=([^~]+)~(.+)$/); // legacy mixtape links
+  m = hash.match(/^#mix=([^~]+)~(.+)$/); // legacy mixtape links
   if (m) {
     const ids = m[2].split(".").filter((id) => placeById(id));
     return ids.length ? { cur: { slug: null, name: decodeURIComponent(m[1]), emoji: "", message: "", mode: "include", ids, notes: {} } } : null;
