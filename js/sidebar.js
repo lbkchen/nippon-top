@@ -65,10 +65,9 @@ function cardEl(p) {
     ${p.star ? '<span class="banger-ribbon">CERTIFIED BANGER</span>' : ""}
     <div class="card-head">
       <span class="card-emoji">${p.emoji || cat.emoji}</span>
-      <span class="card-name">${esc(p.name)}</span>
-      ${p.star ? '<span class="card-star">★</span>' : ""}
+      <span class="card-name">${esc(p.name)}<a class="card-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener" aria-label="open in google maps" title="open in google maps">${EXT_ICON}</a></span>
       ${state.userLoc ? `<span class="card-dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
-      <a class="card-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener" aria-label="open in google maps" title="open in google maps">${EXT_ICON}</a>
+      ${p.star ? '<span class="card-star">★</span>' : ""}
     </div>
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="card-notes">${linkify(esc(p.notes))}</div>

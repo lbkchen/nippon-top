@@ -471,14 +471,17 @@ button {
   flex: 1;
 }
 .card-star { font-size: 14px; }
-/* card rows stay quiet: no pill salad, just an optional distance + the way out */
+/* card rows stay quiet: no pill salad, just an optional distance + the way out.
+   the gmaps icon trails the title itself (centered on the text line) so the
+   star keeps the right edge to itself */
 .card-dist { font-size: 11px; font-weight: 800; opacity: 0.55; white-space: nowrap; }
 .card-gmaps {
-  align-self: center;
-  display: grid;
+  display: inline-grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  vertical-align: -6px;
   border-radius: var(--r-sm);
   color: var(--ink);
   opacity: 0.5;
@@ -1440,7 +1443,7 @@ button.armed {
   .tool-menu button { padding: 11px 14px; font-size: 14px; }
   .drawer-close { width: 40px; height: 40px; }
   .omni-clear { width: 28px; height: 28px; }
-  .card-gmaps { width: 32px; height: 32px; }
+  .card-gmaps { width: 28px; height: 28px; vertical-align: -8px; }
   .modal-wrap.modal-side { align-items: flex-end; justify-content: center; }
   .modal-wrap.modal-side .modal { margin: 0 0 calc(12px + env(safe-area-inset-bottom)); max-height: 54vh; }
   .drawer-body { grid-template-columns: 1fr; }
