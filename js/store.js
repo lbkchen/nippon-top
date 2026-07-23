@@ -60,6 +60,7 @@ export const state = {
   newFilter: null,            // { ids, since } — sidebar scoped to spots added since last visit
   selectedId: null,           // place highlighted in the list
   detailId: null,             // place open in the detail panel
+  lastView: null,             // { center, zoom } before a drill-in flight — "take me back" drains it
   curationView: null,         // curation being viewed via #for= link
   editingCuration: null,      // curation object being edited in curate mode
   zonesOn: true,

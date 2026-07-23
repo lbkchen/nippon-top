@@ -55,6 +55,19 @@ function renderContextBar() {
     label.textContent = `${n} in view`;
   }
   bar.append(label);
+  // drill-in escape hatch: a card click flew you off somewhere — this flies home
+  if (state.lastView) {
+    const back = document.createElement("button");
+    back.className = "ctx-btn gold";
+    back.textContent = "take me back";
+    back.onclick = () => {
+      const v = state.lastView;
+      state.lastView = null;
+      emit("close-detail");
+      map.flyTo(v.center, v.zoom, { duration: 0.8 });
+    };
+    bar.append(back);
+  }
 }
 
 function cardEl(p) {
@@ -192,6 +205,7 @@ export function initSidebar() {
     if (!btn) return;
     $$("#regionChips button").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
+    state.lastView = null; // deliberate region hop — the old "back" is stale now
     map.flyToBounds(groupBounds(btn.dataset.group), { ...PAD(), duration: 0.9 });
   });
 
@@ -310,6 +324,9 @@ export function initSidebar() {
     filtersToggle.textContent = open ? "filters ▴" : "filters ▾";
     filtersToggle.setAttribute("aria-expanded", open);
   });
+
+  // grabbing the map yourself = you know where you're going — drop the memo
+  map.on("dragstart", () => { state.lastView = null; });
 
   map.on("moveend", () => { if (!state.lasso && !state.curationView && !state.zoneFilter && !state.newFilter) renderList(); });
 

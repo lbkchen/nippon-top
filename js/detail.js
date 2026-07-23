@@ -196,7 +196,12 @@ function open({ id, fly = false }) {
   $("#detailPanel").scrollTop = 0;
   emit("open-sidebar");
   const p = placeById(id);
-  if (fly && p) map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 15), { duration: 0.8 });
+  if (fly && p) {
+    // remember where they were browsing (first drill-in only — hopping between
+    // spots keeps the ORIGINAL view as "back"), so the list isn't a one-way door
+    if (!state.lastView) state.lastView = { center: map.getCenter(), zoom: map.getZoom() };
+    map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 15), { duration: 0.8 });
+  }
 }
 
 function close() {
