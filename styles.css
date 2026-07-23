@@ -501,7 +501,7 @@ a.pill-link:hover { background: var(--gold); color: var(--ink); }
   font-size: 13px;
   line-height: 1.45;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

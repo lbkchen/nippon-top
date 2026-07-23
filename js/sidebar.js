@@ -78,7 +78,7 @@ function cardEl(p) {
     </div>
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="card-notes">${linkify(esc(p.notes))}</div>
-    ${p.notes && p.notes.length > 180 ? '<button class="card-more">the whole rant ▾</button>' : ""}
+    ${p.notes && p.notes.length > 420 ? '<button class="card-more">the whole rant ▾</button>' : ""}
     ${editing ? `<button class="card-note-btn">${editNote ? "edit the" : "add a"} note for ${esc(editing.name || "them")}</button>` : ""}
     ${editNote ? `<div class="card-personal">for ${esc(editing.name || "them")}: ${esc(editNote)}</div>` : ""}
     ${custom && !state.curationView ? '<button class="card-del" title="delete this spot">delete</button>' : ""}`;
