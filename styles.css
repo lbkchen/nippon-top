@@ -481,7 +481,7 @@ button {
   width: 24px;
   height: 24px;
   margin-left: 4px;
-  vertical-align: -6px;
+  vertical-align: -1px; /* measured: centers the glyph on the title's text line */
   border-radius: var(--r-sm);
   color: var(--ink);
   opacity: 0.5;
@@ -1443,7 +1443,7 @@ button.armed {
   .tool-menu button { padding: 11px 14px; font-size: 14px; }
   .drawer-close { width: 40px; height: 40px; }
   .omni-clear { width: 28px; height: 28px; }
-  .card-gmaps { width: 28px; height: 28px; vertical-align: -8px; }
+  .card-gmaps { width: 28px; height: 28px; vertical-align: -3px; }
   .modal-wrap.modal-side { align-items: flex-end; justify-content: center; }
   .modal-wrap.modal-side .modal { margin: 0 0 calc(12px + env(safe-area-inset-bottom)); max-height: 54vh; }
   .drawer-body { grid-template-columns: 1fr; }
