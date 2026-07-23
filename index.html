@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=28" />
+  <link rel="stylesheet" href="styles.css?v=29" />
 </head>
 <body>
   <!-- splash title card -->
@@ -349,11 +349,15 @@
       <pattern id="zhatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-24)">
         <path d="M0 1.5 H9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
       </pattern>
+      <!-- skip-it zones: denser + red, matching their dashed border -->
+      <pattern id="zhatch-avoid" width="6.5" height="6.5" patternUnits="userSpaceOnUse" patternTransform="rotate(-24)">
+        <path d="M0 1.2 H6.5" stroke="#e03131" stroke-width="1.8" stroke-linecap="round" />
+      </pattern>
     </defs>
   </svg>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="data.js?v=21"></script>
-  <script type="module" src="js/main.js?v=28"></script>
+  <script type="module" src="js/main.js?v=29"></script>
 </body>
 </html>

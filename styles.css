@@ -54,6 +54,7 @@ html, body {
 body.map-anim .leaflet-overlay-pane path.rough-line { filter: none; }
 .leaflet-overlay-pane path.zfill-dots { fill: url(#zdots); }
 .leaflet-overlay-pane path.zfill-hatch { fill: url(#zhatch); }
+.leaflet-overlay-pane path.zfill-avoid { fill: url(#zhatch-avoid); }
 
 button {
   font-family: var(--font-head);
@@ -745,17 +746,29 @@ body[data-zoom="mid"] .pin-wrap { --zoomscale: 0.85; }
 
 /* ---------- zone labels ---------- */
 .zone-label-wrap { background: none; border: none; }
-/* skip-it zones: crossed-out ink sticker, so the label warns instead of invites */
-.zone-label-avoid {
+/* skip-it zones: ink sticker with a lil red "skip" tag — warns without
+   looking like a rendering bug (compound selector: .zone-label is defined
+   later in this file and would otherwise win the background back) */
+.zone-label.zone-label-avoid {
   background: var(--ink);
   color: var(--cream);
   border-color: var(--z, var(--red));
   border-style: dashed;
-  text-decoration: line-through;
-  text-decoration-color: var(--z, var(--red));
-  text-decoration-thickness: 3px;
   text-shadow: none;
   transform: rotate(1.5deg);
+}
+.zone-skip {
+  display: inline-block;
+  background: var(--z, var(--red));
+  color: var(--cream);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  padding: 0 7px 1px;
+  margin-right: 8px;
+  border-radius: var(--r-cut);
+  transform: skewX(-8deg) translateY(-1.5px);
+  text-shadow: 1px 1px 0 rgba(29, 29, 36, 0.6);
 }
 body[data-zoom="mid"] .zone-label { font-size: 12px; padding: 2px 9px; letter-spacing: 1px; }
 body[data-zoom="far"] .zone-label { display: none; }

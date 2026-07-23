@@ -73,7 +73,7 @@ function drawZone(z) {
   // avoid zones = tourist-trap warnings: caution dashes + forced scribble
   // hatch + a crossed-out label, so "skip this" never reads like "go here"
   const avoid = !!z.avoid;
-  const pattern = avoid ? "zfill-hatch" : z.fill === "dots" ? "zfill-dots" : z.fill === "hatch" ? "zfill-hatch" : null;
+  const pattern = avoid ? "zfill-avoid" : z.fill === "dots" ? "zfill-dots" : z.fill === "hatch" ? "zfill-hatch" : null;
   const poly = L.polygon(chaikin(z.points, 2, true), {
     color: z.color, weight: avoid ? 2.5 : 3, dashArray: avoid ? "4 7" : "12 8", fillColor: z.color,
     fillOpacity: pattern ? 0.6 : 0.13, className: "rough-line",
@@ -86,7 +86,7 @@ function drawZone(z) {
   const label = L.marker(c, {
     icon: L.divIcon({
       className: "zone-label-wrap",
-      html: `<span class="zone-label${avoid ? " zone-label-avoid" : ""}" style="--z:${z.color}">${esc(z.name)}</span>`,
+      html: `<span class="zone-label${avoid ? " zone-label-avoid" : ""}" style="--z:${z.color}">${avoid ? '<b class="zone-skip">skip</b>' : ""}${esc(z.name)}</span>`,
       iconSize: null,
     }),
     interactive: true,
