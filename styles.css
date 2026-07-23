@@ -709,6 +709,18 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 
 /* ---------- zone labels ---------- */
 .zone-label-wrap { background: none; border: none; }
+/* skip-it zones: crossed-out ink sticker, so the label warns instead of invites */
+.zone-label-avoid {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--z, var(--red));
+  border-style: dashed;
+  text-decoration: line-through;
+  text-decoration-color: var(--z, var(--red));
+  text-decoration-thickness: 3px;
+  text-shadow: none;
+  transform: rotate(1.5deg);
+}
 body[data-zoom="mid"] .zone-label { font-size: 12px; padding: 2px 9px; letter-spacing: 1px; }
 body[data-zoom="far"] .zone-label { display: none; }
 .zone-label {

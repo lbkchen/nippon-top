@@ -160,7 +160,10 @@ const PLACES = [
     q: "Tokyo Tower, Minato, Japan", fallback: [35.6586, 139.7454],
     notes: "Overrated - would not recommend this or Skytree. I think you can go to some tall buildings in Roppongi for a similar experience with the Tokyo tower in your view..." },
   { id: "garden-lounge", name: "Garden Lounge", star: false, region: "Central Tokyo?", group: "tokyo", cat: "cafe", emoji: "🍰",
-    q: "Garden Lounge, Hotel New Otani, Tokyo", fallback: [35.6801, 139.7340], approx: true,
+    // New Otani "The Main" lobby floor, 紀尾井町4-1 (the garden it overlooks is the
+    // hotel's own 400-year-old one, not Shinjuku Gyoen)
+    q: "Garden Lounge, Hotel New Otani, Tokyo", fallback: [35.68104, 139.73410], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("ホテルニューオータニ ガーデンラウンジ"),
     notes: "AYCE dessert place with a sick view of the garden (Shinjuku Gyoen?). Have not been, it looks amazing." },
   { id: "akihabara", name: "Akihabara", star: false, region: "Central Tokyo?", group: "tokyo", cat: "fun", emoji: "🕹️",
     q: "Akihabara Station, Tokyo, Japan", fallback: [35.6984, 139.7731],
@@ -216,7 +219,9 @@ const PLACES = [
     q: "Ginkaku-ji, Kyoto, Japan", fallback: [35.0270, 135.7982],
     notes: "Famous temples but the golden temple is a bit overrated, silver temple was more memorable for me. The Philosophers Path near Ginkakuji (silver temple) is a famous cherry blossoms viewing spot." },
   { id: "ikazuchi-udon", name: "Ikazuchi Udon", star: false, region: "Kyoto", group: "kyoto", cat: "food", emoji: "⚡",
-    q: "雷 うどん 京都 銀閣寺", fallback: [35.0244, 135.7938], approx: true,
+    // official spelling イカヅチうどん — 浄土寺西田町82-6, mapion pin
+    q: "イカヅチうどん 京都", fallback: [35.02809, 135.78970], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("イカヅチうどん 京都"),
     notes: "Near Ginkakuji (silver temple) nice for a quick stop. I don't usually like udon much but this is the best udon I've had. Rec getting the one with kitsune (big fried tofu), beef, and kujo negis (local specialty) https://g.co/kgs/AkyD6ZR" },
   { id: "kifune", name: "Kifune", star: false, region: "North of Kyoto", group: "kyoto", cat: "trip",
     q: "Kifune Shrine, Kyoto, Japan", fallback: [35.1216, 135.7629],
@@ -253,7 +258,10 @@ const PLACES = [
     q: "Dotonbori, Osaka, Japan", fallback: [34.6687, 135.5013],
     notes: "I honestly don't remember too much specific stuff about Osaka but generally the people there are friendly and way more talkative than ppl in Tokyo. Dotonbori is like the Kabukicho of Osaka, really lively night scene, tons of great food like kushikatsu, okonomiyaki, etc." },
   { id: "okonomiyaki-chitose", name: "Okonomiyaki Chitose", star: false, region: "Osaka", group: "osaka", cat: "food",
-    q: "お好み焼 千とせ 大阪", fallback: [34.6503, 135.5064], approx: true,
+    // official spelling ちとせ (千とせ is the unrelated namba nikusui shop) —
+    // 西成区太子1-11-10, 1 min from Dobutsuen-mae exit 2
+    q: "お好み焼き ちとせ 西成", fallback: [34.6475, 135.5047], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("お好み焼き ちとせ 西成区"),
     notes: "Really great okonomiyaki, osaka style. There are tons of other places too just make sure to try it once in Osaka and Hiroshima if you go there too the styles are different." },
   { id: "osaka-castle", name: "Osaka Castle", star: false, region: "Osaka", group: "osaka", cat: "view", emoji: "🏯",
     q: "Osaka Castle, Osaka, Japan", fallback: [34.6873, 135.5262],
@@ -289,7 +297,10 @@ const PLACES = [
     q: "Toyako Onsen, Japan", fallback: [42.5657, 140.8195],
     notes: "Beautiful lake and a very popular stop on the way from Sapporo. Great place to stay in a ryokan - would recommend the Lake Suite Ko No Sumika." },
   { id: "soup-curry-mogmog", name: "Soup Curry MogMog", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "food", emoji: "🍛",
-    q: "スープカレー もぐもぐ 洞爺湖", fallback: [42.5510, 140.7570], approx: true,
+    // 洞爺湖温泉124-4, anchored off the neighboring shinkin bank (±100m — the one
+    // researched pin that's estimated; a gmaps share link would lock it exactly)
+    q: "soup curry mog mog 洞爺湖", fallback: [42.5640, 140.8210], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("soup curry mog mog 洞爺湖温泉"),
     notes: "Legendary soup curry place (Hokkaido speciality I think), must go if you're around Lake Toya." },
   { id: "noboribetsu", name: "Noboribetsu", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "onsen",
     q: "Jigokudani, Noboribetsu, Japan", fallback: [42.4995, 141.1475],
@@ -327,6 +338,16 @@ const ZONES = [
   { id: "arashiyama-crawl", name: "Arashiyama Temple Crawl", color: "#2f9e44",
     blurb: "Rent a bike, collect goshuin, befriend monkeys. Go at 6am or perish in the crowds.",
     points: [[35.038, 135.655], [35.034, 135.672], [35.024, 135.683], [35.010, 135.681], [35.008, 135.667], [35.019, 135.657], [35.030, 135.653]] },
+  // avoid: true = tourist-trap warning zones. kept tight — blocks, not districts.
+  { id: "kabukicho-gauntlet", name: "Kabukicho Tout Gauntlet", color: "#e03131", avoid: true,
+    blurb: "Walk it once at night for the neon, say yes to absolutely no one. Every \"free drink\" costs 10man.",
+    points: [[35.6963, 139.7003], [35.6961, 139.7025], [35.6960, 139.7043], [35.6948, 139.7044], [35.6937, 139.7041], [35.6937, 139.7022], [35.6938, 139.7005], [35.6951, 139.7002]] },
+  { id: "takeshita-crush", name: "Takeshita St Crush", color: "#e03131", avoid: true,
+    blurb: "Shoulder-to-shoulder crepe purgatory. One block south is freedom — see Cat Street.",
+    points: [[35.6708, 139.7027], [35.6712, 139.7046], [35.6717, 139.7064], [35.6711, 139.7068], [35.6706, 139.7047], [35.6701, 139.7029]] },
+  { id: "cat-street", name: "Cat Street Strut", color: "#1098ad",
+    blurb: "The actually-good Harajuku: lowkey boutiques and thrift, strung between the two chaos poles.",
+    points: [[35.6708, 139.7073], [35.6694, 139.7076], [35.6675, 139.7075], [35.6662, 139.7064], [35.6648, 139.7056], [35.6636, 139.7050], [35.6629, 139.7046], [35.6633, 139.7038], [35.6640, 139.7042], [35.6652, 139.7048], [35.6666, 139.7056], [35.6677, 139.7067], [35.6693, 139.7068], [35.6707, 139.7065]] },
 ];
 
 // ---------------------------------------------------------------------------

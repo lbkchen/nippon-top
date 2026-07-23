@@ -549,12 +549,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "cafe",
       "emoji": "🍰",
-      "lat": 35.6801,
-      "lng": 139.734,
-      "approx": true,
+      "lat": 35.68104,
+      "lng": 139.7341,
+      "approx": false,
       "notes": "AYCE dessert place with a sick view of the garden (Shinjuku Gyoen?). Have not been, it looks amazing.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%AA%E3%83%BC%E3%82%BF%E3%83%8B%20%E3%82%AC%E3%83%BC%E3%83%87%E3%83%B3%E3%83%A9%E3%82%A6%E3%83%B3%E3%82%B8"
     },
     {
       "id": "akihabara",
@@ -789,12 +789,12 @@ window.NIPPON = {
       "group": "kyoto",
       "cat": "food",
       "emoji": "⚡",
-      "lat": 35.0244,
-      "lng": 135.7938,
-      "approx": true,
+      "lat": 35.02809,
+      "lng": 135.7897,
+      "approx": false,
       "notes": "Near Ginkakuji (silver temple) nice for a quick stop. I don't usually like udon much but this is the best udon I've had. Rec getting the one with kitsune (big fried tofu), beef, and kujo negis (local specialty) https://g.co/kgs/AkyD6ZR",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%82%A4%E3%82%AB%E3%83%85%E3%83%81%E3%81%86%E3%81%A9%E3%82%93%20%E4%BA%AC%E9%83%BD"
     },
     {
       "id": "kifune",
@@ -954,12 +954,12 @@ window.NIPPON = {
       "group": "osaka",
       "cat": "food",
       "emoji": null,
-      "lat": 34.6503,
-      "lng": 135.5064,
-      "approx": true,
+      "lat": 34.6475,
+      "lng": 135.5047,
+      "approx": false,
       "notes": "Really great okonomiyaki, osaka style. There are tons of other places too just make sure to try it once in Osaka and Hiroshima if you go there too the styles are different.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%81%8A%E5%A5%BD%E3%81%BF%E7%84%BC%E3%81%8D%20%E3%81%A1%E3%81%A8%E3%81%9B%20%E8%A5%BF%E6%88%90%E5%8C%BA"
     },
     {
       "id": "osaka-castle",
@@ -1104,12 +1104,12 @@ window.NIPPON = {
       "group": "hokkaido",
       "cat": "food",
       "emoji": "🍛",
-      "lat": 42.551,
-      "lng": 140.757,
-      "approx": true,
+      "lat": 42.564,
+      "lng": 140.821,
+      "approx": false,
       "notes": "Legendary soup curry place (Hokkaido speciality I think), must go if you're around Lake Toya.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=soup%20curry%20mog%20mog%20%E6%B4%9E%E7%88%BA%E6%B9%96%E6%B8%A9%E6%B3%89"
     },
     {
       "id": "noboribetsu",
@@ -1315,6 +1315,144 @@ window.NIPPON = {
         [
           35.03,
           135.653
+        ]
+      ]
+    },
+    {
+      "id": "kabukicho-gauntlet",
+      "name": "Kabukicho Tout Gauntlet",
+      "color": "#e03131",
+      "avoid": true,
+      "blurb": "Walk it once at night for the neon, say yes to absolutely no one. Every \"free drink\" costs 10man.",
+      "points": [
+        [
+          35.6963,
+          139.7003
+        ],
+        [
+          35.6961,
+          139.7025
+        ],
+        [
+          35.696,
+          139.7043
+        ],
+        [
+          35.6948,
+          139.7044
+        ],
+        [
+          35.6937,
+          139.7041
+        ],
+        [
+          35.6937,
+          139.7022
+        ],
+        [
+          35.6938,
+          139.7005
+        ],
+        [
+          35.6951,
+          139.7002
+        ]
+      ]
+    },
+    {
+      "id": "takeshita-crush",
+      "name": "Takeshita St Crush",
+      "color": "#e03131",
+      "avoid": true,
+      "blurb": "Shoulder-to-shoulder crepe purgatory. One block south is freedom — see Cat Street.",
+      "points": [
+        [
+          35.6708,
+          139.7027
+        ],
+        [
+          35.6712,
+          139.7046
+        ],
+        [
+          35.6717,
+          139.7064
+        ],
+        [
+          35.6711,
+          139.7068
+        ],
+        [
+          35.6706,
+          139.7047
+        ],
+        [
+          35.6701,
+          139.7029
+        ]
+      ]
+    },
+    {
+      "id": "cat-street",
+      "name": "Cat Street Strut",
+      "color": "#1098ad",
+      "blurb": "The actually-good Harajuku: lowkey boutiques and thrift, strung between the two chaos poles.",
+      "points": [
+        [
+          35.6708,
+          139.7073
+        ],
+        [
+          35.6694,
+          139.7076
+        ],
+        [
+          35.6675,
+          139.7075
+        ],
+        [
+          35.6662,
+          139.7064
+        ],
+        [
+          35.6648,
+          139.7056
+        ],
+        [
+          35.6636,
+          139.705
+        ],
+        [
+          35.6629,
+          139.7046
+        ],
+        [
+          35.6633,
+          139.7038
+        ],
+        [
+          35.664,
+          139.7042
+        ],
+        [
+          35.6652,
+          139.7048
+        ],
+        [
+          35.6666,
+          139.7056
+        ],
+        [
+          35.6677,
+          139.7067
+        ],
+        [
+          35.6693,
+          139.7068
+        ],
+        [
+          35.6707,
+          139.7065
         ]
       ]
     },

@@ -69,10 +69,13 @@ function clearPreview() {
 
 function drawZone(z) {
   if (zoneHidden(z.id) || z.id === previewSkipId) return;
-  // outlines render smoothed (closed Chaikin) — saved points stay lean
-  const pattern = z.fill === "dots" ? "zfill-dots" : z.fill === "hatch" ? "zfill-hatch" : null;
+  // outlines render smoothed (closed Chaikin) — saved points stay lean.
+  // avoid zones = tourist-trap warnings: caution dashes + forced scribble
+  // hatch + a crossed-out label, so "skip this" never reads like "go here"
+  const avoid = !!z.avoid;
+  const pattern = avoid ? "zfill-hatch" : z.fill === "dots" ? "zfill-dots" : z.fill === "hatch" ? "zfill-hatch" : null;
   const poly = L.polygon(chaikin(z.points, 2, true), {
-    color: z.color, weight: 3, dashArray: "12 8", fillColor: z.color,
+    color: z.color, weight: avoid ? 2.5 : 3, dashArray: avoid ? "4 7" : "12 8", fillColor: z.color,
     fillOpacity: pattern ? 0.6 : 0.13, className: "rough-line",
   }).addTo(zoneLayer);
   if (pattern && poly._path) {
@@ -81,7 +84,11 @@ function drawZone(z) {
   }
   const c = labelPoint(z.points); // interior point, not vertex average — labels stay inside banana zones
   const label = L.marker(c, {
-    icon: L.divIcon({ className: "zone-label-wrap", html: `<span class="zone-label" style="--z:${z.color}">${esc(z.name)}</span>`, iconSize: null }),
+    icon: L.divIcon({
+      className: "zone-label-wrap",
+      html: `<span class="zone-label${avoid ? " zone-label-avoid" : ""}" style="--z:${z.color}">${esc(z.name)}</span>`,
+      iconSize: null,
+    }),
     interactive: true,
   }).addTo(zoneLayer);
 
@@ -152,6 +159,7 @@ function saveZone() {
     blurb: $("#zoneBlurb").value.trim(),
     color: pickedColor,
     ...(pickedFill !== "solid" ? { fill: pickedFill } : {}),
+    ...(editingZone?.avoid ? { avoid: true } : {}), // a retouch never launders a trap into a rec
     points: pendingPoints,
   };
   const wasEdit = !!editingZone;
@@ -174,7 +182,7 @@ function zoneRow(z) {
     <div class="cur-row-head">
       <span class="zone-dot" style="--z:${z.color}"></span>
       <span class="cur-row-name">${esc(z.name)}</span>
-      <span class="cur-row-stats">${inside} rec${inside === 1 ? "" : "s"} inside${z.pack ? " · pack zone" : ""}${hidden ? " · hidden" : ""}</span>
+      <span class="cur-row-stats">${z.avoid ? "skip-it zone · " : ""}${inside} rec${inside === 1 ? "" : "s"} inside${z.pack ? " · pack zone" : ""}${hidden ? " · hidden" : ""}</span>
     </div>
     ${z.blurb ? `<div class="cur-row-msg">"${esc(z.blurb)}"</div>` : ""}
     <div class="cur-row-actions">
