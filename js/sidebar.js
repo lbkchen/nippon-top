@@ -14,6 +14,11 @@ function renderContextBar() {
   const bar = $("#contextBar");
   bar.innerHTML = "";
   const n = currentList().length;
+  // the collapsed tab wears the same count as "N in view" — a live nudge that
+  // there's a list behind that button (renderList runs on moveend either way)
+  const tabCount = $("#sidebarTabCount");
+  tabCount.textContent = n > 99 ? "99+" : n;
+  tabCount.classList.toggle("hidden", n === 0);
   const label = document.createElement("span");
   if (state.curationView && !state.zoneFilter && !state.newFilter) {
     const c = state.curationView;

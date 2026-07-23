@@ -255,6 +255,28 @@ button {
   box-shadow: var(--shadow-sm);
   transform: rotate(2deg);
 }
+/* notification-style count riding the tab: "N spots behind this button" */
+.sidebar-tab .tab-count {
+  position: absolute;
+  top: -9px;
+  left: -10px;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  background: var(--red);
+  color: var(--cream);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: rotate(-4deg);
+}
 
 .sidebar-head {
   padding: 14px 14px 10px;
