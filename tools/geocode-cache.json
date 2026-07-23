@@ -515,5 +515,8 @@
     ],
     "matched": "KOFFEE MAMEYA Kakeru, 14, 平野二丁目, 平野, 江東区, 東京都, 135-0023, 日本",
     "km_from_fallback": 0.6
+  },
+  "hikiniku-to-come": {
+    "miss": true
   }
 }

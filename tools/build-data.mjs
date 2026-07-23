@@ -34,6 +34,9 @@ const PLACES = [
     // geocode matched the west-garden annex, stacking this pin on the Ghibli museum
     q: "Inokashira Park, Musashino, Japan", fallback: [35.7003, 139.5731], pin: true,
     notes: "Big park next to Kichijoji and Ghibli museum, really nice to walk around and likely much less crowded/touristy, one of the nicest parks near tokyo IMO" },
+  { id: "hikiniku-to-come", name: "Hikiniku to Come (hamburg)", star: true, region: "West Tokyo", group: "tokyo", cat: "food", emoji: "🍖",
+    q: "挽肉と米 吉祥寺", fallback: [35.7052, 139.5772], approx: true,
+    notes: "One of the best pure meat experiences of my life. Only one thing on the menu, and that's how you know it's gonna be good - you just order how many patties you want, they grill em fresh for you, and you mix and match toppings to put on the meats. Unlimited refills of the fluffiest rice you'll ever have. Whole place smells like smoke but they give you a wardrobe to stuff your jacket in lol. Idk if they take resys now, we had to show up early morning for a same-day ticket and come back later. Worth the effort, and Kichijoji is S tier anyway so just spend the whole day there." },
   { id: "higashi-koganei", name: "Higashi Koganei", star: false, region: "West Tokyo", group: "tokyo", cat: "hood",
     q: "Higashi-Koganei Station, Koganei, Japan", fallback: [35.7014, 139.5261],
     notes: "Nothing crazy but it's a nice residential neighborhood if you want to experience some of that suburb life. Go to Kujira Shokudo for an amazing tsukemen - it's shoyu instead of fish based. Then explore the back alleys near the station for more food, izakaya (torikizoku), karaoke, etc." },

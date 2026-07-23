@@ -32,6 +32,21 @@ window.NIPPON = {
       "gmaps": null
     },
     {
+      "id": "hikiniku-to-come",
+      "name": "Hikiniku to Come (hamburg)",
+      "star": true,
+      "region": "West Tokyo",
+      "group": "tokyo",
+      "cat": "food",
+      "emoji": "🍖",
+      "lat": 35.7052,
+      "lng": 139.5772,
+      "approx": true,
+      "notes": "One of the best pure meat experiences of my life. Only one thing on the menu, and that's how you know it's gonna be good - you just order how many patties you want, they grill em fresh for you, and you mix and match toppings to put on the meats. Unlimited refills of the fluffiest rice you'll ever have. Whole place smells like smoke but they give you a wardrobe to stuff your jacket in lol. Idk if they take resys now, we had to show up early morning for a same-day ticket and come back later. Worth the effort, and Kichijoji is S tier anyway so just spend the whole day there.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
       "id": "higashi-koganei",
       "name": "Higashi Koganei",
       "star": false,
