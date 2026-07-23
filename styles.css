@@ -49,6 +49,9 @@ html, body {
 
 /* hand-drawn wobble for zones / lasso / doodles */
 .leaflet-overlay-pane path.rough-line { filter: url(#roughen); }
+/* mid-flight the rough ink goes smooth: feTurbulence over half of kanto is not
+   a 60fps filter. it snaps back the frame the map settles (js/map.js flips it) */
+body.map-anim .leaflet-overlay-pane path.rough-line { filter: none; }
 .leaflet-overlay-pane path.zfill-dots { fill: url(#zdots); }
 .leaflet-overlay-pane path.zfill-hatch { fill: url(#zhatch); }
 
@@ -620,7 +623,19 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   border-color: var(--gold);
   background: #fff8dc;
   box-shadow: 0 0 0 2.5px var(--pin, var(--ink)), 3px 3px 0 rgba(29, 29, 36, 0.65);
+}
+/* the gold pulse rides a pseudo and only animates opacity — compositor-cheap.
+   (animating drop-shadow here repainted every starred pin every frame, which
+   made region flights chug) */
+.pin.star::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  box-shadow: 0 0 9px 2px rgba(245, 179, 1, 0.9);
+  opacity: 0;
   animation: starpulse 2.4s ease-in-out infinite;
+  pointer-events: none;
 }
 .pin.star .pin-emoji { font-size: 18px; }
 .pin-badge {
@@ -632,8 +647,8 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
   filter: drop-shadow(1px 1px 0 rgba(29, 29, 36, 0.6));
 }
 @keyframes starpulse {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(245, 179, 1, 0)); }
-  50% { filter: drop-shadow(0 0 7px rgba(245, 179, 1, 0.9)); }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 .pin.approx { border-style: dashed; }
@@ -1441,7 +1456,7 @@ button.armed {
 
 /* calm it down for motion-sensitive folks */
 @media (prefers-reduced-motion: reduce) {
-  .pin.star { animation: none; }
+  .pin.star::before { animation: none; }
   * { transition-duration: 0.01s !important; animation-duration: 0.01s !important; }
 }
 

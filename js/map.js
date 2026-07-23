@@ -13,6 +13,11 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 export const zoneLayer = L.layerGroup().addTo(map);
 export const doodleLayer = L.layerGroup().addTo(map);
 
+// while the map is flying or being dragged, body.map-anim lets the stylesheet
+// shed paint-heavy effects (the rough-ink filter) until things settle
+map.on("movestart zoomstart", () => document.body.classList.add("map-anim"));
+map.on("moveend zoomend", () => document.body.classList.remove("map-anim"));
+
 // padding that keeps flyTo targets clear of the floating UI
 export const PAD = () => (window.innerWidth > 940
   ? { paddingTopLeft: [80, 90], paddingBottomRight: [430, 40] }
