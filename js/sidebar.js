@@ -227,6 +227,40 @@ export function initSidebar() {
     sidebar.style.height = `${px}px`;
     document.documentElement.style.setProperty("--sheet-h", `${px}px`);
   };
+  // drag-dismiss zips the sheet into the corner tab, so your eyes learn where
+  // it went — the tab does a lil catch-wiggle when it lands
+  const dismissToTab = () => {
+    tab.classList.remove("hidden");
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      sidebar.classList.add("collapsed");
+      return;
+    }
+    const s = sidebar.getBoundingClientRect();
+    const t = tab.getBoundingClientRect();
+    const dx = t.left + t.width / 2 - (s.left + s.width / 2);
+    const dy = t.top + t.height / 2 - (s.top + s.height / 2);
+    sidebar.style.transition = "none"; // the zip owns the movement — no competing slide
+    const zip = sidebar.animate(
+      [
+        { transform: "translate(0, 0) scale(1)", opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.05)`, opacity: 0.5 },
+      ],
+      { duration: 300, easing: "cubic-bezier(0.55, 0, 0.8, 0.7)", fill: "forwards" }
+    );
+    zip.onfinish = () => {
+      sidebar.classList.add("collapsed"); // takes over while transitions are still off — no flashback
+      zip.cancel();
+      requestAnimationFrame(() => { sidebar.style.transition = ""; });
+      tab.animate(
+        [
+          { transform: "rotate(2deg) scale(1)" },
+          { transform: "rotate(-4deg) scale(1.25)", offset: 0.45 },
+          { transform: "rotate(2deg) scale(1)" },
+        ],
+        { duration: 300, easing: "ease-out" }
+      );
+    };
+  };
   const sheetDragFrom = (el, slop) => el.addEventListener("pointerdown", (e) => {
     if (slop && window.innerWidth > 940) return; // head-as-handle only exists where the sheet does
     const startY = e.clientY;
@@ -261,12 +295,11 @@ export function initSidebar() {
       const half = Math.round(window.innerHeight * 0.46);
       // full stops short of the toolbar stack — sheets shouldn't eat the controls
       const full = Math.min(Math.round(window.innerHeight * 0.85), window.innerHeight - 214);
-      sidebar.style.transition = "height 0.22s ease, transform 0.25s ease";
       if (h < half * 0.55) {
         setSheetH(half); // next open comes back at the normal half height
-        sidebar.classList.add("collapsed");
-        tab.classList.remove("hidden");
+        dismissToTab();
       } else {
+        sidebar.style.transition = "height 0.22s ease, transform 0.25s ease";
         setSheetH(Math.abs(h - half) <= Math.abs(h - full) ? half : full);
       }
     };
