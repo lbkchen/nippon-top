@@ -499,5 +499,21 @@
   },
   "mt-hakodate": {
     "miss": true
+  },
+  "leaves-coffee": {
+    "coords": [
+      35.7026933,
+      139.7978221
+    ],
+    "matched": "Leaves Coffee Roasters, 清澄通り, 本所一丁目, 本所, 墨田区, 東京都, 130-8644, 日本",
+    "km_from_fallback": 0.4
+  },
+  "koffee-mameya-kakeru": {
+    "coords": [
+      35.6764586,
+      139.8042714
+    ],
+    "matched": "KOFFEE MAMEYA Kakeru, 14, 平野二丁目, 平野, 江東区, 東京都, 135-0023, 日本",
+    "km_from_fallback": 0.6
   }
 }
