@@ -20,7 +20,9 @@ function pinIcon(p) {
 
 function popupContent(p) {
   const div = document.createElement("div");
-  const short = p.notes && p.notes.length > 150 ? p.notes.slice(0, 147) + "…" : p.notes;
+  // most rants fit fine — only truly long ones get clipped (full text is one
+  // tap away via "full details" anyway, and the popup scrolls past ~340px tall)
+  const short = p.notes && p.notes.length > 550 ? p.notes.slice(0, 547) + "…" : p.notes;
   div.innerHTML = `
     <div class="popup-title">${p.emoji || CATS[p.cat].emoji} ${esc(p.name)} ${p.star ? "⭐" : ""}</div>
     <div class="popup-blurb">${linkify(esc(short)) || "<i>no notes, pure vibes</i>"}</div>
@@ -36,7 +38,7 @@ function popupContent(p) {
 function makeMarker(p) {
   const m = L.marker([p.lat, p.lng], { icon: pinIcon(p), riseOnHover: true, zIndexOffset: p.star ? 500 : 0 });
   m.bindTooltip(`${p.star ? "⭐ " : ""}${esc(p.name)}`, { className: "nippon-tip", direction: "top" });
-  m.bindPopup(() => popupContent(p), { offset: [0, -6], maxWidth: 260 });
+  m.bindPopup(() => popupContent(p), { offset: [0, -6], maxWidth: 300, maxHeight: 340 });
   m.on("click", (e) => {
     if (state.mode === "curate") {
       L.DomEvent.stop(e);
