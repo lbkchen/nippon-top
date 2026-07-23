@@ -432,7 +432,7 @@ window.NIPPON = {
       "lat": 35.7026933,
       "lng": 139.7978221,
       "approx": false,
-      "notes": "One of the most respected roasters in Tokyo alongside Glitch — they're obsessive about their brewers, and a bunch of the city's good cafes actually pour their beans. Get the pour over. Seats are scarce and the line gets long, so show up early. If you're a real coffee geek, this is the one.",
+      "notes": "One of the most respected roasters in Tokyo alongside Glitch, they pay a ton of attention to their brewers and a lot of the good cafes around the city actually use their beans. Get the pour over. Pretty hard to get a seat tho and the line gets long, so show up early. If you're a real coffee geek this is the one for you.",
       "photo": null,
       "gmaps": null
     },
@@ -447,7 +447,7 @@ window.NIPPON = {
       "lat": 35.6764586,
       "lng": 139.8042714,
       "approx": false,
-      "notes": "In Kiyosumi Shirakawa, reservation required (double check before you go). A real treat but also kind of a crazy experience — you have to be into coffee AND experimentation, it's a whole course of coffee pairings. The food ones honestly didn't always hit, but the sweets pairings are great, and the orange + whiskey coffee cocktail is one of the nicest drinks I've ever had.",
+      "notes": "A real treat but also kind of a crazy experience, you have to be really into coffee AND experimentation because they do a whole course of coffee pairings with the food. Honestly a lot of the food pairings were not that good, but the sweets pairings were really good, and there was this orange + whiskey coffee cocktail that was one of the nicest drinks I've ever had. Reservation required - double check before you go.",
       "photo": null,
       "gmaps": null
     },
