@@ -621,6 +621,20 @@ button {
 
 /* ---------- pins ---------- */
 .pin-wrap { background: none; border: none; }
+/* grounding: a lil contact ellipse under the tip instead of an offset copy of
+   the teardrop — the old shadow read as a second pin hiding behind the first */
+.pin-wrap::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2.5px;
+  width: 13px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(29, 29, 36, 0.3);
+  transform: translateX(-50%) scale(var(--zoomscale, 1));
+  pointer-events: none;
+}
 .pin {
   width: 100%;
   height: 100%;
@@ -631,12 +645,12 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 2.5px 2.5px 0 rgba(29, 29, 36, 0.65);
   transition: transform 0.12s ease;
   position: relative;
 }
-body[data-zoom="far"] .pin { --zoomscale: 0.62; }
-body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
+/* --zoomscale lives on the wrap so the pin AND its ground shadow inherit it */
+body[data-zoom="far"] .pin-wrap { --zoomscale: 0.62; }
+body[data-zoom="mid"] .pin-wrap { --zoomscale: 0.85; }
 .pin-emoji {
   transform: rotate(calc(45deg - var(--tilt, 0deg)));
   font-size: 15px;
@@ -647,7 +661,7 @@ body[data-zoom="mid"] .pin { --zoomscale: 0.85; }
 .pin.star {
   border-color: var(--gold);
   background: #fff8dc;
-  box-shadow: 0 0 0 2.5px var(--pin, var(--ink)), 3px 3px 0 rgba(29, 29, 36, 0.65);
+  box-shadow: 0 0 0 2.5px var(--pin, var(--ink)); /* cat-color ring only, no ghost-pin offset */
 }
 /* the gold pulse rides a pseudo and only animates opacity — compositor-cheap.
    (animating drop-shadow here repainted every starred pin every frame, which
