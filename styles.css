@@ -439,8 +439,21 @@ button {
 }
 
 .card.starred {
-  background: linear-gradient(135deg, #fffdf7 55%, #fff3c9 100%);
   border-width: 3px;
+}
+/* manga screentone: gold dots dense by the ribbon corner, fading out down-left */
+.card.starred::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: radial-gradient(rgba(245, 179, 1, 0.4) 1.2px, transparent 1.3px);
+  background-size: 6px 6px;
+  -webkit-mask-image: linear-gradient(225deg, #000 0%, transparent 58%);
+  mask-image: linear-gradient(225deg, #000 0%, transparent 58%);
+  pointer-events: none;
+  /* under the text — .card's rotate makes it a stacking context, so -1 stays inside */
+  z-index: -1;
 }
 .card-head { display: flex; align-items: baseline; gap: 7px; }
 .card-emoji { font-size: 19px; }
