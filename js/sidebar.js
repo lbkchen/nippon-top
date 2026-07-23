@@ -218,30 +218,46 @@ export function initSidebar() {
     }
   });
 
-  // --- mobile drag-sheet: grab the pill, snap to half / full / away ---
+  // --- mobile drag-sheet: snap to half / full / away ---
   // (--sheet-h keeps the curate bar riding on top of whatever height sticks)
-  const grab = $("#sheetGrab");
+  // the pill is just the affordance — the whole head is the handle. head drags
+  // ask for a few px of slop first, so taps on filters/context buttons in there
+  // still read as taps and not micro-drags
   const setSheetH = (px) => {
     sidebar.style.height = `${px}px`;
     document.documentElement.style.setProperty("--sheet-h", `${px}px`);
   };
-  grab.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    try { grab.setPointerCapture(e.pointerId); } catch { /* synthetic/stale pointer — listeners below still work */ }
+  const sheetDragFrom = (el, slop) => el.addEventListener("pointerdown", (e) => {
+    if (slop && window.innerWidth > 940) return; // head-as-handle only exists where the sheet does
     const startY = e.clientY;
     const startH = sidebar.getBoundingClientRect().height;
     let h = startH;
-    sidebar.style.transition = "none";
+    let live = !slop;
+    const engage = () => {
+      live = true;
+      sidebar.style.transition = "none";
+      try { el.setPointerCapture(e.pointerId); } catch { /* synthetic/stale pointer — window listeners still work */ }
+    };
+    if (live) { e.preventDefault(); engage(); }
     const move = (ev) => {
       if (ev.pointerId !== e.pointerId) return;
+      if (!live) {
+        if (Math.abs(ev.clientY - startY) < slop) return;
+        engage();
+      }
       h = Math.min(window.innerHeight * 0.9, Math.max(70, startH + (startY - ev.clientY)));
       sidebar.style.height = `${h}px`;
     };
     const done = (ev) => {
       if (ev.pointerId !== e.pointerId) return;
-      grab.removeEventListener("pointermove", move);
-      grab.removeEventListener("pointerup", done);
-      grab.removeEventListener("pointercancel", done);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", done);
+      window.removeEventListener("pointercancel", done);
+      if (!live) return; // never left the slop — that was a tap, leave it be
+      // a real drag shouldn't also press whatever button the finger lifted on
+      const squelch = (ce) => { ce.stopPropagation(); ce.preventDefault(); };
+      el.addEventListener("click", squelch, { capture: true, once: true });
+      setTimeout(() => el.removeEventListener("click", squelch, { capture: true }), 0);
       const half = Math.round(window.innerHeight * 0.46);
       // full stops short of the toolbar stack — sheets shouldn't eat the controls
       const full = Math.min(Math.round(window.innerHeight * 0.85), window.innerHeight - 214);
@@ -254,10 +270,12 @@ export function initSidebar() {
         setSheetH(Math.abs(h - half) <= Math.abs(h - full) ? half : full);
       }
     };
-    grab.addEventListener("pointermove", move);
-    grab.addEventListener("pointerup", done);
-    grab.addEventListener("pointercancel", done);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", done);
+    window.addEventListener("pointercancel", done);
   });
+  sheetDragFrom($("#sheetGrab"), 0);
+  sheetDragFrom($(".sidebar-head"), 8);
   // crossing back to desktop hands sizing back to the stylesheet
   window.addEventListener("resize", () => {
     if (window.innerWidth > 940) {

@@ -174,6 +174,9 @@ button {
   gap: 7px;
 }
 .logo-card .top { color: var(--red); }
+/* desktop: .logo-l2 is invisible plumbing (same flex, same gap) — it only earns
+   its keep on mobile, where TOP + 頂 drop to a second line for a square-ish mark */
+.logo-card .logo-l2 { display: inline-flex; align-items: center; gap: 7px; }
 .logo-card .stamp {
   font-family: var(--font-jp);
   font-size: 12px;
@@ -1311,14 +1314,26 @@ button.armed {
 
 /* ---------- smol screens ---------- */
 @media (max-width: 940px) {
-  .logo-card { padding: 5px 12px; top: 10px; left: 10px; }
-  .logo-card h1 { font-size: 15px; letter-spacing: 1.2px; }
+  /* square-ish mark — NIPPON over TOP 頂 — sharing one row with the search bar */
+  .logo-card {
+    top: 10px;
+    left: 10px;
+    width: 88px;
+    height: 48px;
+    padding: 0;
+    border-radius: var(--r-md);
+    display: grid;
+    place-items: center;
+  }
+  .logo-card h1 { font-size: 15px; letter-spacing: 1.2px; flex-direction: column; gap: 2px; }
+  .logo-card .logo-l2 { gap: 5px; }
   .logo-card .stamp { font-size: 10px; padding: 2px 3px; }
-  /* the slim logo frees the whole top stack to ride up — more map for everyone */
+  /* logo + search on one row frees the whole top stack to ride up — more map for
+     everyone (and the chips clear the search bar's hard shadow instead of wearing it) */
   .region-chips {
     left: 4px;
     right: 4px;
-    top: 100px;
+    top: 66px;
     flex-wrap: nowrap;
     overflow-x: auto;
     padding: 6px 8px 8px; /* breathing room so skewed corners + shadows don't clip */
@@ -1336,15 +1351,17 @@ button.armed {
   .sidebar.collapsed { transform: translateY(calc(100% + 40px)); }
   .sheet-grab { display: block; }
   .sidebar-collapse { display: none; }
-  /* one head line: [ N IN VIEW … | filters ] — chips fold out underneath */
-  .sidebar-head { padding: 4px 10px 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  /* one head line: [ N IN VIEW … | filters ] — chips fold out underneath.
+     the whole head is a drag surface (the pill is just the affordance), so no
+     touch-panning or text selection allowed in here */
+  .sidebar-head { padding: 4px 10px 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; touch-action: none; user-select: none; -webkit-user-select: none; }
   .context-bar { order: 1; flex: 1; margin: 0; transform: none; padding: 5px 12px; font-size: 14px; min-height: 0; border-radius: var(--r-sm); }
   .filters-toggle { display: inline-block; order: 2; }
   .filter-row { display: none; order: 3; width: 100%; padding-right: 0; }
   .filter-row.open { display: flex; }
   .sidebar-tab { top: auto; bottom: calc(14px + env(safe-area-inset-bottom)); }
   /* the action row lives behind one toolbox button — picking a tool tucks it away */
-  .tools-toggle { display: grid; left: 10px; top: 148px; }
+  .tools-toggle { display: grid; left: 10px; top: 114px; }
   .toolbar {
     display: none;
     flex-direction: row;
@@ -1352,7 +1369,7 @@ button.armed {
     left: 10px;
     right: 10px;
     bottom: auto;
-    top: 196px;
+    top: 162px;
   }
   .toolbar.open { display: flex; }
   .toolbar button { width: 40px; height: 40px; font-size: 17px; }
@@ -1657,11 +1674,12 @@ button.armed {
   .toolbar button { width: 40px; height: 40px; }
   .toolbar button svg { width: 20px; height: 20px; }
   .omnibar {
-    left: 10px;
+    left: 106px; /* rides shotgun next to the square logo */
     right: 10px;
-    top: 46px;
+    top: 10px;
     width: auto;
   }
+  .omnibar-box { height: 48px; padding: 0 12px; }
   /* sub-16px inputs make iOS Safari zoom the whole page on focus */
   #omniInput, #addSearch, .modal input[type="text"], .modal input[type="url"], .modal textarea, .mix-bar input, .fix-loc-input { font-size: 16px; }
 }
