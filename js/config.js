@@ -174,6 +174,11 @@ export function distKm(a, b) {
 }
 export const fmtDist = (km) => (km < 1 ? `${Math.round(km * 1000)}m` : km < 20 ? `${km.toFixed(1)}km` : `${Math.round(km)}km`);
 
+// the standard little external-link glyph (wobbly, per the icon rules) — shared
+// by the card-row gmaps link and the detail action chip
+export const EXT_ICON =
+  '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5.2 L7 5.3 C5.4 5.3 4.6 6.1 4.6 7.7 L4.7 17 C4.7 18.6 5.5 19.4 7.1 19.4 L16.4 19.3 C18 19.3 18.8 18.5 18.8 16.9 L18.8 14" /><path d="M13.8 4.7 L19.4 4.6 L19.3 10.2" /><path d="M19.2 4.8 C16.5 7.3 14.2 9.7 11.9 12.3" /></svg>';
+
 // where "open in google maps" goes: Ken's saved share link (lands on the real
 // place card — reviews, hours, photos) or a name search anchored at our pin so
 // google snaps to the right listing instead of a nameless dropped pin

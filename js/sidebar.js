@@ -1,5 +1,5 @@
 // The high-context list: cards, filters, search, region hops, context bar.
-import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl, armCheck } from "./config.js";
+import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl, armCheck, EXT_ICON } from "./config.js";
 import { map, PAD } from "./map.js";
 import { state, allPlaces, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -67,14 +67,8 @@ function cardEl(p) {
       <span class="card-emoji">${p.emoji || cat.emoji}</span>
       <span class="card-name">${esc(p.name)}</span>
       ${p.star ? '<span class="card-star">★</span>' : ""}
-    </div>
-    <div class="card-pills">
-      <span class="pill cat-pill" style="--pin:${cat.color}">${cat.label}</span>
-      <span class="pill">${esc(p.region)}</span>
-      ${p.approx ? '<span class="pill approx" title="the geocoder shrugged — pin placed from memory">~ish location</span>' : ""}
-      ${custom ? '<span class="pill custom">hand-added</span>' : ""}
-      ${state.userLoc ? `<span class="pill dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
-      <a class="pill pill-link" href="${gmapsUrl(p)}" target="_blank" rel="noopener" title="open in google maps">gmaps ↗</a>
+      ${state.userLoc ? `<span class="card-dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))}</span>` : ""}
+      <a class="card-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener" aria-label="open in google maps" title="open in google maps">${EXT_ICON}</a>
     </div>
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="card-notes">${linkify(esc(p.notes))}</div>

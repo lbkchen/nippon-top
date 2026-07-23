@@ -1,6 +1,6 @@
 // Spot detail: the sidebar drills into one place — photo, the whole rant,
 // which zone it's in, and the nearest other recs to chain onto.
-import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck, resolveGmapsLink } from "./config.js";
+import { $, esc, linkify, CATS, DEV, distKm, fmtDist, gmapsUrl, pointInPoly, showHint, armCheck, resolveGmapsLink, EXT_ICON } from "./config.js";
 import { map } from "./map.js";
 import { state, placeById, allPlaces, allZones, isCustom, isPackExtra, deletePlace, setPhoto, setGeo, placePassesFilters, curationVisibleIds } from "./store.js";
 import { emit, on } from "./bus.js";
@@ -69,27 +69,34 @@ function render(id) {
   panel.innerHTML = `
     <button class="detail-back">← back to the list</button>
     ${p.photo ? `<figure class="detail-photo"><img src="img/${esc(p.photo)}" alt="${esc(p.name)}" /></figure>` : ""}
-    <div class="detail-head">
-      <span class="detail-emoji">${p.emoji || cat.emoji}</span>
-      <h2 class="detail-name">${esc(p.name)}${p.star ? ' <span class="card-star">★</span>' : ""}</h2>
-    </div>
-    ${p.star ? '<span class="banger-ribbon detail-ribbon">CERTIFIED BANGER</span>' : ""}
-    <div class="card-pills">
-      <span class="pill cat-pill" style="--pin:${cat.color}">${cat.label}</span>
-      <span class="pill">${esc(p.region)}</span>
-      ${p.approx ? `<span class="pill approx" title="pin placed from memory${state.curationView ? "" : " — click to fix it with a gmaps link"}">~ish location</span>` : ""}
-      ${isCustom(p.id) ? '<span class="pill custom">hand-added</span>' : ""}
-      ${state.userLoc ? `<span class="pill dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))} from you</span>` : ""}
+    <div class="detail-id">
+      <div class="detail-head">
+        <span class="detail-emoji">${p.emoji || cat.emoji}</span>
+        <h2 class="detail-name">${esc(p.name)}${p.star ? ' <span class="card-star">★</span>' : ""}</h2>
+      </div>
+      ${p.star ? '<span class="banger-ribbon detail-ribbon">CERTIFIED BANGER</span>' : ""}
+      <div class="card-pills">
+        <span class="pill cat-pill" style="--pin:${cat.color}">${cat.label}</span>
+        <span class="pill">${esc(p.region)}</span>
+        ${p.approx ? `<span class="pill approx" title="pin placed from memory${state.curationView ? "" : " — click to fix it with a gmaps link"}">~ish location</span>` : ""}
+        ${isCustom(p.id) ? '<span class="pill custom">hand-added</span>' : ""}
+        ${state.userLoc ? `<span class="pill dist">${fmtDist(distKm(state.userLoc, [p.lat, p.lng]))} from you</span>` : ""}
+      </div>
+      ${zone ? `<div class="detail-zone"><span class="zone-dot" style="--z:${zone.color}"></span>inside ${esc(zone.name)}</div>` : ""}
     </div>
     ${viewNote ? `<div class="card-personal">for ${esc(state.curationView.name)}: ${esc(viewNote)}</div>` : ""}
     <div class="detail-notes">${linkify(esc(p.notes)) || '<i>no notes yet — a rec so good it speaks for itself (or ken got lazy)</i>'}</div>
-    <a class="btn-solid detail-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener">open in google maps ↗</a>
-    <button type="button" class="linkish detail-share">copy a link to this spot</button>
+    <div class="detail-actions">
+      <a class="detail-act gold detail-gmaps" href="${gmapsUrl(p)}" target="_blank" rel="noopener">${EXT_ICON}<span>open in google maps</span></a>
+      <button type="button" class="detail-act detail-share">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.6 a3.7 3.7 0 0 0 5.5 0.4 l2.1-2.1 a3.7 3.7 0 0 0-5.2-5.3 l-1.2 1.2" /><path d="M13.8 10.4 a3.7 3.7 0 0 0-5.5-0.4 l-2.1 2.1 a3.7 3.7 0 0 0 5.2 5.3 l1.2-1.2" /></svg>
+        <span>copy a link to this spot</span>
+      </button>
+    </div>
     ${!state.curationView ? `<div class="fix-loc">
       <button type="button" class="linkish fix-loc-btn">${p.approx ? "~ish pin bugging you?" : "pin in the wrong spot?"} fix it with a gmaps link</button>
       <input class="fix-loc-input hidden" type="url" placeholder="paste a google maps link…" spellcheck="false" />
     </div>` : ""}
-    ${zone ? `<div class="detail-zone"><span class="zone-dot" style="--z:${zone.color}"></span>inside ${esc(zone.name)}</div>` : ""}
     <div class="omni-section detail-section">pairs well with</div>
     <div class="detail-pairs"></div>
     ${isCustom(p.id) && !state.curationView ? '<button class="detail-del">delete this spot</button>' : ""}`;
@@ -158,11 +165,12 @@ function render(id) {
   }
 
   const share = panel.querySelector(".detail-share");
+  const shareLabel = share.querySelector("span"); // swap the words, never the icon
   share.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(spotLink(p.id));
-      share.textContent = "copied! go send it to someone";
-      setTimeout(() => { share.textContent = "copy a link to this spot"; }, 1800);
+      shareLabel.textContent = "copied! go send it to someone";
+      setTimeout(() => { shareLabel.textContent = "copy a link to this spot"; }, 1800);
     } catch {
       console.log("spot link:", spotLink(p.id));
       showHint("clipboard said no, the link is in the console", 3000);
