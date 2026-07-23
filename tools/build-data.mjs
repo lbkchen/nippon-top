@@ -35,7 +35,9 @@ const PLACES = [
     q: "Inokashira Park, Musashino, Japan", fallback: [35.7003, 139.5731], pin: true,
     notes: "Big park next to Kichijoji and Ghibli museum, really nice to walk around and likely much less crowded/touristy, one of the nicest parks near tokyo IMO" },
   { id: "hikiniku-to-come", name: "Hikiniku to Come (hamburg)", star: true, region: "West Tokyo", group: "tokyo", cat: "food", emoji: "🍖",
-    q: "挽肉と米 吉祥寺", fallback: [35.7052, 139.5772], approx: true,
+    // 吉祥寺本町2-8-3 — tabelog pin, cross-checked
+    q: "挽肉と米 吉祥寺", fallback: [35.70584, 139.57780], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("挽肉と米 吉祥寺"),
     notes: "One of the best pure meat experiences of my life. Only one thing on the menu, and that's how you know it's gonna be good - you just order how many patties you want, they grill em fresh for you, and you mix and match toppings to put on the meats. Unlimited refills of the fluffiest rice you'll ever have. Whole place smells like smoke but they give you a wardrobe to stuff your jacket in lol. Idk if they take resys now, we had to show up early morning for a same-day ticket and come back later. Worth the effort, and Kichijoji is S tier anyway so just spend the whole day there." },
   { id: "higashi-koganei", name: "Higashi Koganei", star: false, region: "West Tokyo", group: "tokyo", cat: "hood",
     q: "Higashi-Koganei Station, Koganei, Japan", fallback: [35.7014, 139.5261],
@@ -43,11 +45,16 @@ const PLACES = [
   { id: "ghibli-museum", name: "Ghibli Museum", star: true, region: "West Tokyo", group: "tokyo", cat: "museum", emoji: "🐉",
     q: "Ghibli Museum, Mitaka, Japan", fallback: [35.6962, 139.5704],
     notes: "Famous museum showcasing the Ghibli filmmaking process, amazing experience but hard to get tickets." },
-  { id: "ramenya-shima", name: "Ramenya Shima", star: false, region: "West Tokyo", group: "tokyo", cat: "food",
-    q: "らぁめん小池 嶋", fallback: [35.7038, 139.5993], approx: true,
+  { id: "ramenya-shima", name: "Ramenya Shima", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "food",
+    // the old q conflated 嶋 with らぁめん小池 (a different shop) and pinned Nishi-Ogikubo,
+    // 7.7km off. real address: 渋谷区本町3-41-12, near Nishi-Shinjuku-Gochome stn
+    q: "らぁ麺や 嶋 渋谷区本町", fallback: [35.68834, 139.68087], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("らぁ麺や 嶋 渋谷区本町"),
     notes: "Best shoyu ramen I've had. Super annoying to get in tho - 60 bowls a day, you must sign up at 8-9am at the door, then return at the predetermined time slot - see Goog reviews lol. Only for the real fans." },
   { id: "tonkatsu-narikura", name: "Tonkatsu Narikura", star: false, region: "West Tokyo", group: "tokyo", cat: "food",
-    q: "とんかつ成蔵 杉並区", fallback: [35.6998, 139.6357], approx: true,
+    // post-2019 home: 杉並区成田東4-33-9, ~300m from Minami-Asagaya stn
+    q: "とんかつ成蔵 成田東", fallback: [35.69771, 139.63875], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("とんかつ成蔵 成田東"),
     notes: "One of the highest rated tonkatsu (fried pork cutlet) on Tabelog the Japanese yelp. Usually everything is literally 3 stars or less, but this one has over 4 stars and tastes incredible -- you need to book a resy beforehand here: https://omakase.in/en/r/qw473765." },
   { id: "takaosan", name: "Takaosan", star: false, region: "West Tokyo", group: "tokyo", cat: "trip", emoji: "🥾",
     q: "Mount Takao, Hachioji, Japan", fallback: [35.6251, 139.2434],
@@ -114,10 +121,14 @@ const PLACES = [
     q: "Tokyo Skytree, Sumida, Japan", fallback: [35.7101, 139.8107],
     notes: "One of the most famous places out in East Tokyo and a bit out of the way but honestly a beautiful area next to the canals. Idt it's super worth to go up the Skytree itself but it is one of the most shocking views of Tokyo that you can get out there. Solamachi is a giant mall connected to the skytree that's actually quite nice and has a great mix of everything - food, clothing, souvenirs, etc." },
   { id: "yakitori-omino", name: "Yakitori Omino", star: false, region: "East Tokyo", group: "tokyo", cat: "food", emoji: "🍢",
-    q: "焼鳥おみ乃 押上", fallback: [35.7080, 139.8100], approx: true,
+    // the original 押上1-38-4 shop (Kamiyacho branch is a different one)
+    q: "焼鳥おみ乃 押上", fallback: [35.70987, 139.81590], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("焼鳥おみ乃 押上"),
     notes: "Delicious yakitori (chicken skewer) omakase place near Skytree. They serve you until you say stop so come v hungry and experience the great joy of binchotan charcoal grilled chicken parts. The catch is you gotta book like 2+ months in advance on Omakase (as of Mar '24)" },
   { id: "takesue", name: "Takesue Tokyo Premium (ramen)", star: false, region: "East Tokyo", group: "tokyo", cat: "food",
-    q: "竹末東京Premium 押上", fallback: [35.7133, 139.8172], approx: true,
+    // 業平5-14-7, ~350m SE of Skytree — tabelog pin
+    q: "竹末東京Premium 押上", fallback: [35.70815, 139.81765], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("竹末東京Premium"),
     notes: "Awesome local shop, highly recommend the chicken scallop base, and it has the most delicious toppings." },
   { id: "leaves-coffee", name: "Leaves Coffee Roasters", star: false, region: "East Tokyo", group: "tokyo", cat: "cafe",
     q: "Leaves Coffee Roasters, Sumida, Tokyo, Japan", fallback: [35.7060, 139.7996],
@@ -126,15 +137,21 @@ const PLACES = [
     q: "Koffee Mameya Kakeru, Koto, Tokyo, Japan", fallback: [35.6805, 139.8080],
     notes: "A real treat but also kind of a crazy experience, you have to be really into coffee AND experimentation because they do a whole course of coffee pairings with the food. Honestly a lot of the food pairings were not that good, but the sweets pairings were really good, and there was this orange + whiskey coffee cocktail that was one of the nicest drinks I've ever had. Reservation required - double check before you go." },
   { id: "tomita", name: "Chuka soba Tomita (ramen)", star: true, region: "East Tokyo (far-ish)", group: "tokyo", cat: "food", emoji: "🐐",
-    q: "中華蕎麦とみ田 松戸", fallback: [35.7847, 139.9006], approx: true,
+    // 松戸1339 高橋ビル, ~320m south of Matsudo stn (old pin sat on the station)
+    q: "中華蕎麦とみ田 松戸", fallback: [35.78181, 139.90097], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("中華蕎麦とみ田 松戸"),
     notes: "GOAT ramen rated #1 in japan for several years. I booked relatively easily online thru Omakase. Was a wild experience you can feel the attention to every small detail. And you will also leave stuffed." },
 
   // ---------------- CENTRAL / NORTH / SOUTH TOKYO ----------------
   { id: "rokurinsha", name: "Rokurinsha", star: false, region: "Central Tokyo?", group: "tokyo", cat: "food",
-    q: "六厘舎 東京駅", fallback: [35.6797, 139.7688], approx: true,
+    // Tokyo Ramen Street, B1 First Avenue, Yaesu south side
+    q: "六厘舎 東京駅", fallback: [35.68006, 139.76785], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("六厘舎 東京ラーメンストリート"),
     notes: "Famous ramen restaurant right in Tokyo station, known for seafood-forward tsukemen with thicc noods." },
   { id: "kagari", name: "Kagari (ramen)", star: false, region: "Central Tokyo?", group: "tokyo", cat: "food",
-    q: "銀座 篝 本店", fallback: [35.6707, 139.7635], approx: true,
+    // 本店 moved to 銀座6-4-12 KNビル (Dec 2018) — building-exact via co-tenant's tabelog pin
+    q: "銀座 篝 本店", fallback: [35.67098, 139.76109], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("銀座 篝 本店"),
     notes: "Main branch is in Ginza I think -- exists elsewhere. Otemachi has a larger one with 4 people seating, rest are mostly counter seats. BEST tori paitan I've ever had, strongly recommend." },
   { id: "uniqlo-ginza", name: "Uniqlo Ginza", star: false, region: "Central Tokyo?", group: "tokyo", cat: "shop",
     q: "Uniqlo Ginza, Tokyo, Japan", fallback: [35.6717, 139.7639],
@@ -149,7 +166,9 @@ const PLACES = [
     q: "Akihabara Station, Tokyo, Japan", fallback: [35.6984, 139.7731],
     notes: "Anime district, prepare to be overwhelmed. Themed/maid/cat/crazy cafes, electronics stores, collectible stores, this place has it all." },
   { id: "nakiryu", name: "Nakiryu (ramen)", star: false, region: "North Tokyo", group: "tokyo", cat: "food",
-    q: "鳴龍 大塚", fallback: [35.7269, 139.7286], approx: true,
+    // 南大塚2-34-4 — mapion + tabelog agree
+    q: "創作麺工房 鳴龍", fallback: [35.72868, 139.73035], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("創作麺工房 鳴龍"),
     notes: "Michelin star ramen (it's famous for tantanmen style), worth the 1 hr wait." },
   { id: "teamlab-planets", name: "teamLab Planets", star: false, region: "South Tokyo", group: "tokyo", cat: "museum", emoji: "🪩",
     q: "teamLab Planets, Koto, Japan", fallback: [35.6494, 139.7898],

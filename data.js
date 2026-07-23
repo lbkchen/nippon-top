@@ -39,12 +39,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": "🍖",
-      "lat": 35.7052,
-      "lng": 139.5772,
-      "approx": true,
+      "lat": 35.70584,
+      "lng": 139.5778,
+      "approx": false,
       "notes": "One of the best pure meat experiences of my life. Only one thing on the menu, and that's how you know it's gonna be good - you just order how many patties you want, they grill em fresh for you, and you mix and match toppings to put on the meats. Unlimited refills of the fluffiest rice you'll ever have. Whole place smells like smoke but they give you a wardrobe to stuff your jacket in lol. Idk if they take resys now, we had to show up early morning for a same-day ticket and come back later. Worth the effort, and Kichijoji is S tier anyway so just spend the whole day there.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E6%8C%BD%E8%82%89%E3%81%A8%E7%B1%B3%20%E5%90%89%E7%A5%A5%E5%AF%BA"
     },
     {
       "id": "higashi-koganei",
@@ -80,16 +80,16 @@ window.NIPPON = {
       "id": "ramenya-shima",
       "name": "Ramenya Shima",
       "star": false,
-      "region": "West Tokyo",
+      "region": "Shinjuku/Shibuya Area",
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.7038,
-      "lng": 139.5993,
-      "approx": true,
+      "lat": 35.68834,
+      "lng": 139.68087,
+      "approx": false,
       "notes": "Best shoyu ramen I've had. Super annoying to get in tho - 60 bowls a day, you must sign up at 8-9am at the door, then return at the predetermined time slot - see Goog reviews lol. Only for the real fans.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%82%89%E3%81%81%E9%BA%BA%E3%82%84%20%E5%B6%8B%20%E6%B8%8B%E8%B0%B7%E5%8C%BA%E6%9C%AC%E7%94%BA"
     },
     {
       "id": "tonkatsu-narikura",
@@ -99,12 +99,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.6998,
-      "lng": 139.6357,
-      "approx": true,
+      "lat": 35.69771,
+      "lng": 139.63875,
+      "approx": false,
       "notes": "One of the highest rated tonkatsu (fried pork cutlet) on Tabelog the Japanese yelp. Usually everything is literally 3 stars or less, but this one has over 4 stars and tastes incredible -- you need to book a resy beforehand here: https://omakase.in/en/r/qw473765.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%81%A8%E3%82%93%E3%81%8B%E3%81%A4%E6%88%90%E8%94%B5%20%E6%88%90%E7%94%B0%E6%9D%B1"
     },
     {
       "id": "takaosan",
@@ -414,12 +414,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": "🍢",
-      "lat": 35.708,
-      "lng": 139.81,
-      "approx": true,
+      "lat": 35.70987,
+      "lng": 139.8159,
+      "approx": false,
       "notes": "Delicious yakitori (chicken skewer) omakase place near Skytree. They serve you until you say stop so come v hungry and experience the great joy of binchotan charcoal grilled chicken parts. The catch is you gotta book like 2+ months in advance on Omakase (as of Mar '24)",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E7%84%BC%E9%B3%A5%E3%81%8A%E3%81%BF%E4%B9%83%20%E6%8A%BC%E4%B8%8A"
     },
     {
       "id": "takesue",
@@ -429,12 +429,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.7133,
-      "lng": 139.8172,
-      "approx": true,
+      "lat": 35.70815,
+      "lng": 139.81765,
+      "approx": false,
       "notes": "Awesome local shop, highly recommend the chicken scallop base, and it has the most delicious toppings.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E7%AB%B9%E6%9C%AB%E6%9D%B1%E4%BA%ACPremium"
     },
     {
       "id": "leaves-coffee",
@@ -474,12 +474,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": "🐐",
-      "lat": 35.7847,
-      "lng": 139.9006,
-      "approx": true,
+      "lat": 35.78181,
+      "lng": 139.90097,
+      "approx": false,
       "notes": "GOAT ramen rated #1 in japan for several years. I booked relatively easily online thru Omakase. Was a wild experience you can feel the attention to every small detail. And you will also leave stuffed.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E8%8F%AF%E8%95%8E%E9%BA%A6%E3%81%A8%E3%81%BF%E7%94%B0%20%E6%9D%BE%E6%88%B8"
     },
     {
       "id": "rokurinsha",
@@ -489,12 +489,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.6797,
-      "lng": 139.7688,
-      "approx": true,
+      "lat": 35.68006,
+      "lng": 139.76785,
+      "approx": false,
       "notes": "Famous ramen restaurant right in Tokyo station, known for seafood-forward tsukemen with thicc noods.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E5%85%AD%E5%8E%98%E8%88%8E%20%E6%9D%B1%E4%BA%AC%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3%E3%82%B9%E3%83%88%E3%83%AA%E3%83%BC%E3%83%88"
     },
     {
       "id": "kagari",
@@ -504,12 +504,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.6707,
-      "lng": 139.7635,
-      "approx": true,
+      "lat": 35.67098,
+      "lng": 139.76109,
+      "approx": false,
       "notes": "Main branch is in Ginza I think -- exists elsewhere. Otemachi has a larger one with 4 people seating, rest are mostly counter seats. BEST tori paitan I've ever had, strongly recommend.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E9%8A%80%E5%BA%A7%20%E7%AF%9D%20%E6%9C%AC%E5%BA%97"
     },
     {
       "id": "uniqlo-ginza",
@@ -579,12 +579,12 @@ window.NIPPON = {
       "group": "tokyo",
       "cat": "food",
       "emoji": null,
-      "lat": 35.7269,
-      "lng": 139.7286,
-      "approx": true,
+      "lat": 35.72868,
+      "lng": 139.73035,
+      "approx": false,
       "notes": "Michelin star ramen (it's famous for tantanmen style), worth the 1 hr wait.",
       "photo": null,
-      "gmaps": null
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E5%89%B5%E4%BD%9C%E9%BA%BA%E5%B7%A5%E6%88%BF%20%E9%B3%B4%E9%BE%8D"
     },
     {
       "id": "teamlab-planets",
