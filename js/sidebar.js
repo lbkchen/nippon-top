@@ -138,7 +138,7 @@ export function renderList() {
       ? distKm(state.userLoc, [a.lat, a.lng]) - distKm(state.userLoc, [b.lat, b.lng]) // located: nearest first
       : (b.star - a.star) || a.name.localeCompare(b.name));
   if (!list.length) {
-    wrap.innerHTML = `<div class="empty-state"><span class="big">🍥</span>nothing here…<br>zoom out, clear filters, or lasso somewhere tastier</div>`;
+    wrap.innerHTML = `<div class="empty-state"><span class="big">🍥</span>nothing here…<br>zoom out, clear filters, or pan somewhere tastier</div>`;
   } else {
     for (const p of list) wrap.append(cardEl(p));
   }

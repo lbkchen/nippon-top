@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=17" />
 </head>
 <body>
   <!-- splash title card -->
@@ -102,7 +102,8 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8.8" width="17" height="10.7" rx="2" /><path d="M9 8.8 V7.1 a1.7 1.7 0 0 1 1.7 -1.7 h2.6 a1.7 1.7 0 0 1 1.7 1.7 V8.8" /><path d="M3.5 13.4 h17" /><path d="M10.8 13.4 v1.8 h2.4 v-1.8" /></svg>
   </button>
   <div class="toolbar" id="toolbar">
-    <button data-tool="lasso" aria-label="lasso — circle spots to see them all at once">
+    <!-- lasso shelved for now — flip `hidden` off to bring it back -->
+    <button data-tool="lasso" aria-label="lasso — circle spots to see them all at once" hidden>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path stroke-dasharray="3.2 3" d="M12 4 C17.5 3.2 20.8 6.8 20 10.5 C19.2 14.4 14.5 15.8 10.5 15 C6.8 14.3 4.2 11.5 5.2 8.2 C6 5.6 9 4.4 12 4 Z" />
         <path d="M9.5 15.5 C8.6 17.8 7 19.2 5 20.2" />
@@ -352,6 +353,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="data.js?v=15"></script>
-  <script type="module" src="js/main.js?v=18"></script>
+  <script type="module" src="js/main.js?v=19"></script>
 </body>
 </html>

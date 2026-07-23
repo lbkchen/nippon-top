@@ -705,6 +705,7 @@ body[data-zoom="far"] .zone-label { display: none; }
   box-shadow: var(--shadow-sm);
   transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
 }
+.toolbar button[hidden] { display: none; }
 .toolbar button svg { width: 24px; height: 24px; }
 .toolbar button:nth-child(odd) { transform: rotate(-1.2deg); }
 .toolbar button:nth-child(even) { transform: rotate(1.2deg); }
