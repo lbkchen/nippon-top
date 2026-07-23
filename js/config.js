@@ -2,7 +2,7 @@
 
 export const CATS = {
   food:   { emoji: "🍜", label: "slurps & bites", color: "#e03131" },
-  cafe:   { emoji: "🍡", label: "sweets & coffee", color: "#d6336c" },
+  cafe:   { emoji: "☕", label: "sweets & coffee", color: "#d6336c" },
   night:  { emoji: "🍻", label: "nightcaps", color: "#5f3dc4" },
   temple: { emoji: "⛩️", label: "shrines & temples", color: "#e8590c" },
   park:   { emoji: "🌳", label: "green stuff", color: "#2f9e44" },

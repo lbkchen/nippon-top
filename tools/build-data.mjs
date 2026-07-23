@@ -78,7 +78,7 @@ const PLACES = [
   { id: "meiji-jingu", name: "Meiji Jingu / Yoyogi Park", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "temple",
     q: "Meiji Jingu, Shibuya, Japan", fallback: [35.6764, 139.6993],
     notes: "Famous shrine off of Harajuku. It's nothing too crazy but worth checking out if you plan to be here. Yoyogi park is a nice and very huge park in the area." },
-  { id: "roastery-nozy", name: "The Roastery by Nozy Coffee", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "cafe", emoji: "☕",
+  { id: "roastery-nozy", name: "The Roastery by Nozy Coffee", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "cafe",
     q: "The Roastery by Nozy Coffee, Jingumae, Japan", fallback: [35.6669, 139.7052], approx: true,
     notes: "Idk if I was just very new to coffee then but I had the single origin latte here and it was prob the best coffee I ever had at the time. Still think about it sometimes. Quite crowded but cute spot to sit down, walk the sidestreets around here too." },
   { id: "meguro-river", name: "Meguro / Meguro River", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "hood", emoji: "🌸",

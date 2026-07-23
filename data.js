@@ -248,7 +248,7 @@ window.NIPPON = {
       "region": "Shinjuku/Shibuya Area",
       "group": "tokyo",
       "cat": "cafe",
-      "emoji": "☕",
+      "emoji": null,
       "lat": 35.6654945,
       "lng": 139.7048132,
       "approx": false,
