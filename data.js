@@ -317,6 +317,81 @@ window.NIPPON = {
       "gmaps": null
     },
     {
+      "id": "nagatanien-igamono",
+      "name": "Nagatanien Tokyo Store (igamono)",
+      "star": false,
+      "region": "Shinjuku/Shibuya Area",
+      "group": "tokyo",
+      "cat": "shop",
+      "emoji": "🍲",
+      "lat": 35.6455,
+      "lng": 139.7118,
+      "approx": false,
+      "notes": "A dream store for kitchen enthusiasts. They got famous from the Donabe cookbook, and sell a bunch of donabe pots from Iga prefecture which supposedly has the best clay and artisans that make this stuff. Small shop but really well curated and sells a bunch of other handcrafted ceramics, kitchen tools, etc. And worth a quick visit while in Ebisu.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E9%95%B7%E8%B0%B7%E5%9C%92%20%E6%9D%B1%E4%BA%AC%E5%BA%97%20igamono%20%E6%81%B5%E6%AF%94%E5%AF%BF"
+    },
+    {
+      "id": "kinto-store",
+      "name": "KINTO STORE Tokyo",
+      "star": false,
+      "region": "Shinjuku/Shibuya Area",
+      "group": "tokyo",
+      "cat": "shop",
+      "emoji": "🫖",
+      "lat": 35.6469,
+      "lng": 139.6963,
+      "approx": false,
+      "notes": "One of the flagship stores of Kinto which is a famous glassware and ceramics brand. Love their designs coffee mugs and matcha glasses, and they have a very comprehensive collection here. So much cheaper than the states too so grab some stuff here if you have the space.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=KINTO%20STORE%20Tokyo%20%E4%B8%AD%E7%9B%AE%E9%BB%92"
+    },
+    {
+      "id": "jbs-tokyo",
+      "name": "JB's TOKYO (smash burger)",
+      "star": false,
+      "region": "Shinjuku/Shibuya Area",
+      "group": "tokyo",
+      "cat": "food",
+      "emoji": "🍔",
+      "lat": 35.6837,
+      "lng": 139.7013,
+      "approx": false,
+      "notes": "The best smash burger I've had. Two patties with cheese on a milk bread, no frills place that emphasizes good ingredients and it definitely reflects in the taste.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=JB's%20TOKYO%20%E4%BB%A3%E3%80%85%E6%9C%A8%E6%9C%AC%E5%BA%97"
+    },
+    {
+      "id": "amam-dacotan",
+      "name": "AMAM DACOTAN",
+      "star": false,
+      "region": "Shinjuku/Shibuya Area",
+      "group": "tokyo",
+      "cat": "cafe",
+      "emoji": "🥐",
+      "lat": 35.666,
+      "lng": 139.7107,
+      "approx": false,
+      "notes": "An offshoot bakery of \"im donut?\" the legendary fluffy donut shop, this place is just as ridiculous and great. There are so many creative sweet and savory pastries here that are both aesthetic and tasty.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%9E%E3%83%A0%E3%83%80%E3%82%B3%E3%82%BF%E3%83%B3%20%E8%A1%A8%E5%8F%82%E9%81%93"
+    },
+    {
+      "id": "kuramae",
+      "name": "Kuramae",
+      "star": false,
+      "region": "East Tokyo",
+      "group": "tokyo",
+      "cat": "shop",
+      "emoji": "🧵",
+      "lat": 35.7053,
+      "lng": 139.7913,
+      "approx": false,
+      "notes": "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
       "id": "asakusa-sensoji",
       "name": "Asakusa / Sensoji / Nakamise St",
       "star": true,
@@ -572,6 +647,21 @@ window.NIPPON = {
       "gmaps": null
     },
     {
+      "id": "glitch-coffee",
+      "name": "Glitch Coffee (GLITCH TOKYO, Nihonbashi)",
+      "star": false,
+      "region": "Central Tokyo?",
+      "group": "tokyo",
+      "cat": "cafe",
+      "emoji": null,
+      "lat": 35.6868,
+      "lng": 139.7748,
+      "approx": false,
+      "notes": "The most hyped coffee spot in Japan - is it worth the hype? I had mild expectations but honestly it really delivered. Got the latte as I don't drink many pour overs and it was really balanced and I could taste all the tasting notes they had claimed. My favorite part though is how friendly they are with asking your preferences, guiding you through their bean selection and even letting you smell the bean samples before placing your order. Also bought a couple of jars of beans back (really small though, 100g) and they were both bangers.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=GLITCH%20TOKYO%20%E6%97%A5%E6%9C%AC%E6%A9%8B%E6%9C%AC%E7%94%BA"
+    },
+    {
       "id": "nakiryu",
       "name": "Nakiryu (ramen)",
       "star": false,
@@ -628,6 +718,21 @@ window.NIPPON = {
       "lng": 139.6003825,
       "approx": false,
       "notes": "2 hrs away from Tokyo, great full day trip or even better stay the night. Has the coolest most lavish looking shrine (Toshogu) and the mausoleum of Tokugawa, lot's of history in this city. Onsen and also some small ski areas are possible nearby during winter.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "fuji-q",
+      "name": "Fuji-Q Highland",
+      "star": false,
+      "region": "South of Tokyo",
+      "group": "neartokyo",
+      "cat": "fun",
+      "emoji": "🎢",
+      "lat": 35.4875,
+      "lng": 138.7803,
+      "approx": false,
+      "notes": "One of the top 2 amusement parks in Japan. You would think the rides in a Japanese park would be tame - I definitely did, and how WRONG I was. There is one coaster \"eejanaika?\" that literally spins you upside down first before dropping you down what felt like a hundred feet down and I was completely and utterly unprepared with how serious these coasters are. Also you can pay to win $20 to skip each line at this place which just made it a very fun and efficient experience. Also recommend the impossible games \"ride\" which is like a minigame gauntlet really fun to run with friends.",
       "photo": null,
       "gmaps": null
     },
@@ -1082,6 +1187,156 @@ window.NIPPON = {
       "gmaps": null
     },
     {
+      "id": "fukuoka",
+      "name": "Fukuoka",
+      "star": false,
+      "region": "Fukuoka",
+      "group": "kyushu",
+      "cat": "hood",
+      "emoji": null,
+      "lat": 33.5914,
+      "lng": 130.3986,
+      "approx": false,
+      "notes": "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "nakasu",
+      "name": "Nakasu",
+      "star": false,
+      "region": "Fukuoka",
+      "group": "kyushu",
+      "cat": "night",
+      "emoji": null,
+      "lat": 33.5925,
+      "lng": 130.4048,
+      "approx": false,
+      "notes": "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "uminonakamichi",
+      "name": "Uminonakamichi Seaside Park",
+      "star": false,
+      "region": "Fukuoka",
+      "group": "kyushu",
+      "cat": "park",
+      "emoji": "🌼",
+      "lat": 33.664,
+      "lng": 130.347,
+      "approx": false,
+      "notes": "Really idyllic and huge park, almost too expansive to walk so would recommend renting a bike there to get around. A bit empty when we went but one of the more memorable sites from our Fukuoka stay in general. There were these huge blue flower fields that felt pretty otherworldly and various ruin-looking structures that just gave it quite the unique vibe for Japan.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "nanzoin",
+      "name": "Nanzoin Temple",
+      "star": false,
+      "region": "Fukuoka",
+      "group": "kyushu",
+      "cat": "temple",
+      "emoji": "🛌",
+      "lat": 33.5928,
+      "lng": 130.5232,
+      "approx": false,
+      "notes": "The famous reclining Buddha temple - it's definitely striking. One of the most touristy spots but it was quite memorable. There were some fun activities at this temple too like a ring tossing game and a special DIY goshuin (temple stamp).",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E8%94%B5%E9%99%A2%20%E7%AF%A0%E6%A0%97"
+    },
+    {
+      "id": "itoshima",
+      "name": "Itoshima",
+      "star": false,
+      "region": "Near Fukuoka",
+      "group": "kyushu",
+      "cat": "trip",
+      "emoji": "🌾",
+      "lat": 33.5578,
+      "lng": 130.1953,
+      "approx": false,
+      "notes": "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "donguri",
+      "name": "Donguri (bakery)",
+      "star": false,
+      "region": "Sapporo",
+      "group": "hokkaido",
+      "cat": "cafe",
+      "emoji": "🥟",
+      "lat": 43.0613,
+      "lng": 141.3556,
+      "approx": false,
+      "notes": "I think this is a chain bakery all over Sapporo but they have this meat bun that was so good especially in the freezing winter that I am still thinking about it to this day.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%81%A9%E3%82%93%E3%81%90%E3%82%8A%20%E5%A4%A7%E9%80%9A%E5%BA%97%20%E6%9C%AD%E5%B9%8C"
+    },
+    {
+      "id": "poool",
+      "name": "poool - Espresso&Work",
+      "star": false,
+      "region": "Sapporo",
+      "group": "hokkaido",
+      "cat": "cafe",
+      "emoji": null,
+      "lat": 43.0636,
+      "lng": 141.3522,
+      "approx": false,
+      "notes": "Very cool cafe and coworking space with a great vibe. Definitely recommend if you need to get some work done",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=poool%20Espresso%26Work%20%E6%9C%AD%E5%B9%8C"
+    },
+    {
+      "id": "otaru",
+      "name": "Otaru",
+      "star": false,
+      "region": "Hokkaido (West)",
+      "group": "hokkaido",
+      "cat": "trip",
+      "emoji": "🛶",
+      "lat": 43.1988,
+      "lng": 141.0016,
+      "approx": false,
+      "notes": "A really cute European-inspired town lined with canals worth a quick day trip from Sapporo, beautiful in both summer and winter.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "niseko",
+      "name": "Niseko",
+      "star": false,
+      "region": "Hokkaido (West)",
+      "group": "hokkaido",
+      "cat": "fun",
+      "emoji": "🎿",
+      "lat": 42.8613,
+      "lng": 140.6905,
+      "approx": false,
+      "notes": "We spent over a week there in January next to Hirafu and got a bit unlucky with the weather. Snow was a bit sparse and it was still really really busy, like the line to the main gondola felt like it stretched for miles. Also the entire city, from staff to tourists, is basically Australia. I've heard good things about Rusutsu nearby but I would personally recommend Nozawa Onsen instead, which has a much more cozy vibe.",
+      "photo": null,
+      "gmaps": null
+    },
+    {
+      "id": "r-niseko",
+      "name": "Pizzeria \"R Niseko\"",
+      "star": false,
+      "region": "Hokkaido (West)",
+      "group": "hokkaido",
+      "cat": "food",
+      "emoji": "🍕",
+      "lat": 42.8598,
+      "lng": 140.6918,
+      "approx": false,
+      "notes": "This is probably outrageous but I think the Bismarck pizza (red sauce with cracked eggs in the center) is one of the best pizzas I've had. And it's from a random no-name pizza spot in Niseko of all places. I'm still thinking about that one.",
+      "photo": null,
+      "gmaps": "https://www.google.com/maps/search/?api=1&query=Pizzeria%20R%20Niseko%20The%20Maples%20%E3%81%B2%E3%82%89%E3%81%B5"
+    },
+    {
       "id": "lake-toya",
       "name": "Lake Toya",
       "star": false,
@@ -1389,6 +1644,298 @@ window.NIPPON = {
         [
           35.6701,
           139.7029
+        ]
+      ]
+    },
+    {
+      "id": "kuramae-artisan",
+      "name": "Kuramae Maker Blocks",
+      "color": "#1098ad",
+      "fill": "dots",
+      "blurb": "Leather, ceramics, coffee, one-person studios. Wander Edo-dori to the river and let the shop fronts mug you.",
+      "points": [
+        [
+          35.7085,
+          139.7885
+        ],
+        [
+          35.7088,
+          139.793
+        ],
+        [
+          35.7072,
+          139.7945
+        ],
+        [
+          35.704,
+          139.794
+        ],
+        [
+          35.7028,
+          139.7915
+        ],
+        [
+          35.7032,
+          139.7884
+        ],
+        [
+          35.7058,
+          139.7876
+        ]
+      ]
+    },
+    {
+      "id": "nakasu-touts",
+      "name": "Nakasu Info Center Gauntlet",
+      "color": "#e03131",
+      "avoid": true,
+      "blurb": "Every \"FREE INFORMATION CENTER\" is a tout selling escorts, not maps. Eat at the yatai, decline everything else.",
+      "points": [
+        [
+          33.5968,
+          130.4082
+        ],
+        [
+          33.5946,
+          130.41
+        ],
+        [
+          33.5918,
+          130.4068
+        ],
+        [
+          33.5895,
+          130.4046
+        ],
+        [
+          33.5884,
+          130.403
+        ],
+        [
+          33.5898,
+          130.4018
+        ],
+        [
+          33.5925,
+          130.4038
+        ],
+        [
+          33.5955,
+          130.4062
+        ]
+      ]
+    },
+    {
+      "id": "fukuoka-fine",
+      "name": "Fukuoka: Fine, Honestly",
+      "color": "#9c36b5",
+      "blurb": "Nice people, great yatai, not a lot of microcosms. Rent a car and let Itoshima and Beppu do the heavy lifting.",
+      "points": [
+        [
+          33.6,
+          130.39
+        ],
+        [
+          33.599,
+          130.413
+        ],
+        [
+          33.592,
+          130.425
+        ],
+        [
+          33.585,
+          130.423
+        ],
+        [
+          33.582,
+          130.402
+        ],
+        [
+          33.583,
+          130.386
+        ],
+        [
+          33.591,
+          130.383
+        ]
+      ]
+    },
+    {
+      "id": "itoshima-boonies",
+      "name": "Itoshima Boonies Loop",
+      "color": "#2f9e44",
+      "fill": "dots",
+      "blurb": "Golden rice fields, one train track, no infrastructure. Get a car, pack hand sanitizer.",
+      "points": [
+        [
+          33.63,
+          130.105
+        ],
+        [
+          33.625,
+          130.175
+        ],
+        [
+          33.61,
+          130.22
+        ],
+        [
+          33.575,
+          130.245
+        ],
+        [
+          33.53,
+          130.225
+        ],
+        [
+          33.485,
+          130.175
+        ],
+        [
+          33.51,
+          130.115
+        ],
+        [
+          33.57,
+          130.09
+        ]
+      ]
+    },
+    {
+      "id": "shimanami-route",
+      "name": "Shimanami Kaido Run",
+      "color": "#f08c00",
+      "fill": "hatch",
+      "blurb": "70km, 7 islands, zero excuses. Onomichi ramen at the start, Imabari towels at the end, a night somewhere in the middle.",
+      "points": [
+        [
+          34.398,
+          133.233
+        ],
+        [
+          34.386,
+          133.226
+        ],
+        [
+          34.365,
+          133.232
+        ],
+        [
+          34.334,
+          133.211
+        ],
+        [
+          34.302,
+          133.202
+        ],
+        [
+          34.284,
+          133.166
+        ],
+        [
+          34.272,
+          133.12
+        ],
+        [
+          34.243,
+          133.063
+        ],
+        [
+          34.227,
+          133.039
+        ],
+        [
+          34.197,
+          133.041
+        ],
+        [
+          34.182,
+          133.043
+        ],
+        [
+          34.159,
+          133.023
+        ],
+        [
+          34.127,
+          133.012
+        ],
+        [
+          34.091,
+          133.007
+        ],
+        [
+          34.05,
+          133.028
+        ],
+        [
+          34.038,
+          133.021
+        ],
+        [
+          34.074,
+          132.961
+        ],
+        [
+          34.086,
+          132.968
+        ],
+        [
+          34.127,
+          132.947
+        ],
+        [
+          34.163,
+          132.952
+        ],
+        [
+          34.195,
+          132.963
+        ],
+        [
+          34.218,
+          132.983
+        ],
+        [
+          34.233,
+          132.981
+        ],
+        [
+          34.263,
+          132.979
+        ],
+        [
+          34.279,
+          133.003
+        ],
+        [
+          34.308,
+          133.06
+        ],
+        [
+          34.32,
+          133.106
+        ],
+        [
+          34.338,
+          133.142
+        ],
+        [
+          34.37,
+          133.151
+        ],
+        [
+          34.401,
+          133.172
+        ],
+        [
+          34.422,
+          133.166
+        ],
+        [
+          34.434,
+          133.173
         ]
       ]
     },

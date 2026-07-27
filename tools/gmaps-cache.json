@@ -49,5 +49,32 @@
   },
   "https://www.google.com/maps/search/?api=1&query=soup%20curry%20mog%20mog%20%E6%B4%9E%E7%88%BA%E6%B9%96%E6%B8%A9%E6%B3%89": {
     "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=%E9%95%B7%E8%B0%B7%E5%9C%92%20%E6%9D%B1%E4%BA%AC%E5%BA%97%20igamono%20%E6%81%B5%E6%AF%94%E5%AF%BF": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=KINTO%20STORE%20Tokyo%20%E4%B8%AD%E7%9B%AE%E9%BB%92": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=JB's%20TOKYO%20%E4%BB%A3%E3%80%85%E6%9C%A8%E6%9C%AC%E5%BA%97": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%9E%E3%83%A0%E3%83%80%E3%82%B3%E3%82%BF%E3%83%B3%20%E8%A1%A8%E5%8F%82%E9%81%93": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=GLITCH%20TOKYO%20%E6%97%A5%E6%9C%AC%E6%A9%8B%E6%9C%AC%E7%94%BA": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E8%94%B5%E9%99%A2%20%E7%AF%A0%E6%A0%97": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=%E3%81%A9%E3%82%93%E3%81%90%E3%82%8A%20%E5%A4%A7%E9%80%9A%E5%BA%97%20%E6%9C%AD%E5%B9%8C": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=poool%20Espresso%26Work%20%E6%9C%AD%E5%B9%8C": {
+    "noCoords": true
+  },
+  "https://www.google.com/maps/search/?api=1&query=Pizzeria%20R%20Niseko%20The%20Maples%20%E3%81%B2%E3%82%89%E3%81%B5": {
+    "noCoords": true
   }
 }

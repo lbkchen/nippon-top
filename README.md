@@ -5,7 +5,7 @@
 ### 👉 the actual map: **[lbkchen.github.io/nippon-top](https://lbkchen.github.io/nippon-top/)** 👈
 
 A zero-build, zero-API-key, zero-dollar map of every Japan rec from the spreadsheet:
-74 places, 17 certified bangers ⭐, 10 chains, vibe zones, and forkable friend maps.
+94 places, 18 certified bangers ⭐, 10 chains, vibe zones, and forkable friend maps.
 
 ## Run it locally
 

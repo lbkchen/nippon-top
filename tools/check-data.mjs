@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CATS = ["food", "cafe", "night", "temple", "park", "hood", "shop", "museum", "view", "trip", "onsen", "fun"];
-const GROUPS = ["tokyo", "neartokyo", "kyoto", "osaka", "hiroshima", "hokkaido"];
+const GROUPS = ["tokyo", "neartokyo", "kyoto", "osaka", "hiroshima", "kyushu", "hokkaido"];
 // generous Japan bounding box — catches swapped/garbage coords, not border disputes
 const JP = { latMin: 24, latMax: 46, lngMin: 122, lngMax: 154 };
 

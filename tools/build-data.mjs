@@ -100,8 +100,33 @@ const PLACES = [
   { id: "shimokitazawa", name: "Shimokitazawa", star: true, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "hood",
     q: "Shimokitazawa Station, Setagaya, Japan", fallback: [35.6613, 139.6682],
     notes: "Very trendy, hipster area. Similar to Koenji. Lots of nice thrift shops, bookstores, good vibes. Recommend just walking around and spending some time here chilling with a book or something!" },
+  { id: "nagatanien-igamono", name: "Nagatanien Tokyo Store (igamono)", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "shop", emoji: "🍲",
+    // 渋谷区恵比寿4-11-8 — hand-pinned off the address (they moved once, so if the
+    // pin looks off, paste a fresh gmaps link in-app and it'll ride the geo overlay)
+    q: "長谷園 東京店 igamono 恵比寿", fallback: [35.64550, 139.71180], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("長谷園 東京店 igamono 恵比寿"),
+    notes: "A dream store for kitchen enthusiasts. They got famous from the Donabe cookbook, and sell a bunch of donabe pots from Iga prefecture which supposedly has the best clay and artisans that make this stuff. Small shop but really well curated and sells a bunch of other handcrafted ceramics, kitchen tools, etc. And worth a quick visit while in Ebisu." },
+  { id: "kinto-store", name: "KINTO STORE Tokyo", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "shop", emoji: "🫖",
+    // 目黒区青葉台1-19-12, ~6 min walk NW of Nakameguro stn up the Meguro river
+    q: "KINTO STORE Tokyo 青葉台", fallback: [35.64690, 139.69630], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("KINTO STORE Tokyo 中目黒"),
+    notes: "One of the flagship stores of Kinto which is a famous glassware and ceramics brand. Love their designs coffee mugs and matcha glasses, and they have a very comprehensive collection here. So much cheaper than the states too so grab some stuff here if you have the space." },
+  { id: "jbs-tokyo", name: "JB's TOKYO (smash burger)", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "food", emoji: "🍔",
+    // 渋谷区代々木1-33-3, the Yoyogi honten (there's a Miyashita Park branch too)
+    q: "JB's TOKYO 代々木本店", fallback: [35.68370, 139.70130], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("JB's TOKYO 代々木本店"),
+    notes: "The best smash burger I've had. Two patties with cheese on a milk bread, no frills place that emphasizes good ingredients and it definitely reflects in the taste." },
+  { id: "amam-dacotan", name: "AMAM DACOTAN", star: false, region: "Shinjuku/Shibuya Area", group: "tokyo", cat: "cafe", emoji: "🥐",
+    // 港区北青山3-7-6, just north of the Omotesando crossing
+    q: "アマムダコタン 表参道", fallback: [35.66600, 139.71070], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("アマムダコタン 表参道"),
+    notes: "An offshoot bakery of \"im donut?\" the legendary fluffy donut shop, this place is just as ridiculous and great. There are so many creative sweet and savory pastries here that are both aesthetic and tasty." },
 
   // ---------------- EAST TOKYO ----------------
+  { id: "kuramae", name: "Kuramae", star: false, region: "East Tokyo", group: "tokyo", cat: "shop", emoji: "🧵",
+    // the pin is the station on Edo-dori; the shops sprawl — see the Kuramae zone
+    q: "Kuramae Station, Taito, Japan", fallback: [35.70530, 139.79130], pin: true,
+    notes: "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff." },
   { id: "asakusa-sensoji", name: "Asakusa / Sensoji / Nakamise St", star: true, region: "East Tokyo", group: "tokyo", cat: "temple",
     q: "Sensoji, Asakusa, Japan", fallback: [35.7148, 139.7967],
     notes: "Traditional temple with a nice shopping street and more old-town vibes, although it be really touristy now. Most accesssible kyoto-like part of town I guess." },
@@ -168,6 +193,12 @@ const PLACES = [
   { id: "akihabara", name: "Akihabara", star: false, region: "Central Tokyo?", group: "tokyo", cat: "fun", emoji: "🕹️",
     q: "Akihabara Station, Tokyo, Japan", fallback: [35.6984, 139.7731],
     notes: "Anime district, prepare to be overwhelmed. Themed/maid/cat/crazy cafes, electronics stores, collectible stores, this place has it all." },
+  { id: "glitch-coffee", name: "Glitch Coffee (GLITCH TOKYO, Nihonbashi)", star: false, region: "Central Tokyo?", group: "tokyo", cat: "cafe",
+    // 中央区日本橋本町1-1-3 立石本町ビル1F — the roastery flagship that opened Aug '25
+    // (the original Glitch is still in Jimbocho if this pin ever looks wrong)
+    q: "GLITCH TOKYO 日本橋本町", fallback: [35.68680, 139.77480], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("GLITCH TOKYO 日本橋本町"),
+    notes: "The most hyped coffee spot in Japan - is it worth the hype? I had mild expectations but honestly it really delivered. Got the latte as I don't drink many pour overs and it was really balanced and I could taste all the tasting notes they had claimed. My favorite part though is how friendly they are with asking your preferences, guiding you through their bean selection and even letting you smell the bean samples before placing your order. Also bought a couple of jars of beans back (really small though, 100g) and they were both bangers." },
   { id: "nakiryu", name: "Nakiryu (ramen)", star: false, region: "North Tokyo", group: "tokyo", cat: "food",
     // 南大塚2-34-4 — mapion + tabelog agree
     q: "創作麺工房 鳴龍", fallback: [35.72868, 139.73035], pin: true,
@@ -184,6 +215,9 @@ const PLACES = [
   { id: "nikko", name: "Nikko", star: true, region: "North of Tokyo", group: "neartokyo", cat: "trip",
     q: "Toshogu, Nikko, Japan", fallback: [36.7581, 139.5990],
     notes: "2 hrs away from Tokyo, great full day trip or even better stay the night. Has the coolest most lavish looking shrine (Toshogu) and the mausoleum of Tokugawa, lot's of history in this city. Onsen and also some small ski areas are possible nearby during winter." },
+  { id: "fuji-q", name: "Fuji-Q Highland", star: false, region: "South of Tokyo", group: "neartokyo", cat: "fun", emoji: "🎢",
+    q: "Fuji-Q Highland, Fujiyoshida, Japan", fallback: [35.4875, 138.7803],
+    notes: "One of the top 2 amusement parks in Japan. You would think the rides in a Japanese park would be tame - I definitely did, and how WRONG I was. There is one coaster \"eejanaika?\" that literally spins you upside down first before dropping you down what felt like a hundred feet down and I was completely and utterly unprepared with how serious these coasters are. Also you can pay to win $20 to skip each line at this place which just made it a very fun and efficient experience. Also recommend the impossible games \"ride\" which is like a minigame gauntlet really fun to run with friends." },
   { id: "hakone", name: "Hakone", star: false, region: "South of Tokyo", group: "neartokyo", cat: "onsen",
     q: "Hakone-Yumoto Station, Japan", fallback: [35.2324, 139.1069],
     notes: "1 hr away from Tokyo. Very famous for ryokan (traditional hotels), onsen, great natural scenery. Good place to splurge on a nice ryokan with kaiseki ryori (multi-course dinner and breakfast included with stay)." },
@@ -292,7 +326,54 @@ const PLACES = [
     q: "Hiroshima Peace Memorial Museum, Japan", fallback: [34.3917, 132.4531],
     notes: "Incrediblly curated museum on the history of the event, 100% worth visiting if you're here." },
 
+  // ---------------- KYUSHU ----------------
+  { id: "fukuoka", name: "Fukuoka", star: false, region: "Fukuoka", group: "kyushu", cat: "hood",
+    // pin = Tenjin, the city's centre of gravity; the honest take is in the zone too
+    q: "Tenjin Station, Fukuoka, Japan", fallback: [33.59140, 130.39860], pin: true,
+    notes: "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc." },
+  { id: "nakasu", name: "Nakasu", star: false, region: "Fukuoka", group: "kyushu", cat: "night",
+    // the sandbank island between the Naka and Hakata rivers — see the avoid zone
+    q: "Nakasu, Hakata, Fukuoka, Japan", fallback: [33.59250, 130.40480], pin: true,
+    notes: "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol." },
+  { id: "uminonakamichi", name: "Uminonakamichi Seaside Park", star: false, region: "Fukuoka", group: "kyushu", cat: "park", emoji: "🌼",
+    // 東区西戸崎18-25 — huge park on the sandbar, pinned at the main gate by the
+    // station (a geocode centroid lands somewhere in the middle of the flower fields)
+    q: "海の中道海浜公園", fallback: [33.66400, 130.34700], pin: true,
+    notes: "Really idyllic and huge park, almost too expansive to walk so would recommend renting a bike there to get around. A bit empty when we went but one of the more memorable sites from our Fukuoka stay in general. There were these huge blue flower fields that felt pretty otherworldly and various ruin-looking structures that just gave it quite the unique vibe for Japan." },
+  { id: "nanzoin", name: "Nanzoin Temple", star: false, region: "Fukuoka", group: "kyushu", cat: "temple", emoji: "🛌",
+    // 糟屋郡篠栗町篠栗1035, right by Kido-Nanzoin-mae stn on the Sasaguri line
+    q: "南蔵院 篠栗", fallback: [33.59280, 130.52320], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("南蔵院 篠栗"),
+    notes: "The famous reclining Buddha temple - it's definitely striking. One of the most touristy spots but it was quite memorable. There were some fun activities at this temple too like a ring tossing game and a special DIY goshuin (temple stamp)." },
+  { id: "itoshima", name: "Itoshima", star: false, region: "Near Fukuoka", group: "kyushu", cat: "trip", emoji: "🌾",
+    // pin = Chikuzen-Maebaru stn, the way in; the peninsula itself is a zone
+    q: "Chikuzen-Maebaru Station, Itoshima, Japan", fallback: [33.55780, 130.19530], pin: true,
+    notes: "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience." },
+
   // ---------------- HOKKAIDO ----------------
+  { id: "donguri", name: "Donguri (bakery)", star: false, region: "Sapporo", group: "hokkaido", cat: "cafe", emoji: "🥟",
+    // 大通西1丁目13 ル・トロワ1F — the Odori branch, one of many across the city
+    q: "どんぐり 大通店 札幌", fallback: [43.06130, 141.35560], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("どんぐり 大通店 札幌"),
+    notes: "I think this is a chain bakery all over Sapporo but they have this meat bun that was so good especially in the freezing winter that I am still thinking about it to this day." },
+  { id: "poool", name: "poool - Espresso&Work", star: false, region: "Sapporo", group: "hokkaido", cat: "cafe",
+    // 中央区北2条西3丁目1-29 タケサトビル1F, ~2 min from Chi-Ka-Ho exit 3
+    q: "poool Espresso&Work 札幌", fallback: [43.06360, 141.35220], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("poool Espresso&Work 札幌"),
+    notes: "Very cool cafe and coworking space with a great vibe. Definitely recommend if you need to get some work done" },
+  { id: "otaru", name: "Otaru", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "trip", emoji: "🛶",
+    // the canal, not the station — the canal IS the reason you go
+    q: "Otaru Canal, Japan", fallback: [43.19880, 141.00160], pin: true,
+    notes: "A really cute European-inspired town lined with canals worth a quick day trip from Sapporo, beautiful in both summer and winter." },
+  { id: "niseko", name: "Niseko", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "fun", emoji: "🎿",
+    q: "Niseko Hirafu, Kutchan, Japan", fallback: [42.86130, 140.69050], pin: true,
+    notes: "We spent over a week there in January next to Hirafu and got a bit unlucky with the weather. Snow was a bit sparse and it was still really really busy, like the line to the main gondola felt like it stretched for miles. Also the entire city, from staff to tourists, is basically Australia. I've heard good things about Rusutsu nearby but I would personally recommend Nozawa Onsen instead, which has a much more cozy vibe." },
+  { id: "r-niseko", name: "Pizzeria \"R Niseko\"", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "food", emoji: "🍕",
+    // ニセコひらふ1条4-5-41, The Maples Niseko 1F — pin estimated off the block, so
+    // it's upper-Hirafu-accurate rather than door-accurate
+    q: "Pizzeria R Niseko ひらふ", fallback: [42.85980, 140.69180], pin: true,
+    gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Pizzeria R Niseko The Maples ひらふ"),
+    notes: "This is probably outrageous but I think the Bismarck pizza (red sauce with cracked eggs in the center) is one of the best pizzas I've had. And it's from a random no-name pizza spot in Niseko of all places. I'm still thinking about that one." },
   { id: "lake-toya", name: "Lake Toya", star: false, region: "Hokkaido (West)", group: "hokkaido", cat: "onsen", emoji: "🏞️",
     q: "Toyako Onsen, Japan", fallback: [42.5657, 140.8195],
     notes: "Beautiful lake and a very popular stop on the way from Sapporo. Great place to stay in a ryokan - would recommend the Lake Suite Ko No Sumika." },
@@ -345,6 +426,31 @@ const ZONES = [
   { id: "takeshita-crush", name: "Takeshita St Crush", color: "#e03131", avoid: true,
     blurb: "Shoulder-to-shoulder crepe purgatory. One block south is freedom — see Cat Street.",
     points: [[35.6708, 139.7027], [35.6712, 139.7046], [35.6717, 139.7064], [35.6711, 139.7068], [35.6706, 139.7047], [35.6701, 139.7029]] },
+  { id: "kuramae-artisan", name: "Kuramae Maker Blocks", color: "#1098ad", fill: "dots",
+    blurb: "Leather, ceramics, coffee, one-person studios. Wander Edo-dori to the river and let the shop fronts mug you.",
+    // 蔵前 1–4 chome: Kuramabashi-dori (N) → Asakusa-dori (S), Kokusai-dori (W) → the Sumida (E)
+    points: [[35.7085, 139.7885], [35.7088, 139.7930], [35.7072, 139.7945], [35.7040, 139.7940], [35.7028, 139.7915], [35.7032, 139.7884], [35.7058, 139.7876]] },
+  { id: "nakasu-touts", name: "Nakasu Info Center Gauntlet", color: "#e03131", avoid: true,
+    blurb: "Every \"FREE INFORMATION CENTER\" is a tout selling escorts, not maps. Eat at the yatai, decline everything else.",
+    // the sandbank island between the Naka (W) and Hakata (E) rivers, north tip at
+    // Nakasu-Kawabata stn down to the Haruyoshi end — ~1km long, ~250m wide
+    // (north tip runs a touch past the Hakata river so the Kawabata stn exits, where
+    // the touts wait for you, are inside)
+    points: [[33.5968, 130.4082], [33.5946, 130.4100], [33.5918, 130.4068], [33.5895, 130.4046], [33.5884, 130.4030], [33.5898, 130.4018], [33.5925, 130.4038], [33.5955, 130.4062]] },
+  { id: "fukuoka-fine", name: "Fukuoka: Fine, Honestly", color: "#9c36b5",
+    blurb: "Nice people, great yatai, not a lot of microcosms. Rent a car and let Itoshima and Beppu do the heavy lifting.",
+    // Hakata stn ↔ Tenjin ↔ Ohori, the walkable core
+    points: [[33.6000, 130.3900], [33.5990, 130.4130], [33.5920, 130.4250], [33.5850, 130.4230], [33.5820, 130.4020], [33.5830, 130.3860], [33.5910, 130.3830]] },
+  { id: "itoshima-boonies", name: "Itoshima Boonies Loop", color: "#2f9e44", fill: "dots",
+    blurb: "Golden rice fields, one train track, no infrastructure. Get a car, pack hand sanitizer.",
+    // the peninsula: Keya cape → Futamigaura → Maebaru → the Sefuri foothills
+    points: [[33.6300, 130.1050], [33.6250, 130.1750], [33.6100, 130.2200], [33.5750, 130.2450], [33.5300, 130.2250], [33.4850, 130.1750], [33.5100, 130.1150], [33.5700, 130.0900]] },
+  { id: "shimanami-route", name: "Shimanami Kaido Run", color: "#f08c00", fill: "hatch",
+    blurb: "70km, 7 islands, zero excuses. Onomichi ramen at the start, Imabari towels at the end, a night somewhere in the middle.",
+    // a ~7km-wide corridor around the route centerline: Onomichi → Mukaishima →
+    // Innoshima → Ikuchijima (Setoda) → Omishima → Hakatajima → Oshima → Imabari.
+    // Down the SE side, back up the NW side; both ends run a little past the terminals.
+    points: [[34.398, 133.233], [34.386, 133.226], [34.365, 133.232], [34.334, 133.211], [34.302, 133.202], [34.284, 133.166], [34.272, 133.120], [34.243, 133.063], [34.227, 133.039], [34.197, 133.041], [34.182, 133.043], [34.159, 133.023], [34.127, 133.012], [34.091, 133.007], [34.050, 133.028], [34.038, 133.021], [34.074, 132.961], [34.086, 132.968], [34.127, 132.947], [34.163, 132.952], [34.195, 132.963], [34.218, 132.983], [34.233, 132.981], [34.263, 132.979], [34.279, 133.003], [34.308, 133.060], [34.320, 133.106], [34.338, 133.142], [34.370, 133.151], [34.401, 133.172], [34.422, 133.166], [34.434, 133.173]] },
   { id: "cat-street", name: "Cat Street Strut", color: "#1098ad",
     blurb: "The actually-good Harajuku: lowkey boutiques and thrift, strung between the two chaos poles.",
     points: [[35.6708, 139.7073], [35.6694, 139.7076], [35.6675, 139.7075], [35.6662, 139.7064], [35.6648, 139.7056], [35.6636, 139.7050], [35.6629, 139.7046], [35.6633, 139.7038], [35.6640, 139.7042], [35.6652, 139.7048], [35.6666, 139.7056], [35.6677, 139.7067], [35.6693, 139.7068], [35.6707, 139.7065]] },
