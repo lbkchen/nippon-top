@@ -17,12 +17,13 @@ let pendingPoints = null;
 let editingZone = null; // zone being retouched via the modal (null = staking a new one)
 let pickedColor = ZONE_COLORS[0];
 let pickedFill = "solid";
+let pickedStar = false;
 let preview = null;        // live polygon shown while the naming modal is open
 let previewSkipId = null;  // the zone being retouched hides so the preview replaces it
 // mid-redraw: everything the zone knows except its shape, parked while you draw
 // the new outline. The old outline stays hidden so you're not tracing over it.
 let redrawing = null;
-const polys = {}; // zone id -> its rendered polygon, so search can pop a popup
+const polys = new Map(); // zone id -> its rendered polygon, so search can pop a popup
 
 function placesInZone(z) {
   let pool = allPlaces().filter((p) => pointInPoly(p.lat, p.lng, z.points));
@@ -91,6 +92,7 @@ function popupFit() {
     autoPanPaddingBottomRight: L.point(right, bottom),
   };
 }
+const refit = (layer) => Object.assign(layer.getPopup().options, popupFit());
 
 function drawZone(z) {
   if (zoneHidden(z.id) || z.id === previewSkipId) return;
@@ -117,6 +119,18 @@ function drawZone(z) {
     interactive: true,
   }).addTo(zoneLayer);
 
+  // Leaflet reads popup sizing at open time, and the band it has to fit moves
+  // (rotate the phone, drag the sheet), so re-measure on the way in rather than
+  // freezing it at bind time. The click handler is registered before bindPopup so
+  // it runs ahead of Leaflet's own click→open; every other way in calls refit too.
+  poly.on("click", () => refit(poly));
+  poly.bindPopup(L.popup(popupFit()).setContent(zonePopup(z)));
+  label.on("click", () => { refit(poly); poly.openPopup(c); });
+  polys.set(z.id, poly);
+}
+
+// same shape as pins.js popupContent: build the node, wire it, hand it back
+function zonePopup(z) {
   const inside = placesInZone(z).length;
   const div = document.createElement("div");
   div.innerHTML = `
@@ -127,38 +141,48 @@ function drawZone(z) {
       <span class="popup-link zone-filter-link">${inside ? `${inside} rec${inside === 1 ? "" : "s"} inside — show them` : "no recs inside (yet)"}</span>
       ${z.custom ? '<span class="popup-link zone-redraw-link">redraw the outline</span><span class="popup-link zone-edit-link">rename / recolor</span><span class="popup-link zone-del-link">remove this zone</span>' : ""}
     </div>`;
-  if (inside) div.querySelector(".zone-filter-link").addEventListener("click", () => { map.closePopup(); filterToZone(z); });
-  const redraw = div.querySelector(".zone-redraw-link");
-  if (redraw) redraw.addEventListener("click", () => { map.closePopup(); startRedraw(z); });
-  const edit = div.querySelector(".zone-edit-link");
-  if (edit) edit.addEventListener("click", () => { map.closePopup(); openZoneModal(z.points, z); });
-  const del = div.querySelector(".zone-del-link");
-  if (del) del.addEventListener("click", (e) => {
+  const wire = (sel, fn) => div.querySelector(sel)?.addEventListener("click", fn);
+  if (inside) wire(".zone-filter-link", () => { map.closePopup(); filterToZone(z); });
+  wire(".zone-redraw-link", () => { map.closePopup(); startRedraw(z); });
+  wire(".zone-edit-link", () => { map.closePopup(); openZoneModal(z.points, z); });
+  wire(".zone-del-link", (e) => {
     if (!armCheck(e.target, "un-stake it?")) return;
     removeZone(z.id);
     if (state.zoneFilter?.id === z.id) { state.zoneFilter = null; emit("refresh-list"); }
     map.closePopup();
     renderZones();
   });
-  poly.bindPopup(div, popupFit());
-  label.on("click", () => poly.openPopup(c));
-  polys[z.id] = poly;
+  return div;
 }
 
 function renderZones() {
   zoneLayer.clearLayers();
-  for (const k of Object.keys(polys)) delete polys[k];
+  polys.clear();
   allZones().forEach(drawZone);
 }
 
 // omnisearch hit → fly there and pop the label open, so the rant is one tap away
+let pendingFocus = null;
 function focusAndOpen(id) {
   const z = allZones().find((x) => x.id === id);
   if (!z) return;
   if (!state.zonesOn) toggleZones();
   if (zoneHidden(z.id)) { toggleZoneHidden(z.id); renderZones(); }
   focusZone(z);
-  map.once("moveend", () => polys[z.id]?.openPopup(labelPoint(z.points)));
+  // moveend can be skipped when the view already matches, and a second search
+  // mid-flight would otherwise pop the first zone — so latest wins, with a floor
+  pendingFocus = id;
+  const open = () => {
+    if (pendingFocus !== id) return;
+    pendingFocus = null;
+    map.off("moveend", open);
+    const poly = polys.get(id);
+    if (!poly) return;
+    refit(poly);
+    poly.openPopup(labelPoint(z.points));
+  };
+  map.once("moveend", open);
+  setTimeout(open, 1200);
 }
 
 // ---------- naming modal (create + edit, also fed by lasso→zone) ----------
@@ -169,16 +193,24 @@ function tidy(points) {
   return thinned.length < 4 ? raw : thinned;
 }
 
+function paintStar() {
+  const b = $("#zoneStar");
+  b.classList.toggle("active", pickedStar);
+  b.setAttribute("aria-pressed", String(pickedStar));
+}
+
 export function openZoneModal(points, existing = null) {
   editingZone = existing;
   if (existing) {
     pendingPoints = existing.points;
     pickedColor = existing.color;
     pickedFill = existing.fill || "solid";
+    pickedStar = !!existing.star;
   } else {
     pendingPoints = tidy(points);
     pickedColor = ZONE_COLORS[zoneCount() % ZONE_COLORS.length];
     pickedFill = "solid";
+    pickedStar = false;
   }
   $("#zoneModal h2").textContent = existing ? "RETOUCH THE ZONE" : "STAKE OUT A ZONE";
   $("#zoneSave").textContent = existing ? "save the touch-up" : "stake the claim";
@@ -189,6 +221,7 @@ export function openZoneModal(points, existing = null) {
   $("#zoneRedraw").classList.toggle("hidden", !existing);
   [...$("#zoneColors").children].forEach((s) => s.classList.toggle("active", s.dataset.color === pickedColor));
   [...$("#zoneFills").children].forEach((b) => b.classList.toggle("active", b.dataset.fill === pickedFill));
+  paintStar();
   previewSkipId = existing?.id || null;
   if (previewSkipId) renderZones(); // the preview stands in for the original
   paintPreview();
@@ -200,18 +233,38 @@ export function openZoneModal(points, existing = null) {
   $("#zoneName").focus();
 }
 
+// Every zone field the modal owns. Anything NOT in here (avoid, group, …) is
+// carried through a retouch untouched instead of being silently dropped.
+const FORM_KEYS = ["name", "blurb", "notes", "color", "fill", "star"];
+const modalOpen = () => !$("#zoneModal").classList.contains("hidden");
+
+// what the form holds right now, shaped like a zone — empty text is left out
+// entirely so a saved zone reads like the hand-written ones in build-data.mjs
+function formValues() {
+  const text = (sel) => $(sel).value.trim();
+  return {
+    name: text("#zoneName"),
+    ...(text("#zoneBlurb") ? { blurb: text("#zoneBlurb") } : {}),
+    ...(text("#zoneNotes") ? { notes: text("#zoneNotes") } : {}),
+    color: pickedColor,
+    ...(pickedFill !== "solid" ? { fill: pickedFill } : {}),
+    ...(pickedStar ? { star: true } : {}),
+  };
+}
+
 // ---------- redraw the outline (keeps everything but the shape) ----------
 // The modal is stashed, not cancelled: whatever you've typed rides along and you
 // land back in it with the new outline previewed, so nothing is retyped.
 function startRedraw(z) {
-  redrawing = {
-    ...z,
-    name: $("#zoneModal").classList.contains("hidden") ? z.name : $("#zoneName").value.trim() || z.name,
-    blurb: $("#zoneModal").classList.contains("hidden") ? z.blurb : $("#zoneBlurb").value.trim(),
-    notes: $("#zoneModal").classList.contains("hidden") ? z.notes : $("#zoneNotes").value.trim(),
-    color: pickedColor && editingZone?.id === z.id ? pickedColor : z.color,
-    ...(editingZone?.id === z.id && pickedFill !== "solid" ? { fill: pickedFill } : {}),
-  };
+  // reached from the open modal → unsaved edits win; from a popup/drawer row →
+  // the zone as stored. Form-owned keys drop off first so clearing one sticks.
+  if (modalOpen() && editingZone?.id === z.id) {
+    const carried = { ...z };
+    for (const k of FORM_KEYS) delete carried[k];
+    redrawing = { ...carried, ...formValues() };
+  } else {
+    redrawing = z;
+  }
   $("#zoneModal").classList.add("hidden");
   preview?.remove();
   preview = null;
@@ -232,17 +285,17 @@ function cancelRedraw() {
 }
 
 function saveZone() {
-  const name = $("#zoneName").value.trim();
-  if (!name) { $("#zoneName").focus(); return; }
+  const vals = formValues();
+  if (!vals.name) { $("#zoneName").focus(); return; }
+  // start from the zone being edited so fields the form doesn't own survive:
+  // `avoid` (a retouch never launders a trap into a rec) and `group` (what keeps
+  // a region chip framing a pinless zone). custom/pack are render flags, not data.
+  const carried = { ...editingZone };
+  for (const k of [...FORM_KEYS, "custom", "pack", "points", "id"]) delete carried[k];
   const z = {
     id: editingZone ? editingZone.id : "zone-" + Date.now().toString(36),
-    name,
-    blurb: $("#zoneBlurb").value.trim(),
-    notes: $("#zoneNotes").value.trim(),
-    color: pickedColor,
-    ...(pickedFill !== "solid" ? { fill: pickedFill } : {}),
-    ...(editingZone?.avoid ? { avoid: true } : {}), // a retouch never launders a trap into a rec
-    ...(editingZone?.star ? { star: true } : {}),
+    ...carried,
+    ...vals,
     points: pendingPoints,
   };
   const wasEdit = !!editingZone;
@@ -414,6 +467,7 @@ export function initZones() {
     toggleZones();
     $("#zoneMenu").classList.add("hidden");
   });
+  $("#zoneStar").addEventListener("click", () => { pickedStar = !pickedStar; paintStar(); });
   $("#zoneRedraw").addEventListener("click", () => { if (editingZone) startRedraw(editingZone); });
   $("#zoneSave").addEventListener("click", saveZone);
   $("#zoneCancel").addEventListener("click", () => {

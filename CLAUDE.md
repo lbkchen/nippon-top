@@ -95,7 +95,10 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   A zone with `notes` IS a rec — a region too big for a pin (Kuramae, Nakasu, Fukuoka,
   Itoshima, Shimanami Kaido) carries the full rant, can wear `star`, and is counted in
   the footer + check-data; never also give it a pin. `blurb` stays the one-line lead,
-  `group` keeps its region chip flying wide enough to frame a pinless zone. Editable
+  `group` keeps its region chip flying wide enough to frame a pinless zone. The modal
+  owns exactly `FORM_KEYS` (name/blurb/notes/color/fill/star) — every other field
+  rides through a save untouched, which is what stops a retouch eating `group` or
+  `avoid`; empty text fields are omitted, not saved as "". Editable
   after creation two ways: "rename / recolor" (the modal) and **"redraw the outline"**
   (popup, drawer row, or the button inside the modal) — redraw parks everything but the
   shape, hides the old outline so you're not tracing it, and drops you back in the modal
