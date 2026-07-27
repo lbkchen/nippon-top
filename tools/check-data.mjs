@@ -64,6 +64,12 @@ for (const z of zones) {
   if (!z.name) err(`${tag}: missing name`);
   if (!/^#[0-9a-f]{6}$/i.test(z.color || "")) err(`${tag}: color must be #rrggbb`);
   if (z.fill != null && !["dots", "hatch"].includes(z.fill)) err(`${tag}: fill must be dots|hatch (or absent for solid)`);
+  // region-sized recs live as zones, so a zone carries the same rant a place does
+  if (z.blurb != null && typeof z.blurb !== "string") err(`${tag}: blurb must be a string`);
+  if (z.notes != null && typeof z.notes !== "string") err(`${tag}: notes must be a string`);
+  if (z.star != null && typeof z.star !== "boolean") err(`${tag}: star must be boolean`);
+  // optional — it's what makes a region chip fly wide enough to hold a pinless zone
+  if (z.group != null && !GROUPS.includes(z.group)) err(`${tag}: unknown group "${z.group}"`);
   if (!Array.isArray(z.points) || z.points.length < 3) err(`${tag}: needs ≥3 points`);
   else for (const pt of z.points) {
     if (!Array.isArray(pt) || pt.length !== 2 || typeof pt[0] !== "number") { err(`${tag}: malformed point`); break; }
@@ -126,4 +132,7 @@ if (errors.length) {
   for (const e of errors) console.error(`  · ${e}`);
   process.exit(1);
 }
-console.log(`✓ data.js looks extremely correct — ${places.length} places (${places.filter((p) => p.star).length} bangers), ${chains.length} chains, ${zones.length} zones, ${doodles.length} doodles, ${packCount} friend pack${packCount === 1 ? "" : "s"}`);
+// a zone with notes is a region-sized rec, not just an annotation — counted like a place
+const recZones = zones.filter((z) => z.notes);
+const bangers = places.filter((p) => p.star).length + recZones.filter((z) => z.star).length;
+console.log(`✓ data.js looks extremely correct — ${places.length + recZones.length} recs (${places.length} pins + ${recZones.length} zones, ${bangers} bangers), ${chains.length} chains, ${zones.length} zones, ${doodles.length} doodles, ${packCount} friend pack${packCount === 1 ? "" : "s"}`);

@@ -17,4 +17,6 @@ export const on = (type, fn) => bus.addEventListener(type, (e) => fn(e.detail));
  *                        zones + doodles re-render their layers off this
  *   export-pack        — {slug} seal one friend map into friends/<file>.enc (+ manifest)
  *   zone-filter-clear  — drop the "inside <zone>" sidebar scope (set via zone popup/drawer)
+ *   zone-focus         — {id} fly to a zone and pop its label (omnisearch picks a zone)
+ *   zone-saved         — a zone was staked, retouched, or redrawn
  */

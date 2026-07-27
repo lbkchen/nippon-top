@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Bangers&family=DotGothic16&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css?v=29" />
+  <link rel="stylesheet" href="styles.css?v=30" />
 </head>
 <body>
   <!-- splash title card -->
@@ -309,6 +309,10 @@
       <label>the vibes, in one line
         <input id="zoneBlurb" type="text" placeholder="optional but encouraged" maxlength="90" />
       </label>
+      <label>the whole rant
+        <textarea id="zoneNotes" rows="4" placeholder="everything you'd tell a friend about this area"></textarea>
+      </label>
+      <button type="button" class="btn-ghost zone-redraw-btn hidden" id="zoneRedraw">redraw the outline</button>
       <label>flag color</label>
       <div class="zone-colors" id="zoneColors"></div>
       <label>fill style</label>
@@ -328,7 +332,7 @@
   <div class="drawer hidden" id="zonesDrawer">
     <div class="drawer-head">
       <h2>ZONE CONTROL</h2>
-      <p>every staked claim on the map — jump to it, retouch it, or un-stake it.</p>
+      <p>every staked claim on the map — jump to it, redraw its outline, retouch it, or un-stake it.</p>
       <button class="drawer-close" id="zonesClose" aria-label="close">✕</button>
       <button class="btn-solid drawer-new" id="zonesNew">+ stake one</button>
     </div>
@@ -358,7 +362,7 @@
   </svg>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data.js?v=22"></script>
-  <script type="module" src="js/main.js?v=31"></script>
+  <script src="data.js?v=23"></script>
+  <script type="module" src="js/main.js?v=32"></script>
 </body>
 </html>

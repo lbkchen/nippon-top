@@ -735,6 +735,18 @@ body[data-zoom="mid"] .pin-wrap { --zoomscale: 0.85; }
 .leaflet-popup-tip { background: var(--ink); }
 .popup-title { font-family: var(--font-head); font-weight: 700; font-size: 15px; }
 .popup-blurb { font-size: 12.5px; margin-top: 4px; }
+/* region zones carry the full rant now — the blurb stays the punchy lead-in,
+   this is the rest of it (popup maxHeight scrolls anything truly unhinged) */
+.popup-notes {
+  font-size: 12.5px;
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1.5px dashed rgba(29, 29, 36, 0.25);
+  line-height: 1.5;
+}
+/* a zone popup carries up to four of these — without a gap they read as one
+   run-on sentence ("rename / recolorremove this zone") */
+.popup-links { display: flex; flex-wrap: wrap; column-gap: 14px; }
 .popup-link {
   display: inline-block;
   margin-top: 6px;
@@ -770,6 +782,8 @@ body[data-zoom="mid"] .pin-wrap { --zoomscale: 0.85; }
   transform: skewX(-8deg) translateY(-1.5px);
   text-shadow: 1px 1px 0 rgba(29, 29, 36, 0.6);
 }
+/* a zone can be a certified banger too — same gold star the pins wear */
+.zone-star { color: var(--gold); text-shadow: 1.5px 1.5px 0 var(--ink); }
 body[data-zoom="mid"] .zone-label { font-size: 12px; padding: 2px 9px; letter-spacing: 1px; }
 body[data-zoom="far"] .zone-label { display: none; }
 .zone-label {
@@ -1349,6 +1363,10 @@ button.armed {
   font-size: 13px;
   margin: 12px 0 4px;
 }
+/* redrawing an outline is an edit of the shape, not of the form — full-width
+   ghost button so it reads as its own step, not a third text field */
+.zone-redraw-btn { width: 100%; margin-top: 12px; }
+.zone-redraw-btn.hidden { display: none; }
 .modal input[type="text"], .modal input[type="url"], .modal textarea {
   width: 100%;
   font-family: var(--font-body);
@@ -1587,6 +1605,16 @@ button.armed {
   opacity: 0.55;
 }
 .omni-star { color: var(--gold); text-shadow: 1px 1px 0 var(--ink); }
+/* zone hits wear their flag color where a rec would show its category emoji */
+.omni-zone-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--r-cut);
+  background: var(--z);
+  border: 2px solid var(--ink);
+  vertical-align: -1px;
+}
 
 #addSearch {
   width: 100%;

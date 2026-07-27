@@ -1,9 +1,9 @@
-// The primary search bar: recs and real-world places in one dropdown.
+// The primary search bar: recs, vibe zones, and real-world places in one dropdown.
 // Typing live-filters the map; picking a rec flies to it; picking an
 // address drops a marker with "add a spot here" / "distances from here".
 import { $, esc, CATS, showHint } from "./config.js";
 import { map } from "./map.js";
-import { state, allPlaces } from "./store.js";
+import { state, allPlaces, allZones, zoneHidden } from "./store.js";
 import { emit, on } from "./bus.js";
 import { photonSearch, debounce } from "./photon.js";
 
@@ -57,6 +57,14 @@ function recMatches(q) {
     .slice(0, 5);
 }
 
+// region-sized recs live as zones, not pins — without this they'd be unfindable
+function zoneMatches(q) {
+  return allZones()
+    .filter((z) => !zoneHidden(z.id) && `${z.name} ${z.blurb || ""} ${z.notes || ""}`.toLowerCase().includes(q))
+    .sort((a, b) => (!!b.star - !!a.star) || a.name.localeCompare(b.name))
+    .slice(0, 4);
+}
+
 export function initOmnisearch() {
   const input = $("#omniInput");
   const results = $("#omniResults");
@@ -84,9 +92,19 @@ export function initOmnisearch() {
     dropSeek(r);
   }
 
+  function pickZone(z) {
+    input.value = z.name;
+    state.q = "";
+    clearBtn.classList.remove("hidden");
+    close();
+    emit("refresh");
+    emit("zone-focus", { id: z.id });
+  }
+
   function render(q) {
     results.innerHTML = "";
     const recs = recMatches(q);
+    const zones = zoneMatches(q);
     if (recs.length) {
       const title = document.createElement("div");
       title.className = "omni-section";
@@ -102,6 +120,20 @@ export function initOmnisearch() {
         results.append(b);
       }
     }
+    if (zones.length) {
+      const title = document.createElement("div");
+      title.className = "omni-section";
+      title.textContent = "in the zones";
+      results.append(title);
+      for (const z of zones) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "geo-result";
+        b.innerHTML = `<span class="geo-name"><span class="omni-zone-dot" style="--z:${z.color}"></span> ${esc(z.name)}${z.star ? ' <span class="omni-star">★</span>' : ""}</span><span class="geo-where">${z.avoid ? "skip-it zone" : "vibe zone"}${z.blurb ? ` · ${esc(z.blurb)}` : ""}</span>`;
+        b.addEventListener("click", () => pickZone(z));
+        results.append(b);
+      }
+    }
     placeSection = document.createElement("div");
     if (q.length >= 3) {
       const title = document.createElement("div");
@@ -109,7 +141,7 @@ export function initOmnisearch() {
       title.textContent = "on the map";
       results.append(title, placeSection);
       placeSection.innerHTML = '<div class="geo-empty">searching…</div>';
-    } else if (!recs.length) {
+    } else if (!recs.length && !zones.length) {
       placeSection.innerHTML = '<div class="geo-empty">keep typing to search addresses…</div>';
       results.append(placeSection);
     }

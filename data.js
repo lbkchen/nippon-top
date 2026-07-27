@@ -377,21 +377,6 @@ window.NIPPON = {
       "gmaps": "https://www.google.com/maps/search/?api=1&query=%E3%82%A2%E3%83%9E%E3%83%A0%E3%83%80%E3%82%B3%E3%82%BF%E3%83%B3%20%E8%A1%A8%E5%8F%82%E9%81%93"
     },
     {
-      "id": "kuramae",
-      "name": "Kuramae",
-      "star": false,
-      "region": "East Tokyo",
-      "group": "tokyo",
-      "cat": "shop",
-      "emoji": "🧵",
-      "lat": 35.7053,
-      "lng": 139.7913,
-      "approx": false,
-      "notes": "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff.",
-      "photo": null,
-      "gmaps": null
-    },
-    {
       "id": "asakusa-sensoji",
       "name": "Asakusa / Sensoji / Nakamise St",
       "star": true,
@@ -1142,21 +1127,6 @@ window.NIPPON = {
       "gmaps": null
     },
     {
-      "id": "shimanami-kaido",
-      "name": "Shimanami Kaido",
-      "star": true,
-      "region": "Hiroshima",
-      "group": "hiroshima",
-      "cat": "fun",
-      "emoji": "🚴",
-      "lat": 34.4039069,
-      "lng": 133.1937736,
-      "approx": false,
-      "notes": "Must do if you're ever near Hiroshima, a 70km perfectly paved biking trail across 7 islands in Shikoku. You can experience something different on every island so I recommend taking it slow and spending a night on one of the islands in between, but you can finish it in a day if you're fast. Try Onomichi ramen at the starting point, and once you reach Imabari (I think it's known for towels?? lol), you can take a bus ride back to the beginning :)",
-      "photo": null,
-      "gmaps": null
-    },
-    {
       "id": "itsukushima",
       "name": "Itsukushima",
       "star": false,
@@ -1183,36 +1153,6 @@ window.NIPPON = {
       "lng": 132.4530979,
       "approx": false,
       "notes": "Incrediblly curated museum on the history of the event, 100% worth visiting if you're here.",
-      "photo": null,
-      "gmaps": null
-    },
-    {
-      "id": "fukuoka",
-      "name": "Fukuoka",
-      "star": false,
-      "region": "Fukuoka",
-      "group": "kyushu",
-      "cat": "hood",
-      "emoji": null,
-      "lat": 33.5914,
-      "lng": 130.3986,
-      "approx": false,
-      "notes": "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc.",
-      "photo": null,
-      "gmaps": null
-    },
-    {
-      "id": "nakasu",
-      "name": "Nakasu",
-      "star": false,
-      "region": "Fukuoka",
-      "group": "kyushu",
-      "cat": "night",
-      "emoji": null,
-      "lat": 33.5925,
-      "lng": 130.4048,
-      "approx": false,
-      "notes": "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol.",
       "photo": null,
       "gmaps": null
     },
@@ -1245,21 +1185,6 @@ window.NIPPON = {
       "notes": "The famous reclining Buddha temple - it's definitely striking. One of the most touristy spots but it was quite memorable. There were some fun activities at this temple too like a ring tossing game and a special DIY goshuin (temple stamp).",
       "photo": null,
       "gmaps": "https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E8%94%B5%E9%99%A2%20%E7%AF%A0%E6%A0%97"
-    },
-    {
-      "id": "itoshima",
-      "name": "Itoshima",
-      "star": false,
-      "region": "Near Fukuoka",
-      "group": "kyushu",
-      "cat": "trip",
-      "emoji": "🌾",
-      "lat": 33.5578,
-      "lng": 130.1953,
-      "approx": false,
-      "notes": "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience.",
-      "photo": null,
-      "gmaps": null
     },
     {
       "id": "donguri",
@@ -1468,6 +1393,7 @@ window.NIPPON = {
     {
       "id": "chuo-line",
       "name": "Chuo Line Cool Zone",
+      "group": "tokyo",
       "color": "#e8590c",
       "blurb": "Vintage shops, tsukemen, and zero tourists. Ride the orange line, get off anywhere.",
       "points": [
@@ -1508,6 +1434,7 @@ window.NIPPON = {
     {
       "id": "shitamachi",
       "name": "Old Tokyo Zone",
+      "group": "tokyo",
       "color": "#9c36b5",
       "blurb": "Sensoji, knife street, god-tier ramen. Maximum old-town energy per square meter.",
       "points": [
@@ -1540,6 +1467,7 @@ window.NIPPON = {
     {
       "id": "arashiyama-crawl",
       "name": "Arashiyama Temple Crawl",
+      "group": "kyoto",
       "color": "#2f9e44",
       "blurb": "Rent a bike, collect goshuin, befriend monkeys. Go at 6am or perish in the crowds.",
       "points": [
@@ -1576,6 +1504,7 @@ window.NIPPON = {
     {
       "id": "kabukicho-gauntlet",
       "name": "Kabukicho Tout Gauntlet",
+      "group": "tokyo",
       "color": "#e03131",
       "avoid": true,
       "blurb": "Walk it once at night for the neon, say yes to absolutely no one. Every \"free drink\" costs 10man.",
@@ -1617,6 +1546,7 @@ window.NIPPON = {
     {
       "id": "takeshita-crush",
       "name": "Takeshita St Crush",
+      "group": "tokyo",
       "color": "#e03131",
       "avoid": true,
       "blurb": "Shoulder-to-shoulder crepe purgatory. One block south is freedom — see Cat Street.",
@@ -1650,9 +1580,11 @@ window.NIPPON = {
     {
       "id": "kuramae-artisan",
       "name": "Kuramae Maker Blocks",
+      "group": "tokyo",
       "color": "#1098ad",
       "fill": "dots",
       "blurb": "Leather, ceramics, coffee, one-person studios. Wander Edo-dori to the river and let the shop fronts mug you.",
+      "notes": "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff.",
       "points": [
         [
           35.7085,
@@ -1687,9 +1619,11 @@ window.NIPPON = {
     {
       "id": "nakasu-touts",
       "name": "Nakasu Info Center Gauntlet",
+      "group": "kyushu",
       "color": "#e03131",
       "avoid": true,
       "blurb": "Every \"FREE INFORMATION CENTER\" is a tout selling escorts, not maps. Eat at the yatai, decline everything else.",
+      "notes": "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol.",
       "points": [
         [
           33.5968,
@@ -1728,8 +1662,10 @@ window.NIPPON = {
     {
       "id": "fukuoka-fine",
       "name": "Fukuoka: Fine, Honestly",
+      "group": "kyushu",
       "color": "#9c36b5",
       "blurb": "Nice people, great yatai, not a lot of microcosms. Rent a car and let Itoshima and Beppu do the heavy lifting.",
+      "notes": "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc.",
       "points": [
         [
           33.6,
@@ -1764,9 +1700,11 @@ window.NIPPON = {
     {
       "id": "itoshima-boonies",
       "name": "Itoshima Boonies Loop",
+      "group": "kyushu",
       "color": "#2f9e44",
       "fill": "dots",
       "blurb": "Golden rice fields, one train track, no infrastructure. Get a car, pack hand sanitizer.",
+      "notes": "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience.",
       "points": [
         [
           33.63,
@@ -1805,9 +1743,12 @@ window.NIPPON = {
     {
       "id": "shimanami-route",
       "name": "Shimanami Kaido Run",
+      "group": "hiroshima",
       "color": "#f08c00",
       "fill": "hatch",
+      "star": true,
       "blurb": "70km, 7 islands, zero excuses. Onomichi ramen at the start, Imabari towels at the end, a night somewhere in the middle.",
+      "notes": "Must do if you're ever near Hiroshima, a 70km perfectly paved biking trail across 7 islands in Shikoku. You can experience something different on every island so I recommend taking it slow and spending a night on one of the islands in between, but you can finish it in a day if you're fast. Try Onomichi ramen at the starting point, and once you reach Imabari (I think it's known for towels?? lol), you can take a bus ride back to the beginning :)",
       "points": [
         [
           34.398,
@@ -1942,6 +1883,7 @@ window.NIPPON = {
     {
       "id": "cat-street",
       "name": "Cat Street Strut",
+      "group": "tokyo",
       "color": "#1098ad",
       "blurb": "The actually-good Harajuku: lowkey boutiques and thrift, strung between the two chaos poles.",
       "points": [

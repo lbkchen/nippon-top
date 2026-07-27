@@ -1,7 +1,7 @@
 // The high-context list: cards, filters, search, region hops, context bar.
 import { CATS, $, $$, esc, linkify, distKm, fmtDist, gmapsUrl, armCheck, EXT_ICON } from "./config.js";
 import { map, PAD } from "./map.js";
-import { state, allPlaces, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
+import { state, allPlaces, allZones, currentList, groupBounds, deletePlace, isCustom, BASE } from "./store.js";
 import { emit, on } from "./bus.js";
 import { highlightPin } from "./pins.js";
 
@@ -155,8 +155,12 @@ export function renderList() {
   }
   renderContextBar();
   if (state.selectedId) selectCard(state.selectedId, { scroll: false });
-  const total = allPlaces().length;
-  $("#footCount").textContent = `${total} recs · ${allPlaces().filter((p) => p.star).length} bangers · ${BASE.chains.length} chains`;
+  // a zone carrying a rant IS a rec (region-sized, so no pin) — count those, but
+  // not the pure vibe zones, which annotate the map without being recs themselves
+  const recZones = allZones().filter((z) => z.notes);
+  const total = allPlaces().length + recZones.length;
+  const bangers = allPlaces().filter((p) => p.star).length + recZones.filter((z) => z.star).length;
+  $("#footCount").textContent = `${total} recs · ${bangers} bangers · ${BASE.chains.length} chains`;
 }
 
 function selectCard(id, { scroll = true } = {}) {

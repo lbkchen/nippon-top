@@ -5,7 +5,7 @@
 ### 👉 the actual map: **[lbkchen.github.io/nippon-top](https://lbkchen.github.io/nippon-top/)** 👈
 
 A zero-build, zero-API-key, zero-dollar map of every Japan rec from the spreadsheet:
-94 places, 18 certified bangers ⭐, 10 chains, vibe zones, and forkable friend maps.
+94 recs (89 pins + 5 region zones), 18 certified bangers ⭐, 10 chains, and forkable friend maps.
 
 ## Run it locally
 
@@ -27,7 +27,7 @@ taken, `node tools/serve.mjs 5000` picks another port.
 | thing | how |
 |---|---|
 | 🪢 **Lasso** | draw a loop around pins → everything inside lists in the sidebar with full notes. The "what's worth it around here today" tool. |
-| 🎿 **Zones** | ski-map style area annotations ("Chuo Line Cool Zone") with solid, halftone-dot, or hatch fills. Draw one and watch the live preview while you name it, retouch it later, hide it, or ask it "show me the recs inside" — zone control drawer runs the show. |
+| 🎿 **Zones** | ski-map style areas ("Chuo Line Cool Zone") with solid, halftone-dot, or hatch fills. Some are pure annotation; some *are* the rec — a region too big for a pin (Kuramae, Itoshima, the Shimanami Kaido) carries the full rant and can be a certified banger. Draw one and watch the live preview while you name it, **redraw its outline** any time after, retouch it, hide it, or ask it "show me the recs inside" — zone control drawer runs the show. |
 | 🔎 **Omnisearch** | one bar that live-filters the rec pins AND searches real places/addresses (Photon — komoot's free, keyless OSM geocoder). Pick a rec → fly to it; pick an address → add a spot there or measure distances from it ("what's near my hotel?"). |
 | 🖊️ **Doodle** | freehand ink that sticks to the terrain AND keeps its scale (zoom out, your street scribble stays street-sized). Three brushes, highlighter, eraser, undo/redo, pressure support. iPad/Pencil friendly. |
 | 🈴 **Stamps & words** | press one of 16 hand-drawn hanko seals (頂, banger star, ramen, fuji, sakura, GO…) onto the map, or type text stickers straight onto a street. Drag to move them, tap to resize/reword/peel off. They ride friend maps too. |

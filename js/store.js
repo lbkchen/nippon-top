@@ -160,7 +160,11 @@ export function currentList() {
 }
 
 export function groupBounds(group) {
-  const pts = allPlaces().filter((p) => group === "all" || p.group === group).map((p) => [p.lat, p.lng]);
+  const mine = (g) => group === "all" || g === group;
+  const pts = allPlaces().filter((p) => mine(p.group)).map((p) => [p.lat, p.lng]);
+  // a region rec can be a zone with no pin at all (Fukuoka, Itoshima, the Kaido) —
+  // a chip that flew past them would look like the region was half empty
+  for (const z of allZones()) if (z.group && mine(z.group)) pts.push(...z.points);
   return pts.length ? L.latLngBounds(pts) : L.latLngBounds([[35.6, 139.7]]);
 }
 

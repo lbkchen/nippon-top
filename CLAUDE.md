@@ -37,7 +37,8 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   for setMode. No other feature→feature imports.
 - `store.js` owns all state + the localStorage overlay (keys `nippon_custom_*`). `state.q` is
   owned by the omnibar (`omnisearch.js`) — never add another search input (exception: the
-  add-spot modal's location search).
+  add-spot modal's location search). It searches three pools: recs, zones (region recs
+  have no pin, so this is the only way to type your way to them), then Photon addresses.
 - Sketch-on-map interactions (lasso/pen/zone) register through `sketch.js`, not their own
   pointer handlers.
 
@@ -90,9 +91,17 @@ Hard constraints: **no paid APIs/keys ever, no framework, no build step.** READM
   a fetched pack imports it for editing = Ken's cross-browser recovery path.
   localStorage is staging/cache only: anything durable must be reconstructible from
   repo artifacts + a link. Legacy `#for=<slug>` and `#mix=` links still parse.
-- **Zones** = ski-map area annotations (draw via zones menu or lasso→save; solid/dots/hatch
-  fills). Editable after creation ("retouch" via popup or the ZONE CONTROL drawer, which also
-  does per-zone hide + jump). Zones scope the sidebar ("N recs inside — show them",
+- **Zones** = ski-map areas (draw via zones menu or lasso→save; solid/dots/hatch fills).
+  A zone with `notes` IS a rec — a region too big for a pin (Kuramae, Nakasu, Fukuoka,
+  Itoshima, Shimanami Kaido) carries the full rant, can wear `star`, and is counted in
+  the footer + check-data; never also give it a pin. `blurb` stays the one-line lead,
+  `group` keeps its region chip flying wide enough to frame a pinless zone. Editable
+  after creation two ways: "rename / recolor" (the modal) and **"redraw the outline"**
+  (popup, drawer row, or the button inside the modal) — redraw parks everything but the
+  shape, hides the old outline so you're not tracing it, and drops you back in the modal
+  with the new one previewed; bailing out (Esc / leaving zone mode) restores the original.
+  The ZONE CONTROL drawer also does per-zone hide + jump. Zones scope the sidebar
+  ("N recs inside — show them",
   `state.zoneFilter`, roulette follows). While the naming modal is open (docked right / bottom
   sheet, `modal-side`) a marching-ants preview shows the pending polygon and restyles with the
   pickers; a retouched zone hides behind its preview. Base-zone edits = copy-on-write shadows

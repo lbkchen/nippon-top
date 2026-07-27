@@ -123,10 +123,6 @@ const PLACES = [
     notes: "An offshoot bakery of \"im donut?\" the legendary fluffy donut shop, this place is just as ridiculous and great. There are so many creative sweet and savory pastries here that are both aesthetic and tasty." },
 
   // ---------------- EAST TOKYO ----------------
-  { id: "kuramae", name: "Kuramae", star: false, region: "East Tokyo", group: "tokyo", cat: "shop", emoji: "🧵",
-    // the pin is the station on Edo-dori; the shops sprawl — see the Kuramae zone
-    q: "Kuramae Station, Taito, Japan", fallback: [35.70530, 139.79130], pin: true,
-    notes: "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff." },
   { id: "asakusa-sensoji", name: "Asakusa / Sensoji / Nakamise St", star: true, region: "East Tokyo", group: "tokyo", cat: "temple",
     q: "Sensoji, Asakusa, Japan", fallback: [35.7148, 139.7967],
     notes: "Traditional temple with a nice shopping street and more old-town vibes, although it be really touristy now. Most accesssible kyoto-like part of town I guess." },
@@ -316,9 +312,6 @@ const PLACES = [
     notes: "An hour or so away from Osaka, it's a temple complex in the mountains worth spending a day visiting. You can check out the mausoleum and there are even overnight temple stays you can do here. From one of the temples here you can get a sacred cedar wood goshuincho which is the book you use to collect temple stamps and it's one of the coolest souvenirs you can take from Japan." },
 
   // ---------------- HIROSHIMA ----------------
-  { id: "shimanami-kaido", name: "Shimanami Kaido", star: true, region: "Hiroshima", group: "hiroshima", cat: "fun", emoji: "🚴",
-    q: "Onomichi Station, Japan", fallback: [34.4049, 133.1937],
-    notes: "Must do if you're ever near Hiroshima, a 70km perfectly paved biking trail across 7 islands in Shikoku. You can experience something different on every island so I recommend taking it slow and spending a night on one of the islands in between, but you can finish it in a day if you're fast. Try Onomichi ramen at the starting point, and once you reach Imabari (I think it's known for towels?? lol), you can take a bus ride back to the beginning :)" },
   { id: "itsukushima", name: "Itsukushima", star: false, region: "Hiroshima", group: "hiroshima", cat: "temple",
     q: "Itsukushima Shrine, Hatsukaichi, Japan", fallback: [34.2960, 132.3198],
     notes: "Probably the most famous shrine in Hiroshima area because it looks like it's floating on the water. Hopefully it's no longer under renovation. Worth also getting all the maple-flavored snacks and doing the hike up the mountain here." },
@@ -327,14 +320,6 @@ const PLACES = [
     notes: "Incrediblly curated museum on the history of the event, 100% worth visiting if you're here." },
 
   // ---------------- KYUSHU ----------------
-  { id: "fukuoka", name: "Fukuoka", star: false, region: "Fukuoka", group: "kyushu", cat: "hood",
-    // pin = Tenjin, the city's centre of gravity; the honest take is in the zone too
-    q: "Tenjin Station, Fukuoka, Japan", fallback: [33.59140, 130.39860], pin: true,
-    notes: "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc." },
-  { id: "nakasu", name: "Nakasu", star: false, region: "Fukuoka", group: "kyushu", cat: "night",
-    // the sandbank island between the Naka and Hakata rivers — see the avoid zone
-    q: "Nakasu, Hakata, Fukuoka, Japan", fallback: [33.59250, 130.40480], pin: true,
-    notes: "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol." },
   { id: "uminonakamichi", name: "Uminonakamichi Seaside Park", star: false, region: "Fukuoka", group: "kyushu", cat: "park", emoji: "🌼",
     // 東区西戸崎18-25 — huge park on the sandbar, pinned at the main gate by the
     // station (a geocode centroid lands somewhere in the middle of the flower fields)
@@ -345,10 +330,6 @@ const PLACES = [
     q: "南蔵院 篠栗", fallback: [33.59280, 130.52320], pin: true,
     gmaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("南蔵院 篠栗"),
     notes: "The famous reclining Buddha temple - it's definitely striking. One of the most touristy spots but it was quite memorable. There were some fun activities at this temple too like a ring tossing game and a special DIY goshuin (temple stamp)." },
-  { id: "itoshima", name: "Itoshima", star: false, region: "Near Fukuoka", group: "kyushu", cat: "trip", emoji: "🌾",
-    // pin = Chikuzen-Maebaru stn, the way in; the peninsula itself is a zone
-    q: "Chikuzen-Maebaru Station, Itoshima, Japan", fallback: [33.55780, 130.19530], pin: true,
-    notes: "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience." },
 
   // ---------------- HOKKAIDO ----------------
   { id: "donguri", name: "Donguri (bakery)", star: false, region: "Sapporo", group: "hokkaido", cat: "cafe", emoji: "🥟",
@@ -408,50 +389,60 @@ const CHAINS = [
   { name: "Ginza Karen", emoji: "🧳", notes: "If you shopped too hard and need a $40 giant suitcase to bring everything back, this is it" },
 ];
 
-// Hand-drawn starter "ski map" zones. More can be drawn in-app with the lasso.
+// Hand-drawn "ski map" zones. More can be drawn in-app with the lasso, and any
+// zone's outline can be redrawn later from its popup / the ZONE CONTROL drawer.
+// Region-sized recs live here rather than as a pin: `blurb` is the one-liner on
+// the label popup, `notes` is the full rant (same field a place carries), `star`
+// marks a certified banger, `group` keeps the region chip flying wide enough to
+// hold a zone that has no pin of its own. No pin duplicates a zone.
 const ZONES = [
-  { id: "chuo-line", name: "Chuo Line Cool Zone", color: "#e8590c",
+  { id: "chuo-line", name: "Chuo Line Cool Zone", group: "tokyo", color: "#e8590c",
     blurb: "Vintage shops, tsukemen, and zero tourists. Ride the orange line, get off anywhere.",
     points: [[35.717, 139.515], [35.719, 139.575], [35.716, 139.612], [35.713, 139.655], [35.694, 139.657], [35.690, 139.612], [35.688, 139.565], [35.690, 139.520]] },
-  { id: "shitamachi", name: "Old Tokyo Zone", color: "#9c36b5",
+  { id: "shitamachi", name: "Old Tokyo Zone", group: "tokyo", color: "#9c36b5",
     blurb: "Sensoji, knife street, god-tier ramen. Maximum old-town energy per square meter.",
     points: [[35.727, 139.760], [35.725, 139.800], [35.716, 139.822], [35.703, 139.818], [35.700, 139.772], [35.706, 139.757]] },
-  { id: "arashiyama-crawl", name: "Arashiyama Temple Crawl", color: "#2f9e44",
+  { id: "arashiyama-crawl", name: "Arashiyama Temple Crawl", group: "kyoto", color: "#2f9e44",
     blurb: "Rent a bike, collect goshuin, befriend monkeys. Go at 6am or perish in the crowds.",
     points: [[35.038, 135.655], [35.034, 135.672], [35.024, 135.683], [35.010, 135.681], [35.008, 135.667], [35.019, 135.657], [35.030, 135.653]] },
   // avoid: true = tourist-trap warning zones. kept tight — blocks, not districts.
-  { id: "kabukicho-gauntlet", name: "Kabukicho Tout Gauntlet", color: "#e03131", avoid: true,
+  { id: "kabukicho-gauntlet", name: "Kabukicho Tout Gauntlet", group: "tokyo", color: "#e03131", avoid: true,
     blurb: "Walk it once at night for the neon, say yes to absolutely no one. Every \"free drink\" costs 10man.",
     points: [[35.6963, 139.7003], [35.6961, 139.7025], [35.6960, 139.7043], [35.6948, 139.7044], [35.6937, 139.7041], [35.6937, 139.7022], [35.6938, 139.7005], [35.6951, 139.7002]] },
-  { id: "takeshita-crush", name: "Takeshita St Crush", color: "#e03131", avoid: true,
+  { id: "takeshita-crush", name: "Takeshita St Crush", group: "tokyo", color: "#e03131", avoid: true,
     blurb: "Shoulder-to-shoulder crepe purgatory. One block south is freedom — see Cat Street.",
     points: [[35.6708, 139.7027], [35.6712, 139.7046], [35.6717, 139.7064], [35.6711, 139.7068], [35.6706, 139.7047], [35.6701, 139.7029]] },
-  { id: "kuramae-artisan", name: "Kuramae Maker Blocks", color: "#1098ad", fill: "dots",
+  { id: "kuramae-artisan", name: "Kuramae Maker Blocks", group: "tokyo", color: "#1098ad", fill: "dots",
     blurb: "Leather, ceramics, coffee, one-person studios. Wander Edo-dori to the river and let the shop fronts mug you.",
+    notes: "Right off of Asakusa the streets here are lined with great coffee shops and artisan stores. We were looking for a nice leather bag and just stumbled upon so many stores that sell unique artisan wares, like ceramics, leather goods, homeware, clothes, etc. These shops definitely have a much more curated collection from individual artists than the typical items you can also find at Loft, Kappabashi, etc. Lots of hidden gems if you're looking for that kind of stuff.",
     // 蔵前 1–4 chome: Kuramabashi-dori (N) → Asakusa-dori (S), Kokusai-dori (W) → the Sumida (E)
     points: [[35.7085, 139.7885], [35.7088, 139.7930], [35.7072, 139.7945], [35.7040, 139.7940], [35.7028, 139.7915], [35.7032, 139.7884], [35.7058, 139.7876]] },
-  { id: "nakasu-touts", name: "Nakasu Info Center Gauntlet", color: "#e03131", avoid: true,
+  { id: "nakasu-touts", name: "Nakasu Info Center Gauntlet", group: "kyushu", color: "#e03131", avoid: true,
     blurb: "Every \"FREE INFORMATION CENTER\" is a tout selling escorts, not maps. Eat at the yatai, decline everything else.",
+    notes: "Not necessarily to be avoided because I think all the yatai night stands and lots of good restaurants are around there but it's comparable to Kabukicho in Tokyo. Very strange area - you will quickly notice there a bunch of these \"FREE INFORMATION CENTERS\" everywhere and it may seem like tourist centers. However, they are actually touts that will sell you escort services lol.",
     // the sandbank island between the Naka (W) and Hakata (E) rivers, north tip at
     // Nakasu-Kawabata stn down to the Haruyoshi end — ~1km long, ~250m wide
     // (north tip runs a touch past the Hakata river so the Kawabata stn exits, where
     // the touts wait for you, are inside)
     points: [[33.5968, 130.4082], [33.5946, 130.4100], [33.5918, 130.4068], [33.5895, 130.4046], [33.5884, 130.4030], [33.5898, 130.4018], [33.5925, 130.4038], [33.5955, 130.4062]] },
-  { id: "fukuoka-fine", name: "Fukuoka: Fine, Honestly", color: "#9c36b5",
+  { id: "fukuoka-fine", name: "Fukuoka: Fine, Honestly", group: "kyushu", color: "#9c36b5",
     blurb: "Nice people, great yatai, not a lot of microcosms. Rent a car and let Itoshima and Beppu do the heavy lifting.",
+    notes: "Honestly, not really an anti-rec, but we didn't think it was super special, compared to other big cities like Osaka, Sapporo and Tokyo. People are really nice, similar to Osaka, but there are just not as many things to do in the city itself and it feels pretty uniform, unlike Tokyo which is just filled with microcosms, etc. Maybe the best way to experience this area is to get a car and go all around neighboring areas like Itoshima (boonies), Beppu, etc.",
     // Hakata stn ↔ Tenjin ↔ Ohori, the walkable core
     points: [[33.6000, 130.3900], [33.5990, 130.4130], [33.5920, 130.4250], [33.5850, 130.4230], [33.5820, 130.4020], [33.5830, 130.3860], [33.5910, 130.3830]] },
-  { id: "itoshima-boonies", name: "Itoshima Boonies Loop", color: "#2f9e44", fill: "dots",
+  { id: "itoshima-boonies", name: "Itoshima Boonies Loop", group: "kyushu", color: "#2f9e44", fill: "dots",
     blurb: "Golden rice fields, one train track, no infrastructure. Get a car, pack hand sanitizer.",
+    notes: "Idyllic spot in the boonies off of Fukuoka. Conveniently it's right on the line that goes to the Hakata airport, so actually quite easy to get to. Some of the landscapes here are really insane too, like rolling golden rice fields with just a single locomotive track running through. Unfortunately due to the lack of infrastructure we think we got Shigella here but it was quite the experience.",
     // the peninsula: Keya cape → Futamigaura → Maebaru → the Sefuri foothills
     points: [[33.6300, 130.1050], [33.6250, 130.1750], [33.6100, 130.2200], [33.5750, 130.2450], [33.5300, 130.2250], [33.4850, 130.1750], [33.5100, 130.1150], [33.5700, 130.0900]] },
-  { id: "shimanami-route", name: "Shimanami Kaido Run", color: "#f08c00", fill: "hatch",
+  { id: "shimanami-route", name: "Shimanami Kaido Run", group: "hiroshima", color: "#f08c00", fill: "hatch", star: true,
     blurb: "70km, 7 islands, zero excuses. Onomichi ramen at the start, Imabari towels at the end, a night somewhere in the middle.",
+    notes: "Must do if you're ever near Hiroshima, a 70km perfectly paved biking trail across 7 islands in Shikoku. You can experience something different on every island so I recommend taking it slow and spending a night on one of the islands in between, but you can finish it in a day if you're fast. Try Onomichi ramen at the starting point, and once you reach Imabari (I think it's known for towels?? lol), you can take a bus ride back to the beginning :)",
     // a ~7km-wide corridor around the route centerline: Onomichi → Mukaishima →
     // Innoshima → Ikuchijima (Setoda) → Omishima → Hakatajima → Oshima → Imabari.
     // Down the SE side, back up the NW side; both ends run a little past the terminals.
     points: [[34.398, 133.233], [34.386, 133.226], [34.365, 133.232], [34.334, 133.211], [34.302, 133.202], [34.284, 133.166], [34.272, 133.120], [34.243, 133.063], [34.227, 133.039], [34.197, 133.041], [34.182, 133.043], [34.159, 133.023], [34.127, 133.012], [34.091, 133.007], [34.050, 133.028], [34.038, 133.021], [34.074, 132.961], [34.086, 132.968], [34.127, 132.947], [34.163, 132.952], [34.195, 132.963], [34.218, 132.983], [34.233, 132.981], [34.263, 132.979], [34.279, 133.003], [34.308, 133.060], [34.320, 133.106], [34.338, 133.142], [34.370, 133.151], [34.401, 133.172], [34.422, 133.166], [34.434, 133.173]] },
-  { id: "cat-street", name: "Cat Street Strut", color: "#1098ad",
+  { id: "cat-street", name: "Cat Street Strut", group: "tokyo", color: "#1098ad",
     blurb: "The actually-good Harajuku: lowkey boutiques and thrift, strung between the two chaos poles.",
     points: [[35.6708, 139.7073], [35.6694, 139.7076], [35.6675, 139.7075], [35.6662, 139.7064], [35.6648, 139.7056], [35.6636, 139.7050], [35.6629, 139.7046], [35.6633, 139.7038], [35.6640, 139.7042], [35.6652, 139.7048], [35.6666, 139.7056], [35.6677, 139.7067], [35.6693, 139.7068], [35.6707, 139.7065]] },
 ];

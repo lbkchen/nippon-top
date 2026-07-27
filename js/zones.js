@@ -3,7 +3,7 @@
 // in the same naming modal, which also handles re-editing an existing zone.
 // Zones know what's inside them: the popup and drawer can scope the sidebar
 // to a zone's recs (lasso-style), and every zone can hide individually.
-import { $, esc, showHint, armCheck, labelPoint, pointInPoly, simplifyPts, chaikin, degPerPx, ZONE_COLORS } from "./config.js";
+import { $, esc, linkify, showHint, armCheck, labelPoint, pointInPoly, simplifyPts, chaikin, degPerPx, ZONE_COLORS } from "./config.js";
 import { map, zoneLayer } from "./map.js";
 import {
   state, allPlaces, allZones, addZone, updateZone, removeZone, zoneCount,
@@ -19,6 +19,10 @@ let pickedColor = ZONE_COLORS[0];
 let pickedFill = "solid";
 let preview = null;        // live polygon shown while the naming modal is open
 let previewSkipId = null;  // the zone being retouched hides so the preview replaces it
+// mid-redraw: everything the zone knows except its shape, parked while you draw
+// the new outline. The old outline stays hidden so you're not tracing over it.
+let redrawing = null;
+const polys = {}; // zone id -> its rendered polygon, so search can pop a popup
 
 function placesInZone(z) {
   let pool = allPlaces().filter((p) => pointInPoly(p.lat, p.lng, z.points));
@@ -64,7 +68,28 @@ function clearPreview() {
   preview = null;
   pendingPoints = null;
   editingZone = null;
+  redrawing = null;
   if (previewSkipId) { previewSkipId = null; renderZones(); }
+}
+
+// Zones carry full rants now, so the popup has to live inside the band the chrome
+// actually leaves it and scroll the overflow instead of opening under the omnibar
+// or behind the list. Measured, not guessed: the sidebar is a right rail on desktop
+// and a bottom sheet on mobile, and the sheet's height moves as you drag it.
+function popupFit() {
+  const wide = window.innerWidth > 940;
+  const rect = (sel) => $(sel)?.getBoundingClientRect();
+  const sb = rect("#sidebar");
+  const top = Math.round(rect("#regionChips")?.bottom || 90) + 14;
+  const bottom = wide || !sb ? 40 : Math.round(window.innerHeight - sb.top) + 14;
+  const right = wide && sb ? Math.round(window.innerWidth - sb.left) + 14 : 16;
+  return {
+    maxWidth: 300,
+    // ~44px of popup chrome (padding, border, close button) rides on top of this
+    maxHeight: Math.max(140, window.innerHeight - top - bottom - 44),
+    autoPanPaddingTopLeft: L.point(wide ? 70 : 16, top),
+    autoPanPaddingBottomRight: L.point(right, bottom),
+  };
 }
 
 function drawZone(z) {
@@ -86,7 +111,7 @@ function drawZone(z) {
   const label = L.marker(c, {
     icon: L.divIcon({
       className: "zone-label-wrap",
-      html: `<span class="zone-label${avoid ? " zone-label-avoid" : ""}" style="--z:${z.color}">${avoid ? '<b class="zone-skip">skip</b>' : ""}${esc(z.name)}</span>`,
+      html: `<span class="zone-label${avoid ? " zone-label-avoid" : ""}" style="--z:${z.color}">${avoid ? '<b class="zone-skip">skip</b>' : ""}${esc(z.name)}${z.star ? ' <span class="zone-star">★</span>' : ""}</span>`,
       iconSize: null,
     }),
     interactive: true,
@@ -95,11 +120,16 @@ function drawZone(z) {
   const inside = placesInZone(z).length;
   const div = document.createElement("div");
   div.innerHTML = `
-    <div class="popup-title">${esc(z.name)}</div>
+    <div class="popup-title">${esc(z.name)}${z.star ? " ⭐" : ""}</div>
     <div class="popup-blurb">${esc(z.blurb) || "<i>a zone of unspecified vibes</i>"}</div>
-    <span class="popup-link zone-filter-link">${inside ? `${inside} rec${inside === 1 ? "" : "s"} inside — show them` : "no recs inside (yet)"}</span>
-    ${z.custom ? '<span class="popup-link zone-edit-link">retouch this zone</span><span class="popup-link zone-del-link">remove this zone</span>' : ""}`;
+    ${z.notes ? `<div class="popup-notes">${linkify(esc(z.notes))}</div>` : ""}
+    <div class="popup-links">
+      <span class="popup-link zone-filter-link">${inside ? `${inside} rec${inside === 1 ? "" : "s"} inside — show them` : "no recs inside (yet)"}</span>
+      ${z.custom ? '<span class="popup-link zone-redraw-link">redraw the outline</span><span class="popup-link zone-edit-link">rename / recolor</span><span class="popup-link zone-del-link">remove this zone</span>' : ""}
+    </div>`;
   if (inside) div.querySelector(".zone-filter-link").addEventListener("click", () => { map.closePopup(); filterToZone(z); });
+  const redraw = div.querySelector(".zone-redraw-link");
+  if (redraw) redraw.addEventListener("click", () => { map.closePopup(); startRedraw(z); });
   const edit = div.querySelector(".zone-edit-link");
   if (edit) edit.addEventListener("click", () => { map.closePopup(); openZoneModal(z.points, z); });
   const del = div.querySelector(".zone-del-link");
@@ -110,16 +140,35 @@ function drawZone(z) {
     map.closePopup();
     renderZones();
   });
-  poly.bindPopup(div);
+  poly.bindPopup(div, popupFit());
   label.on("click", () => poly.openPopup(c));
+  polys[z.id] = poly;
 }
 
 function renderZones() {
   zoneLayer.clearLayers();
+  for (const k of Object.keys(polys)) delete polys[k];
   allZones().forEach(drawZone);
 }
 
+// omnisearch hit → fly there and pop the label open, so the rant is one tap away
+function focusAndOpen(id) {
+  const z = allZones().find((x) => x.id === id);
+  if (!z) return;
+  if (!state.zonesOn) toggleZones();
+  if (zoneHidden(z.id)) { toggleZoneHidden(z.id); renderZones(); }
+  focusZone(z);
+  map.once("moveend", () => polys[z.id]?.openPopup(labelPoint(z.points)));
+}
+
 // ---------- naming modal (create + edit, also fed by lasso→zone) ----------
+// freehand points are dense and jittery — thin them to something a human would draw
+function tidy(points) {
+  const raw = points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]);
+  const thinned = simplifyPts(raw, 1.8 * degPerPx(map.getZoom()));
+  return thinned.length < 4 ? raw : thinned;
+}
+
 export function openZoneModal(points, existing = null) {
   editingZone = existing;
   if (existing) {
@@ -127,9 +176,7 @@ export function openZoneModal(points, existing = null) {
     pickedColor = existing.color;
     pickedFill = existing.fill || "solid";
   } else {
-    const tol = 1.8 * degPerPx(map.getZoom());
-    pendingPoints = simplifyPts(points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]), tol);
-    if (pendingPoints.length < 4) pendingPoints = points.map((p) => [+(+p[0]).toFixed(5), +(+p[1]).toFixed(5)]);
+    pendingPoints = tidy(points);
     pickedColor = ZONE_COLORS[zoneCount() % ZONE_COLORS.length];
     pickedFill = "solid";
   }
@@ -137,6 +184,9 @@ export function openZoneModal(points, existing = null) {
   $("#zoneSave").textContent = existing ? "save the touch-up" : "stake the claim";
   $("#zoneName").value = existing?.name || "";
   $("#zoneBlurb").value = existing?.blurb || "";
+  $("#zoneNotes").value = existing?.notes || "";
+  // an outline you can't change is the whole complaint — offer it right here
+  $("#zoneRedraw").classList.toggle("hidden", !existing);
   [...$("#zoneColors").children].forEach((s) => s.classList.toggle("active", s.dataset.color === pickedColor));
   [...$("#zoneFills").children].forEach((b) => b.classList.toggle("active", b.dataset.fill === pickedFill));
   previewSkipId = existing?.id || null;
@@ -150,6 +200,37 @@ export function openZoneModal(points, existing = null) {
   $("#zoneName").focus();
 }
 
+// ---------- redraw the outline (keeps everything but the shape) ----------
+// The modal is stashed, not cancelled: whatever you've typed rides along and you
+// land back in it with the new outline previewed, so nothing is retyped.
+function startRedraw(z) {
+  redrawing = {
+    ...z,
+    name: $("#zoneModal").classList.contains("hidden") ? z.name : $("#zoneName").value.trim() || z.name,
+    blurb: $("#zoneModal").classList.contains("hidden") ? z.blurb : $("#zoneBlurb").value.trim(),
+    notes: $("#zoneModal").classList.contains("hidden") ? z.notes : $("#zoneNotes").value.trim(),
+    color: pickedColor && editingZone?.id === z.id ? pickedColor : z.color,
+    ...(editingZone?.id === z.id && pickedFill !== "solid" ? { fill: pickedFill } : {}),
+  };
+  $("#zoneModal").classList.add("hidden");
+  preview?.remove();
+  preview = null;
+  pendingPoints = null;
+  editingZone = null;
+  previewSkipId = z.id; // the old shape steps aside so you're not tracing over it
+  renderZones();
+  if (!state.zonesOn) toggleZones();
+  setMode("zone");
+  showHint(`redrawing "${z.name}" — circle the new area, the name and colors stick`, 3200);
+}
+
+function cancelRedraw() {
+  if (!redrawing) return;
+  redrawing = null;
+  previewSkipId = null;
+  renderZones();
+}
+
 function saveZone() {
   const name = $("#zoneName").value.trim();
   if (!name) { $("#zoneName").focus(); return; }
@@ -157,9 +238,11 @@ function saveZone() {
     id: editingZone ? editingZone.id : "zone-" + Date.now().toString(36),
     name,
     blurb: $("#zoneBlurb").value.trim(),
+    notes: $("#zoneNotes").value.trim(),
     color: pickedColor,
     ...(pickedFill !== "solid" ? { fill: pickedFill } : {}),
     ...(editingZone?.avoid ? { avoid: true } : {}), // a retouch never launders a trap into a rec
+    ...(editingZone?.star ? { star: true } : {}),
     points: pendingPoints,
   };
   const wasEdit = !!editingZone;
@@ -182,14 +265,14 @@ function zoneRow(z) {
     <div class="cur-row-head">
       <span class="zone-dot" style="--z:${z.color}"></span>
       <span class="cur-row-name">${esc(z.name)}</span>
-      <span class="cur-row-stats">${z.avoid ? "skip-it zone · " : ""}${inside} rec${inside === 1 ? "" : "s"} inside${z.pack ? " · pack zone" : ""}${hidden ? " · hidden" : ""}</span>
+      <span class="cur-row-stats">${z.star ? "banger · " : ""}${z.avoid ? "skip-it zone · " : ""}${inside} rec${inside === 1 ? "" : "s"} inside${z.pack ? " · pack zone" : ""}${hidden ? " · hidden" : ""}</span>
     </div>
     ${z.blurb ? `<div class="cur-row-msg">"${esc(z.blurb)}"</div>` : ""}
     <div class="cur-row-actions">
       <button data-act="jump">jump to it</button>
       <button data-act="filter" ${inside ? "" : "disabled"}>show the recs</button>
       <button data-act="hide">${hidden ? "unhide" : "hide"}</button>
-      ${z.custom ? '<button data-act="edit">retouch</button><button data-act="del">un-stake</button>' : ""}
+      ${z.custom ? '<button data-act="redraw">redraw</button><button data-act="edit">retouch</button><button data-act="del">un-stake</button>' : ""}
     </div>`;
   row.querySelector('[data-act="jump"]').onclick = () => {
     $("#zonesDrawer").classList.add("hidden");
@@ -203,6 +286,11 @@ function zoneRow(z) {
     toggleZoneHidden(z.id);
     renderZones();
     openZonesDrawer();
+  };
+  const redraw = row.querySelector('[data-act="redraw"]');
+  if (redraw) redraw.onclick = () => {
+    $("#zonesDrawer").classList.add("hidden");
+    startRedraw(z);
   };
   const edit = row.querySelector('[data-act="edit"]');
   if (edit) edit.onclick = () => {
@@ -259,6 +347,9 @@ export function initZones() {
   renderZones();
   on("pack-changed", renderZones);
   on("zone-filter-clear", () => { state.zoneFilter = null; emit("refresh-list"); });
+  // bailing out of zone mode mid-redraw (Esc, tool toggle) puts the old shape back
+  on("mode-changed", (m) => { if (m !== "zone") cancelRedraw(); });
+  on("zone-focus", ({ id }) => focusAndOpen(id));
 
   // color swatches in the modal
   const wrap = $("#zoneColors");
@@ -288,7 +379,17 @@ export function initZones() {
   registerSketchMode("zone", {
     style: () => ({ color: "#1d1d24", weight: 3, dashArray: "10 8", lineCap: "round", lineJoin: "round" }),
     onDone(pts) {
-      if (pts.length < 5) { showHint("that was barely a squiggle — circle the whole area", 2200); return; }
+      if (pts.length < 5) {
+        showHint(redrawing ? "that was barely a squiggle — circle the whole area again" : "that was barely a squiggle — circle the whole area", 2200);
+        return; // a dud stroke doesn't cancel a redraw, just try again
+      }
+      const points = tidy(pts.map((ll) => [ll.lat, ll.lng]));
+      if (redrawing) {
+        const z = { ...redrawing, points };
+        redrawing = null;
+        openZoneModal(points, z); // previewSkipId still hides the old shape
+        return;
+      }
       openZoneModal(pts.map((ll) => [ll.lat, ll.lng]));
     },
   });
@@ -313,6 +414,7 @@ export function initZones() {
     toggleZones();
     $("#zoneMenu").classList.add("hidden");
   });
+  $("#zoneRedraw").addEventListener("click", () => { if (editingZone) startRedraw(editingZone); });
   $("#zoneSave").addEventListener("click", saveZone);
   $("#zoneCancel").addEventListener("click", () => {
     $("#zoneModal").classList.add("hidden");
