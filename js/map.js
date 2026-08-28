@@ -5,7 +5,7 @@ export const map = L.map("map", { zoomControl: false, attributionControl: true }
 L.control.zoom({ position: "bottomright" }).addTo(map);
 map.attributionControl.setPrefix("🗾 NIPPON TOP");
 
-L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2ewg_1_dad6af1106978c82454fbfe4", {
   attribution: "© <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> © <a href='https://carto.com/attributions'>CARTO</a>",
   maxZoom: 20,
 }).addTo(map);
